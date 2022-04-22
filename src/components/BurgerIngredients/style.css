@@ -1,0 +1,21 @@
+.form-pay{
+    display: flex;
+    text-align: center;
+    justify-content: flex-end;
+}
+
+.margin-height-auto{
+    margin: auto 0;
+}
+
+.icon-pay{
+    height: 33px;
+    width: 33px;
+}
+
+.item{
+    display: flex;
+    flex-direction: row;
+    vertical-align: middle;
+
+}
