@@ -1,0 +1,48 @@
+.tab{
+    display: flex;
+}
+
+.all_content{
+    width: 600px;
+    height: calc(90vh - 8%);
+
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+    display: flex;
+    flex-direction: column;
+}
+.all_content::-webkit-scrollbar{
+    width: 8px;
+}
+.all_content::-webkit-scrollbar-track{
+    background: #2F2F37;
+}
+.all_content::-webkit-scrollbar-thumb{
+    background: #8585AD;
+}
+
+
+.content{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.card_frame{
+    text-align: center;
+    flex-basis: min-content;
+}
+
+.card_info{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.price{
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    object-fit: cover;
+}
