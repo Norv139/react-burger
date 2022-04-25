@@ -1,21 +1,11 @@
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import {Tab, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components'
+
+import dataPropTypes from '../../utils/type.js'
 
 import style from './style.module.css'
 
-const dataPropTypes = PropTypes.shape({
-    _id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    proteins: PropTypes.number.isRequired,
-    fat: PropTypes.string.isRequired,
-    carbohydrates:PropTypes.number.isRequired,
-    calories:PropTypes.number.isRequired,
-    price:PropTypes.number.isRequired,
-    image:PropTypes.string.isRequired,
-    image_mobile:PropTypes.string.isRequired,
-    image_large:PropTypes.string.isRequired,
-    __v:PropTypes.number,
-  });
+
 
 function BurgerIngredients({dataIngredients, openDetals}) {
     return(
@@ -63,12 +53,30 @@ function BurgerIngredients({dataIngredients, openDetals}) {
         </div>
     )
 }
-PropTypes.BurgerIngredients = {
+
+BurgerIngredients.propTypes = {
     dataIngredients: PropTypes.arrayOf(dataPropTypes.isRequired),
     openDetals: PropTypes.func
 }
 
-function Сard({data, openDetals}){
+function SortCards({data, filterName, openDetals}){
+    return(
+        <div className={style.content}>
+            {
+                data
+                .filter( firstData => firstData.type === filterName )
+                .map( renderData => {return( <Сard key={renderData._id} data={renderData} openDetals={openDetals} /> ) } )
+            }
+        </div>
+    )
+}
+SortCards.propTypes = {
+    data: PropTypes.arrayOf(dataPropTypes).isRequired,
+    filterName: PropTypes.string.isRequired,
+    openDetals: PropTypes.func
+}
+
+function Сard ({data, openDetals}) {
     return(
         <div className={style.card_frame + ' mt-6 mb-10 ml-4 mr-2'} onClick={()=>{openDetals(data)}}>
             
@@ -90,33 +98,12 @@ function Сard({data, openDetals}){
         </div>
     )
 }
-PropTypes.Card = {
-    data: PropTypes.objectOf(
-        {
-            image: PropTypes.string.isRequired,
-            name: PropTypes.string.isRequired,
-            price: PropTypes.number.isRequired
 
-        }
-    )
-}
-
-function SortCards({data, filterName, openDetals}){
-    return(
-        <div className={style.content}>
-            {
-                data
-                .filter( firstData => firstData.type === filterName )
-                .map( renderData => {return( <Сard key={renderData._id} data={renderData} openDetals={openDetals} /> ) } )
-            }
-        </div>
-    )
-}
-PropTypes.SortCards = {
-    data: PropTypes.arrayOf(dataPropTypes).isRequired,
-    filterName: PropTypes.string.isRequired,
+Сard.propTypes ={
+    data: PropTypes.object,
     openDetals: PropTypes.func
 }
+
 
 
 export default BurgerIngredients;

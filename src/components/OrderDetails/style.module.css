@@ -1,0 +1,47 @@
+.modal{
+    height: 100vh;
+    width: 100vw;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.model_content{
+
+    background-color: rgb(29, 28, 33) !important;
+    flex-basis: min-content;
+    border-radius: 40px;
+}
+
+.model_main{
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+}
+
+.model_close_btn{
+    display: flex;
+    justify-content:flex-end;
+    align-content: center;
+}
+
+.secondary{
+    color: #8585AD;
+}
+
+.btn{
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
