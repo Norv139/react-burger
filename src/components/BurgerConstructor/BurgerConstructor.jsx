@@ -1,87 +1,124 @@
-import {Tab, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components'
+import PropTypes from 'prop-types'
+import { CurrencyIcon, Button, ConstructorElement, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import './style.css'
+import dataPropTypes from '../../utils/type.js'
 
-function BurgerConstructor(props) {
+import style from './style.module.css'
+
+function BurgerConstructor({listIngredients, openDetails}) {
+
     return(
-        <div className="main-block mr-10">
+        <div className={"mt-20"} >
 
-            <p className=" text text_type_main-large mt-10 mb-5">
-                Собери бургер
-            </p>
-
-            <div style={{ display: 'flex' }} className="">
-                <Tab>
-                    Булки
-                </Tab>
-                <Tab>
-                    Соусы
-                </Tab>
-                <Tab>
-                    Начинка
-                </Tab>
-            </div>
-
-            <div className='all-content'>
-
-                <p className="title text text_type_main-medium mt-10" id='bun'>
-                    Булки
-                </p>
-                <SortCards data={props.data} filterName="bun" />
-
-                <p className="title text text_type_main-medium" id='sauce'>
-                    Соусы
-                </p>
-                <SortCards data={props.data} filterName="sauce" />
-
-                <p className="title text text_type_main-medium" id='main'>
-                    Начинка
-                </p>
-                <SortCards data={props.data} filterName="main" />
-
-            </div>
-
-        </div>
-    )
-}
-
-
-
-function Сard(props){
-    return(
-        <div className='card-frame mt-6 mb-10 ml-4 mr-2'>
-            
-            <div className='ml-4 mr-4'>
-                <img src={props.data.image} alt={props.data.name} />
+            <div className={style.all_list}>
+                {   listIngredients &&
+                    <BurgerConstructorList list={listIngredients} />
+                }
             </div>
             
 
-            <div className='card-info'>
-                <div className="price mt-1 mb-1">
-                    <p className="text text_type_digits-default">
-                        {props.data.price} 
-                    </p>
-                    <CurrencyIcon type="primary" />
+            <div className={style.form_pay + " mt-10"}>
+
+                <p className={"text text_type_digits-medium "+style.margin_height_auto}>
+                    {TotalPrice(listIngredients)}
+                </p>
+
+                <div className={style.margin_height_auto }>
+                    <CurrencyIcon type="primary" className={style.icon_pay} />
                 </div>
-                <p className="text text_type_main-default">
-                    {props.data.name}
-                </p>
+                
+                <div className="ml-10">
+                    <Button
+                        onClick={openDetails}
+                        className='ml-10'
+                        type="primary" 
+                        size="large"
+                    >
+                        Оформить заказ
+                    </Button>
+                </div>
             </div>
         </div>
     )
 }
 
-function SortCards(props){
-    return(
-        <div className='content'>
-            {
-                props.data
-                .filter( firstData => firstData.type === props.filterName )
-                .map( renderData => {return( <Сard key={renderData._id} data={renderData} /> ) } )
-            }
-        </div>
-    )
+BurgerConstructor.propTypes = {
+    listIngredients: PropTypes.arrayOf(dataPropTypes.isRequired),
+    openDetails: PropTypes.func.isRequired
 }
 
+function TotalPrice(list){
+    try {
+        const bun = list.filter( firstData => firstData.type === "bun" )[0].price
+
+        const initialValue = 0;
+        const sumWithInitial = list
+            .filter( firstData => firstData.type !== "bun" )
+            .map(x=>x.price)
+            .reduce( 
+                (previousValue, currentValue) => previousValue + currentValue,
+                initialValue);
+        return sumWithInitial + bun * 2
+    } catch {
+        return 0
+    }
+}
+
+TotalPrice.propTypes= {
+    list: PropTypes.arrayOf(dataPropTypes)
+}
+
+function BurgerConstructorList({list}){
+    try{
+        const bun = list.filter( firstData => firstData.type === "bun" )[0]
+        return(
+            <span>
+                <div className='ml-6 mb-4'>
+                    <ConstructorElement
+                        className='ml-8'
+                        type="top"
+                        isLocked={true}
+                        text={bun.name + '(верх)'}
+                        price={bun.price}
+                        thumbnail={bun.image} 
+                    />
+                </div>        
+                {
+                    list
+                    .filter( firstData => firstData.type !== "bun" )
+                    .map((x, index)=>{
+                        return(
+                            <div key={index} className={style.item + " mb-4"}>
+                                <div className={style.margin_height_auto}>
+                                    <DragIcon type="primary"/>
+                                </div>
+                                <ConstructorElement
+                                    text={x.name}
+                                    price={x.price}
+                                    thumbnail={x.image} />
+                            </div>
+                            )
+                    })
+                }
+                <div className='ml-6'>
+                    <ConstructorElement
+                        type="bottom"
+                        isLocked={true}
+                        text={bun.name +'(низ)'}
+                        price={bun.price}
+                        thumbnail={bun.image} 
+                    />
+                </div>
+            </span>
+        )
+    }
+    catch{
+        return null
+    }
+}
+
+BurgerConstructorList.propTypes = {
+    list: PropTypes.arrayOf(dataPropTypes)
+}
 
 export default BurgerConstructor;

@@ -1,9 +1,0 @@
-.mainConteiner{
-  position: relative;
-  display: flex;
-  justify-content: center;
-}
-.main-block{
-  display: flex;
-  flex-direction: column;
-}

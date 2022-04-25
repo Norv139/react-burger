@@ -1,0 +1,36 @@
+.all_list{
+    width: 600px;
+    height: calc(100vh - 10% - 60px);
+    overflow-y: scroll;
+}
+.all_list::-webkit-scrollbar{
+    width: 8px;
+}
+.all_list::-webkit-scrollbar-track{
+    background: #2F2F37;
+}
+.all_list::-webkit-scrollbar-thumb{
+    background: #8585AD;
+}
+
+.form_pay{
+    display: flex;
+    text-align: center;
+    justify-content: flex-end;
+}
+
+.margin_height_auto{
+    margin: auto 0;
+}
+
+.icon_pay{
+    margin: auto 0;
+    height: 33px;
+    width: 33px;
+}
+
+.item{
+    display: flex;
+    flex-direction: row;
+    vertical-align: middle;
+}

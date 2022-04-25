@@ -1,92 +1,109 @@
-import { CurrencyIcon, Button, ConstructorElement, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import './style.css'
+import PropTypes from 'prop-types'
+import {Tab, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components'
+
+import dataPropTypes from '../../utils/type.js'
+
+import style from './style.module.css'
 
 
-function BurgerIngredients(props) {
 
+function BurgerIngredients({dataIngredients, openDetals}) {
     return(
-        <div className="mr-10">
+        <div className={style.main_block + " mr-10"}>
 
-            <BurgerIngredientsList list={props.dataList} />
+            <p className=" text text_type_main-large mt-10 mb-5">
+                Собери бургер
+            </p>
 
-            <div className="form-pay mt-10">
+            <div className={style.tab}>
+                <Tab>
+                    Булки
+                </Tab>
+                <Tab>
+                    Соусы
+                </Tab>
+                <Tab>
+                    Начинка
+                </Tab>
+            </div>
 
-                <p className="text text_type_digits-medium margin-height-auto">
-                    {TotalPrice(props.dataList)}
+            { dataIngredients &&
+            <div className={style.all_content}>
+
+                <p className="title text text_type_main-medium mt-10" id='bun'>
+                    Булки
                 </p>
-                <div className="margin-height-auto">
-                    <CurrencyIcon type="primary" className='icon-pay' />
-                </div>
-                <div className="ml-10">
-                    <Button
-                        className='ml-10'
-                        type="primary" 
-                        size="large"
-                    >
-                        Оформить заказ
-                    </Button>
-                </div>
-            </div>
+
+                <SortCards data={dataIngredients} filterName="bun" openDetals={openDetals} />
+
+                <p className="title text text_type_main-medium" id='sauce'>
+                    Соусы
+                </p>
+
+                <SortCards data={dataIngredients} filterName="sauce" openDetals={openDetals} />
+
+                <p className="title text text_type_main-medium" id='main'>
+                    Начинка
+                </p>
+
+                <SortCards data={dataIngredients} filterName="main" openDetals={openDetals} />
+
+            </div>}
+
         </div>
     )
 }
 
-function TotalPrice(list){
-
-    const bun = list.filter( firstData => firstData.type === "bun" )[0].price
-
-    const initialValue = 0;
-    const sumWithInitial = list
-        .map(x=>x.price)
-        .reduce( 
-            (previousValue, currentValue) => previousValue + currentValue,
-            initialValue);
-    return sumWithInitial + bun * 2
+BurgerIngredients.propTypes = {
+    dataIngredients: PropTypes.arrayOf(dataPropTypes.isRequired),
+    openDetals: PropTypes.func
 }
 
-function BurgerIngredientsList(props){
-    const bun = props.list.filter( firstData => firstData.type === "bun" )[0]
-
+function SortCards({data, filterName, openDetals}){
     return(
-        <div className="list">
-            <div className='ml-6 mt-25 mb-4'>
-                <ConstructorElement
-                    className='ml-8'
-                    type="top"
-                    isLocked={true}
-                    text={bun.name + '(верх)'}
-                    price={bun.price}
-                    thumbnail={bun.image} 
-                />
-            </div>        
-                {
-                    props.list
-                    .map((x, index)=>{
-                        return(
-                            <div key={index} className='item mb-4'>
-                                <div className="margin-height-auto">
-                                    <DragIcon type="primary"/>
-                                </div>
-                                <ConstructorElement
-                                    text={x.name}
-                                    price={x.price}
-                                    thumbnail={x.image} 
-                                />
-                            </div>
-                            )
-                    })
-                }
-            <div className='ml-6'>
-                <ConstructorElement
-                    type="bottom"
-                    isLocked={true}
-                    text={bun.name +'(низ)'}
-                    price={bun.price}
-                    thumbnail={bun.image} 
-                />
+        <div className={style.content}>
+            {
+                data
+                .filter( firstData => firstData.type === filterName )
+                .map( renderData => {return( <Сard key={renderData._id} data={renderData} openDetals={openDetals} /> ) } )
+            }
+        </div>
+    )
+}
+SortCards.propTypes = {
+    data: PropTypes.arrayOf(dataPropTypes).isRequired,
+    filterName: PropTypes.string.isRequired,
+    openDetals: PropTypes.func
+}
+
+function Сard ({data, openDetals}) {
+    return(
+        <div className={style.card_frame + ' mt-6 mb-10 ml-4 mr-2'} onClick={()=>{openDetals(data)}}>
+            
+            <div className={ style.card_frame + ' ml-4 mr-4'}>
+                <img src={data.image} alt={data.name} />
+            </div>
+
+            <div className={style.cart_info} >
+                <div className={style.price+" mt-1 mb-1"}>
+                    <p className="text text_type_digits-default">
+                        {data.price} 
+                    </p>
+                    <CurrencyIcon type="primary" />
+                </div>
+                <p className="text text_type_main-default" >
+                    {data.name}
+                </p>
             </div>
         </div>
     )
 }
+
+Сard.propTypes ={
+    data: PropTypes.object,
+    openDetals: PropTypes.func
+}
+
+
 
 export default BurgerIngredients;
