@@ -1,13 +1,9 @@
-import { useEffect, useState, useCallback} from 'react';
+import { useEffect, useState} from 'react';
 
 // components
 import AppHeader from '../Header/AppHeader'
 import BurgerConstructor from '../BurgerConstructor/BurgerConstructor'
 import BurgerIngredients from '../BurgerIngredients/BurgerIngredients'
-
-// Overlay
-import IngredientDetails from '../IngredientDetails/IngredientDetails';
-import OrderDetails from '../OrderDetails/OrderDetails';
 
 //config
 
@@ -26,19 +22,9 @@ function App() {
 
   const [success, setSuccess] = useState(false)
 
-  const [orderOpen, setOrderOpen] = useState(false)
-  const [ingridientInfo, setIngridientInfo] = useState({})
-
-  const escFunction = useCallback((event) => {
-    if (event.keyCode === 27) {
-      setOrderOpen(false);
-      setIngridientInfo({})
-    }
-  }, []);
+ 
 
   useEffect(()=>{
-    document.addEventListener("keydown", escFunction);
-
     fetch(url+path)
       .then((response) => {return response.json()})
       .then( (reqest) => {
@@ -47,11 +33,7 @@ function App() {
       })
       .catch((e)=>{console.log(e)})
 
-      return () => {
-        document.removeEventListener("keydown", escFunction);
-      };
-
-  }, [escFunction])
+  }, [])
 
   return (
     <div className="App">
@@ -60,20 +42,14 @@ function App() {
           <main>
             <BurgerIngredients 
               dataIngredients={dataIngredients} 
-              openDetals={setIngridientInfo} 
+              openDetals={()=>{console.log(DetailsIngredients)}} 
             />
             <BurgerConstructor 
               listIngredients={datalistIngredients} 
-              openDetails={()=>{setOrderOpen(true)}} 
+              openDetails={()=>{console.log(OpenDetails)}} 
             />
           </main>
         }
-        {orderOpen && 
-          <OrderDetails setActive={()=>{setOrderOpen(false)}} />
-          }
-        {ingridientInfo.name !== undefined && 
-          <IngredientDetails setActive={()=>(setIngridientInfo(false))} data={ingridientInfo} />
-          }
           
     </div>
   );
