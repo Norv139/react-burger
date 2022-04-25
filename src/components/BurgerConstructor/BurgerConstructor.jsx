@@ -43,7 +43,7 @@ function BurgerConstructor({listIngredients, openDetails}) {
 }
 
 BurgerConstructor.propTypes = {
-    listIngredients: PropTypes.arrayOf(dataPropTypes.isRequired),
+    listIngredients: PropTypes.arrayOf(dataPropTypes).isRequired,
     openDetails: PropTypes.func.isRequired
 }
 
@@ -65,7 +65,7 @@ function TotalPrice(list){
 }
 
 TotalPrice.propTypes= {
-    list: PropTypes.arrayOf(dataPropTypes)
+    list: PropTypes.arrayOf(dataPropTypes).isRequired
 }
 
 function BurgerConstructorList({list}){
@@ -118,7 +118,7 @@ function BurgerConstructorList({list}){
 }
 
 BurgerConstructorList.propTypes = {
-    list: PropTypes.arrayOf(dataPropTypes)
+    list: PropTypes.arrayOf(dataPropTypes).isRequired
 }
 
 export default BurgerConstructor;

@@ -42,11 +42,11 @@ function App() {
           <main>
             <BurgerIngredients 
               dataIngredients={dataIngredients} 
-              openDetals={()=>{console.log(DetailsIngredients)}} 
+              openDetals={()=>{console.log('DetailsIngredients')}} 
             />
             <BurgerConstructor 
               listIngredients={datalistIngredients} 
-              openDetails={()=>{console.log(OpenDetails)}} 
+              openDetails={()=>{console.log('OpenDetails')}} 
             />
           </main>
         }

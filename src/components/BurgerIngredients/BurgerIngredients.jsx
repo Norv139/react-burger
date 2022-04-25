@@ -55,7 +55,7 @@ function BurgerIngredients({dataIngredients, openDetals}) {
 }
 
 BurgerIngredients.propTypes = {
-    dataIngredients: PropTypes.arrayOf(dataPropTypes.isRequired),
+    dataIngredients: PropTypes.arrayOf(dataPropTypes).isRequired,
     openDetals: PropTypes.func
 }
 
