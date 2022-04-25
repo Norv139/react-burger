@@ -1,21 +1,9 @@
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import { CurrencyIcon, Button, ConstructorElement, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import style from './style.module.css'
+import dataPropTypes from '../../utils/type.js'
 
-const dataPropTypes = PropTypes.shape({
-    _id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    proteins: PropTypes.number.isRequired,
-    fat: PropTypes.string.isRequired,
-    carbohydrates:PropTypes.number.isRequired,
-    calories:PropTypes.number.isRequired,
-    price:PropTypes.number.isRequired,
-    image:PropTypes.string.isRequired,
-    image_mobile:PropTypes.string.isRequired,
-    image_large:PropTypes.string.isRequired,
-    __v:PropTypes.number,
-  });
+import style from './style.module.css'
 
 function BurgerConstructor({listIngredients, openDetails}) {
 
@@ -54,7 +42,7 @@ function BurgerConstructor({listIngredients, openDetails}) {
     )
 }
 
-PropTypes.BurgerConstructor = {
+BurgerConstructor.propTypes = {
     listIngredients: PropTypes.arrayOf(dataPropTypes.isRequired),
     openDetails: PropTypes.func.isRequired
 }
@@ -76,7 +64,7 @@ function TotalPrice(list){
     }
 }
 
-PropTypes.TotalPrice = {
+TotalPrice.propTypes= {
     list: PropTypes.arrayOf(dataPropTypes)
 }
 
@@ -129,7 +117,7 @@ function BurgerConstructorList({list}){
     }
 }
 
-PropTypes.BurgerConstructorList = {
+BurgerConstructorList.propTypes = {
     list: PropTypes.arrayOf(dataPropTypes)
 }
 

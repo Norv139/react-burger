@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback} from 'react';
+import { useEffect, useState} from 'react';
 
 // components
 import AppHeader from '../Header/AppHeader'
@@ -16,15 +16,15 @@ const path = "/api/ingredients"
 
 
 function App() {
+
   const [datalistIngredients, setDataListIngredients] = useState(testListData)
-  const [dataIngredients, setDataIngredients] = useState()
+  const [dataIngredients, setDataIngredients] = useState(testListData)
 
   const [success, setSuccess] = useState(false)
 
-
+ 
 
   useEffect(()=>{
-
     fetch(url+path)
       .then((response) => {return response.json()})
       .then( (reqest) => {
@@ -42,11 +42,11 @@ function App() {
           <main>
             <BurgerIngredients 
               dataIngredients={dataIngredients} 
-              openDetals={()=>{console.log('openDetals')}} 
+              openDetals={()=>{console.log(DetailsIngredients)}} 
             />
             <BurgerConstructor 
               listIngredients={datalistIngredients} 
-              openDetails={()=>{console.log('openDetails')}} 
+              openDetails={()=>{console.log(OpenDetails)}} 
             />
           </main>
         }

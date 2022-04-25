@@ -30,6 +30,7 @@
 }
 
 .card_frame{
+    cursor: pointer;
     text-align: center;
     flex-basis: min-content;
 }
