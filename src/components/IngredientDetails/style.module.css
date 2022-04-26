@@ -14,10 +14,10 @@
 }
 
 .model_content{
+    display: flex;
     justify-content: center;
-    text-align: center;
-    background-color: rgb(29, 28, 33) !important;
-    border-radius: 40px;
+    align-items: center;
+    flex-direction: column;
 }
 
 .model_info{
@@ -25,11 +25,13 @@
     justify-content: center;
     text-align: center;
     white-space: pre;
+    
 }
 
 .modal_top{
     display: flex;
     justify-content: space-between;
+    white-space: nowrap;
 }
 
 .secondary{

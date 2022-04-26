@@ -10,7 +10,7 @@ function BurgerConstructor({listIngredients, openDetails}) {
     return(
         <div className={"mt-20"} >
 
-            <div className={style.all_list}>
+            <div >
                 {   listIngredients &&
                     <BurgerConstructorList list={listIngredients} />
                 }
@@ -43,7 +43,7 @@ function BurgerConstructor({listIngredients, openDetails}) {
 }
 
 BurgerConstructor.propTypes = {
-    listIngredients: PropTypes.arrayOf(dataPropTypes.isRequired),
+    listIngredients: PropTypes.arrayOf(dataPropTypes).isRequired,
     openDetails: PropTypes.func.isRequired
 }
 
@@ -65,7 +65,7 @@ function TotalPrice(list){
 }
 
 TotalPrice.propTypes= {
-    list: PropTypes.arrayOf(dataPropTypes)
+    list: PropTypes.arrayOf(dataPropTypes).isRequired
 }
 
 function BurgerConstructorList({list}){
@@ -73,7 +73,7 @@ function BurgerConstructorList({list}){
         const bun = list.filter( firstData => firstData.type === "bun" )[0]
         return(
             <span>
-                <div className='ml-6 mb-4'>
+                <div className='ml-6 mb-2'>
                     <ConstructorElement
                         className='ml-8'
                         type="top"
@@ -82,13 +82,14 @@ function BurgerConstructorList({list}){
                         price={bun.price}
                         thumbnail={bun.image} 
                     />
-                </div>        
+                </div> 
+                <div className={style.all_list}>   
                 {
                     list
                     .filter( firstData => firstData.type !== "bun" )
                     .map((x, index)=>{
                         return(
-                            <div key={index} className={style.item + " mb-4"}>
+                            <div key={index} className={style.item + " mt-2 mb-2"}>
                                 <div className={style.margin_height_auto}>
                                     <DragIcon type="primary"/>
                                 </div>
@@ -100,7 +101,8 @@ function BurgerConstructorList({list}){
                             )
                     })
                 }
-                <div className='ml-6'>
+                </div>  
+                <div className='ml-6 mt-2'>
                     <ConstructorElement
                         type="bottom"
                         isLocked={true}

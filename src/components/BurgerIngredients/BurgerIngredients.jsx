@@ -28,9 +28,9 @@ function BurgerIngredients({dataIngredients, openDetals}) {
             </div>
 
             { dataIngredients &&
-            <div className={style.all_content}>
+            <div className={style.all_content + '  mt-10'}>
 
-                <p className="title text text_type_main-medium mt-10" id='bun'>
+                <p className="title text text_type_main-medium" id='bun'>
                     Булки
                 </p>
 
@@ -55,7 +55,7 @@ function BurgerIngredients({dataIngredients, openDetals}) {
 }
 
 BurgerIngredients.propTypes = {
-    dataIngredients: PropTypes.arrayOf(dataPropTypes.isRequired),
+    dataIngredients: PropTypes.arrayOf(dataPropTypes).isRequired,
     openDetals: PropTypes.func
 }
 

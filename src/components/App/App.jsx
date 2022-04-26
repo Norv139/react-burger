@@ -5,6 +5,11 @@ import AppHeader from '../Header/AppHeader'
 import BurgerConstructor from '../BurgerConstructor/BurgerConstructor'
 import BurgerIngredients from '../BurgerIngredients/BurgerIngredients'
 
+//modal
+
+import Modal from '../Modal/Modal';
+import ModalOverlay from '../ModalOverlay/ModalOverlay';
+
 // Overlay
 import IngredientDetails from '../IngredientDetails/IngredientDetails';
 import OrderDetails from '../OrderDetails/OrderDetails';
@@ -30,7 +35,7 @@ function App() {
   const [ingridientInfo, setIngridientInfo] = useState({})
 
   const escFunction = useCallback((event) => {
-    if (event.keyCode === 27) {
+    if (event.key === 'Escape') {
       setOrderOpen(false);
       setIngridientInfo({})
     }
@@ -40,16 +45,16 @@ function App() {
     document.addEventListener("keydown", escFunction);
 
     fetch(url+path)
-      .then((response) => {return response.json()})
-      .then( (reqest) => {
-        setDataIngredients(reqest.data); 
-        setSuccess(reqest.success);
-      })
-      .catch((e)=>{console.log(e)})
+    .then(response => {return response.json();})
+    .then( (reqest) => {
+      setDataIngredients(reqest.data); 
+      setSuccess(reqest.success);
+    })
+    .catch(e=>{console.log(e)})
 
-      return () => {
-        document.removeEventListener("keydown", escFunction);
-      };
+    return () => {
+      document.removeEventListener("keydown", escFunction);
+    };
 
   }, [escFunction])
 
@@ -68,13 +73,20 @@ function App() {
             />
           </main>
         }
-        {orderOpen && 
-          <OrderDetails setActive={()=>{setOrderOpen(false)}} />
-          }
-        {ingridientInfo.name !== undefined && 
-          <IngredientDetails setActive={()=>(setIngridientInfo(false))} data={ingridientInfo} />
-          }
-          
+         <ModalOverlay>
+              {orderOpen &&
+                <Modal setActive={()=>{setOrderOpen(false)}}>
+                  <OrderDetails setActive={()=>{setOrderOpen(false)}} />
+                </Modal>
+                }
+              {ingridientInfo.name !== undefined && 
+                <Modal setActive={()=>{setIngridientInfo({})}}z>
+                  <IngredientDetails 
+                    setActive={()=>{setIngridientInfo({})}}
+                    data={ingridientInfo}/>
+                </Modal>
+              }
+         </ModalOverlay>
     </div>
   );
 }
