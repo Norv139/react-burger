@@ -45,12 +45,20 @@ function App() {
     document.addEventListener("keydown", escFunction);
 
     fetch(url+path)
-    .then(response => {return response.json();})
-    .then( (reqest) => {
-      setDataIngredients(reqest.data); 
-      setSuccess(reqest.success);
+    .then( (response) => {
+      if (response.ok) { 
+        return response.json();
+      } else {
+        return Promise.reject(response.status);
+      }
     })
-    .catch(e=>{console.log(e)})
+    .then( (response) => {
+      setDataIngredients(response.data); 
+      setSuccess(response.success);
+    })
+    .catch( (error) => {
+      console.log(error);
+    });
 
     return () => {
       document.removeEventListener("keydown", escFunction);
