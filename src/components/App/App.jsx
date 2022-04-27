@@ -78,6 +78,7 @@ function App() {
             <BurgerConstructor 
               listIngredients={datalistIngredients} 
               openDetails={()=>{setOrderOpen(true)}} 
+
             />
           </main>
         }

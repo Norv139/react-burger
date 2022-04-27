@@ -120,7 +120,7 @@ function BurgerConstructorList({list}){
 }
 
 BurgerConstructorList.propTypes = {
-    list: PropTypes.arrayOf(dataPropTypes)
+    list: PropTypes.arrayOf(dataPropTypes).isRequired
 }
 
 export default BurgerConstructor;
