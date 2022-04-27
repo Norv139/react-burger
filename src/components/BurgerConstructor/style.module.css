@@ -1,6 +1,6 @@
 .all_list{
     width: 600px;
-    height: calc(100vh - 10% - 60px);
+    height: 41vh;
     overflow-y: scroll;
 }
 .all_list::-webkit-scrollbar{
