@@ -1,4 +1,7 @@
 import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { CLOSE_INFO } from '../../services/actions/detals';
 
 import { } from '@ya.praktikum/react-developer-burger-ui-components'
 
@@ -8,9 +11,19 @@ import style from './style.module.css'
 import dataPropTypes from '../../utils/type.js'
 
 
-function IngredientDetails({setActive, data}){
+function IngredientDetails(){
+    const dispatch = useDispatch()
+    const data = useSelector(state=>state.detals.info)
+    const isOpenInfo = useSelector(state=>state.detals.isOpenInfo)
+
+    const setActive = () => {
+        dispatch({type: CLOSE_INFO})
+    }
     
     return(
+            <>
+            {isOpenInfo ? 
+            (
             <span className={style.model_content + ' mt-10 ml-10 mr-10 mb-15'}>
                 <div className={style.modal_top}>
                     <p className="text text_type_main-large mr-20">Детали ингредиента</p>
@@ -45,6 +58,11 @@ function IngredientDetails({setActive, data}){
                     </span>
                 </div>
             </span>
+                ):(
+                null
+            )}
+            </>
+            
     )
 }
 

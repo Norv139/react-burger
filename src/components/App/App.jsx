@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 // components
 import AppHeader from '../Header/AppHeader'
@@ -17,6 +18,8 @@ import OrderDetails from '../OrderDetails/OrderDetails';
 //config
 
 import testListData from '../../utils/data';
+import { CLOSE_INFO, CLOSE_ORDER } from '../../services/actions/detals';
+import { GET_ITEMS_SUCCESS, GET_ITEMS_FAILED, GET_ITEMS_REQUEST} from '../../services/actions/components';
 
 const url = "https://norma.nomoreparties.space"
 const path = "/api/ingredients"
@@ -25,21 +28,15 @@ const path = "/api/ingredients"
 
 
 function App() {
-
-  const [datalistIngredients, setDataListIngredients] = useState(testListData)
-  const [dataIngredients, setDataIngredients] = useState(testListData)
-
-  const [success, setSuccess] = useState(false)
-
-  const [orderOpen, setOrderOpen] = useState(false)
-  const [ingridientInfo, setIngridientInfo] = useState({})
+  const dispatch = useDispatch()
+  const {isOpenInfo, isOpenOrder } = useSelector(state => state.detals)
 
   const escFunction = useCallback((event) => {
     if (event.key === 'Escape') {
-      setOrderOpen(false);
-      setIngridientInfo({})
+      dispatch({type:CLOSE_ORDER});
+      dispatch({type:CLOSE_INFO})
     }
-  }, []);
+  }, [dispatch]);
 
   useEffect(()=>{
     document.addEventListener("keydown", escFunction);
@@ -47,54 +44,39 @@ function App() {
     fetch(url+path)
     .then( (response) => {
       if (response.ok) { 
+        dispatch({type: GET_ITEMS_REQUEST});
         return response.json();
       } else {
         return Promise.reject(response.status);
       }
     })
     .then( (response) => {
-      setDataIngredients(response.data); 
-      setSuccess(response.success);
+      dispatch({type: GET_ITEMS_SUCCESS, items:response.data})
     })
     .catch( (error) => {
       console.log(error);
+      dispatch({type: GET_ITEMS_FAILED})
     });
 
     return () => {
       document.removeEventListener("keydown", escFunction);
     };
-
-  }, [escFunction])
+  }, [escFunction, dispatch])
 
   return (
     <div className="App">
         <AppHeader/>
-        {success &&
           <main>
-            <BurgerIngredients 
-              dataIngredients={dataIngredients} 
-              openDetals={setIngridientInfo} 
-            />
-            <BurgerConstructor 
-              listIngredients={datalistIngredients} 
-              openDetails={()=>{setOrderOpen(true)}} 
-
-            />
+            <BurgerIngredients />
+            <BurgerConstructor />
           </main>
-        }
          <ModalOverlay>
-              {orderOpen &&
-                <Modal setActive={()=>{setOrderOpen(false)}}>
-                  <OrderDetails setActive={()=>{setOrderOpen(false)}} />
+            {(isOpenInfo || isOpenOrder) &&
+                <Modal>
+                  <OrderDetails/>
+                  <IngredientDetails/>
                 </Modal>
-                }
-              {ingridientInfo.name !== undefined && 
-                <Modal setActive={()=>{setIngridientInfo({})}}z>
-                  <IngredientDetails 
-                    setActive={()=>{setIngridientInfo({})}}
-                    data={ingridientInfo}/>
-                </Modal>
-              }
+             }   
          </ModalOverlay>
     </div>
   );

@@ -1,11 +1,21 @@
 import PropTypes from 'prop-types'
 import { CurrencyIcon, Button, ConstructorElement, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 
+import { useSelector, useDispatch } from 'react-redux';
+import { OPEN_ORDER } from '../../services/actions/detals.js';
+
 import dataPropTypes from '../../utils/type.js'
 
 import style from './style.module.css'
 
-function BurgerConstructor({listIngredients, openDetails}) {
+
+function BurgerConstructor() {
+    const dispatch = useDispatch() 
+
+    const listIngredients = useSelector(store=>store.components.list)
+    const openDetails = () => {
+        dispatch({type:OPEN_ORDER})
+    }
 
     return(
         <div className={"mt-20"} >

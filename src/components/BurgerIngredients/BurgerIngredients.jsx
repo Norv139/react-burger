@@ -1,13 +1,20 @@
 import PropTypes from 'prop-types'
 import {Tab, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components'
+import { useDispatch, useSelector } from 'react-redux'
+import { OPEN_INFO, SET_INFO } from '../../services/actions/detals.js'
 
 import dataPropTypes from '../../utils/type.js'
 
 import style from './style.module.css'
 
 
+function BurgerIngredients() {
+    const dispatch = useDispatch()
 
-function BurgerIngredients({dataIngredients, openDetals}) {
+    const dataIngredients = useSelector(state=>state.components.items)
+
+    const openDetals = (data) => {dispatch({type:SET_INFO, item:{...data}}); dispatch({type: OPEN_INFO})}
+
     return(
         <div className={style.main_block + " mr-10"}>
 
@@ -54,10 +61,6 @@ function BurgerIngredients({dataIngredients, openDetals}) {
     )
 }
 
-BurgerIngredients.propTypes = {
-    dataIngredients: PropTypes.arrayOf(dataPropTypes).isRequired,
-    openDetals: PropTypes.func
-}
 
 function SortCards({data, filterName, openDetals}){
     return(
@@ -71,7 +74,7 @@ function SortCards({data, filterName, openDetals}){
     )
 }
 SortCards.propTypes = {
-    data: PropTypes.arrayOf(dataPropTypes).isRequired,
+    data: PropTypes.arrayOf(dataPropTypes),
     filterName: PropTypes.string.isRequired,
     openDetals: PropTypes.func
 }
