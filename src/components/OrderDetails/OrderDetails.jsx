@@ -8,8 +8,6 @@ import { CLOSE_ORDER } from '../../services/actions/detals';
 
 import style from './style.module.css'
 
-
-
 function OrderDetails(){
     const dispatch = useDispatch()
     const {isOpenOrder} = useSelector(state => state.detals)

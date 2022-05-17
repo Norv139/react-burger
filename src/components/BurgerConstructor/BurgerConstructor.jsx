@@ -4,9 +4,14 @@ import { CurrencyIcon, Button, ConstructorElement, DragIcon } from "@ya.praktiku
 import { useSelector, useDispatch } from 'react-redux';
 import { OPEN_ORDER } from '../../services/actions/detals.js';
 
+import { INCREASE_LIST_ITEM, DECREASE_LIST_ITEM } from '../../services/actions/components.js';
+
+import { useDrop } from 'react-dnd'
+
 import dataPropTypes from '../../utils/type.js'
 
 import style from './style.module.css'
+
 
 
 function BurgerConstructor() {
@@ -17,10 +22,18 @@ function BurgerConstructor() {
         dispatch({type:OPEN_ORDER})
     }
 
+    const [, drop] = useDrop(() => ({
+        accept: 'item',
+        drop: (item) => {
+          console.log(item);
+          dispatch({type:INCREASE_LIST_ITEM, items:{...item} })
+        },
+      }), [])
+
     return(
         <div className={"mt-20"} >
 
-            <div >
+            <div ref={drop}>
                 {   listIngredients &&
                     <BurgerConstructorList list={listIngredients} />
                 }
@@ -52,11 +65,6 @@ function BurgerConstructor() {
     )
 }
 
-BurgerConstructor.propTypes = {
-    listIngredients: PropTypes.arrayOf(dataPropTypes).isRequired,
-    openDetails: PropTypes.func.isRequired
-}
-
 function TotalPrice(list){
     try {
         const bun = list.filter( firstData => firstData.type === "bun" )[0].price
@@ -75,7 +83,7 @@ function TotalPrice(list){
 }
 
 TotalPrice.propTypes= {
-    list: PropTypes.arrayOf(dataPropTypes).isRequired
+    list: PropTypes.arrayOf(dataPropTypes)
 }
 
 function BurgerConstructorList({list}){
@@ -103,10 +111,14 @@ function BurgerConstructorList({list}){
                                 <div className={style.margin_height_auto}>
                                     <DragIcon type="primary"/>
                                 </div>
+
                                 <ConstructorElement
                                     text={x.name}
                                     price={x.price}
-                                    thumbnail={x.image} />
+                                    thumbnail={x.image}
+                                    handleClose={()=>{console.log('LAL', x._id)}}
+                                />
+
                             </div>
                             )
                     })
@@ -125,7 +137,10 @@ function BurgerConstructorList({list}){
         )
     }
     catch{
-        return null
+        return (
+            <div className={style.all_list}> 
+            </div>
+        )
     }
 }
 

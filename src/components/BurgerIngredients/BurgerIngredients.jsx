@@ -1,18 +1,28 @@
 import PropTypes from 'prop-types'
-import {Tab, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components'
+import {Tab, CurrencyIcon, Counter} from '@ya.praktikum/react-developer-burger-ui-components'
 import { useDispatch, useSelector } from 'react-redux'
 import { OPEN_INFO, SET_INFO } from '../../services/actions/detals.js'
+import { useDrag } from 'react-dnd'
 
 import dataPropTypes from '../../utils/type.js'
 
 import style from './style.module.css'
 
 
+
+
+
+
 function BurgerIngredients() {
     const dispatch = useDispatch()
 
     const dataIngredients = useSelector(state=>state.components.items)
+    const listIngredients = useSelector(state=>state.components.list)
 
+    function fnCaunt(_id){
+        return listIngredients.filter( x => {return x._id === _id}).length
+    }
+    
     const openDetals = (data) => {dispatch({type:SET_INFO, item:{...data}}); dispatch({type: OPEN_INFO})}
 
     return(
@@ -41,19 +51,24 @@ function BurgerIngredients() {
                     Булки
                 </p>
 
-                <SortCards data={dataIngredients} filterName="bun" openDetals={openDetals} />
+                <SortCards 
+                    data={dataIngredients} 
+                    filterName="bun" 
+                    openDetals={openDetals} 
+                    fnCount={fnCaunt}
+                    />
 
                 <p className="title text text_type_main-medium" id='sauce'>
                     Соусы
                 </p>
 
-                <SortCards data={dataIngredients} filterName="sauce" openDetals={openDetals} />
+                <SortCards data={dataIngredients} filterName="sauce" openDetals={openDetals} fnCount={fnCaunt} />
 
                 <p className="title text text_type_main-medium" id='main'>
                     Начинка
                 </p>
 
-                <SortCards data={dataIngredients} filterName="main" openDetals={openDetals} />
+                <SortCards data={dataIngredients} filterName="main" openDetals={openDetals} fnCount={fnCaunt} />
 
             </div>}
 
@@ -62,13 +77,23 @@ function BurgerIngredients() {
 }
 
 
-function SortCards({data, filterName, openDetals}){
+function SortCards({data, filterName, openDetals, fnCount}){
+    
     return(
         <div className={style.content}>
             {
                 data
                 .filter( firstData => firstData.type === filterName )
-                .map( renderData => {return( <Сard key={renderData._id} data={renderData} openDetals={openDetals} /> ) } )
+                .map( renderData => 
+                    { return(
+                         
+                    <Сard 
+                        key={renderData._id} 
+                        data={renderData} 
+                        openDetals={openDetals} 
+                        count={fnCount(renderData._id)}
+                    /> 
+                    ) } )
             }
         </div>
     )
@@ -79,15 +104,37 @@ SortCards.propTypes = {
     openDetals: PropTypes.func
 }
 
-function Сard ({data, openDetals}) {
+function Сard ({data, openDetals, count}) {
+
+    const [,drag] = useDrag(() => ({
+        type: 'item',
+        item: {...data},
+        collect: monitor => ({
+          isDragging: !!monitor.isDragging(),
+        }),
+      }), [data]
+      )
+
     return(
-        <div className={style.card_frame + ' mt-6 mb-10 ml-4 mr-2'} onClick={()=>{openDetals(data)}}>
-            
+        <div className={style.card_frame + ' mt-6 mb-10 ml-4 mr-2'} onClick={()=>{openDetals(data)}} >
             <div className={ style.card_frame + ' ml-4 mr-4'}>
-                <img src={data.image} alt={data.name} />
+                { count !== 0 ?(
+                    <div className={style.counter_box}>
+                        <Counter count={ 
+                                count
+                            } size="default" />
+                    </div>
+                    ):(
+                    null
+                )}
+
+                <img src={data.image} alt={data.name} ref={drag} />
+
+
             </div>
 
             <div className={style.cart_info} >
+            
                 <div className={style.price+" mt-1 mb-1"}>
                     <p className="text text_type_digits-default">
                         {data.price} 

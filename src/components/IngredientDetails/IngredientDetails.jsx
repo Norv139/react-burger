@@ -66,9 +66,4 @@ function IngredientDetails(){
     )
 }
 
-IngredientDetails.propTypes = {
-    data: PropTypes.objectOf(dataPropTypes).isRequired,
-    setActive: PropTypes.func
-}
-
 export default IngredientDetails

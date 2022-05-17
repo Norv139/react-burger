@@ -7,6 +7,7 @@ import {
     INCREASE_LIST_ITEM
 
 } from "../actions/components";
+import testListData from "../../utils/data";
 
 const initialState = {
     items: [],
@@ -33,6 +34,7 @@ const componentReduser = (state = initialState, action) => {
         }
 
         case DECREASE_LIST_ITEM: {
+
             return {
                 ...state,
                 items: [...state.items].map(item =>
@@ -41,7 +43,10 @@ const componentReduser = (state = initialState, action) => {
               };
         }
         case INCREASE_LIST_ITEM: {
-            return {...state, list: [...state.list, action.items]}
+            return action.items.type !== "bun" ? 
+            {...state, list: [...state.list, action.items]} :
+
+            {...state, list: [...state.list, action.items]}
         }
 
         default: {
