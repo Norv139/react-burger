@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types'
+import { useRef, useEffect, useState } from 'react'
 import {Tab, CurrencyIcon, Counter} from '@ya.praktikum/react-developer-burger-ui-components'
 import { useDispatch, useSelector } from 'react-redux'
 import { OPEN_INFO, SET_INFO } from '../../services/actions/detals.js'
@@ -14,6 +15,12 @@ import style from './style.module.css'
 
 
 function BurgerIngredients() {
+
+    const [current, setCurrent] = useState('bun')
+
+    const myRef = useRef(null)
+
+
     const dispatch = useDispatch()
 
     const dataIngredients = useSelector(state=>state.components.items)
@@ -25,6 +32,20 @@ function BurgerIngredients() {
     
     const openDetals = (data) => {dispatch({type:SET_INFO, item:{...data}}); dispatch({type: OPEN_INFO})}
 
+    const inputRef = useRef();
+    const scrollHandler = _ => {
+        var all =  inputRef.current.getBoundingClientRect().top
+        setCurrent( all > 20 ? 'bun' : all > -530 ? 'souse' : 'main' );
+    };
+
+    useEffect(() => {
+      window.addEventListener("scroll", scrollHandler, true);
+      return () => {
+        window.removeEventListener("scroll", scrollHandler, true);
+      };
+    }, []);
+
+
     return(
         <div className={style.main_block + " mr-10"}>
 
@@ -33,21 +54,21 @@ function BurgerIngredients() {
             </p>
 
             <div className={style.tab}>
-                <Tab>
+                <Tab value="bun" active={current === 'bun'}>
                     Булки
                 </Tab>
-                <Tab>
+                <Tab value="souse" active={current === 'souse'}>
                     Соусы
                 </Tab>
-                <Tab>
+                <Tab value="main" active={current === 'main'}>
                     Начинка
                 </Tab>
             </div>
 
             { dataIngredients &&
-            <div className={style.all_content + '  mt-10'}>
+            <div className={style.all_content + '  mt-10' }>
 
-                <p className="title text text_type_main-medium" id='bun'>
+                <p className="title text text_type_main-medium" id='bun' ref={inputRef}>
                     Булки
                 </p>
 
