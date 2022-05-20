@@ -18,9 +18,6 @@ function BurgerIngredients() {
 
     const [current, setCurrent] = useState('bun')
 
-    const myRef = useRef(null)
-
-
     const dispatch = useDispatch()
 
     const dataIngredients = useSelector(state=>state.components.items)
@@ -32,10 +29,18 @@ function BurgerIngredients() {
     
     const openDetals = (data) => {dispatch({type:SET_INFO, item:{...data}}); dispatch({type: OPEN_INFO})}
 
-    const inputRef = useRef();
+    const borderRef = useRef(null)
+    const bunRef = useRef(null);
+    const souseRef = useRef(null)
+
     const scrollHandler = _ => {
-        var all =  inputRef.current.getBoundingClientRect().top
-        setCurrent( all > 20 ? 'bun' : all > -530 ? 'souse' : 'main' );
+        var top = borderRef.current.getBoundingClientRect().top
+        var bun = bunRef.current.getBoundingClientRect().top -30 
+        var souse = souseRef.current.getBoundingClientRect().top -30
+        setCurrent(
+            bun > 0 ? 'bun' : 
+            souse > -top ? 'souse' : 'main'
+        );
     };
 
     useEffect(() => {
@@ -66,9 +71,9 @@ function BurgerIngredients() {
             </div>
 
             { dataIngredients &&
-            <div className={style.all_content + '  mt-10' }>
+            <div className={style.all_content + '  mt-10'} ref={borderRef}>
 
-                <p className="title text text_type_main-medium" id='bun' ref={inputRef}>
+                <p className="title text text_type_main-medium" id='bun' ref={bunRef}>
                     Булки
                 </p>
 
@@ -79,7 +84,7 @@ function BurgerIngredients() {
                     fnCount={fnCaunt}
                     />
 
-                <p className="title text text_type_main-medium" id='sauce'>
+                <p className="title text text_type_main-medium" id='sauce' ref={souseRef}>
                     Соусы
                 </p>
 

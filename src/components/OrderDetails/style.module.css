@@ -12,8 +12,13 @@
 
     background-color: rgba(0, 0, 0, 0.4);
 }
+.model_close_btn{
+    display: flex;
+    justify-content: end;
+}
 
 .model_main{
+    min-width: 450px;
     display: flex;
     justify-content: center;
     align-items: center;

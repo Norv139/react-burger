@@ -4,9 +4,17 @@ import { CurrencyIcon, Button, ConstructorElement, DragIcon } from "@ya.praktiku
 import { useSelector, useDispatch } from 'react-redux';
 import { OPEN_ORDER } from '../../services/actions/detals.js';
 
-import { INCREASE_LIST_ITEM, DECREASE_LIST_ITEM } from '../../services/actions/components.js';
+import { 
+    POST_ORDER_SUCCESS, 
+    POST_ORDER_REQUEST, 
+    POST_ORDER_FAILED
+} from '../../services/actions/detals';
+
+import { DECREASE_LIST_ITEM, INCREASE_LIST_ITEM } from '../../services/actions/components'
 
 import { useDrop } from 'react-dnd'
+
+import { url, orders } from '../../utils/settings';
 
 import dataPropTypes from '../../utils/type.js'
 
@@ -17,9 +25,37 @@ import style from './style.module.css'
 function BurgerConstructor() {
     const dispatch = useDispatch() 
 
+    const removeItem = (itemId) => dispatch({type: DECREASE_LIST_ITEM, id: itemId})
+
     const listIngredients = useSelector(store=>store.components.list)
-    const openDetails = () => {
-        dispatch({type:OPEN_ORDER})
+    const createOrder = async() => {
+
+       
+
+        const data = { "ingredients": listIngredients.map(x=>x._id) };
+
+            fetch( url + orders, {
+                method: 'POST', 
+                body: JSON.stringify(data), 
+                headers: {
+                'Content-Type': 'application/json'
+                }
+            })
+            .then( (response) => {
+                if (response.ok) { 
+                    dispatch({type: POST_ORDER_REQUEST})
+                    return response.json();
+                } else {
+                  return Promise.reject(response.status);
+                }
+            })
+            .then( (response) => {
+                dispatch({type: POST_ORDER_SUCCESS, items: {...response}})
+            })
+            .catch( (error) => {
+                dispatch({type: POST_ORDER_FAILED})
+                console.log(error);
+            });
     }
 
     const [, drop] = useDrop(() => ({
@@ -35,7 +71,7 @@ function BurgerConstructor() {
 
             <div ref={drop}>
                 {   listIngredients &&
-                    <BurgerConstructorList list={listIngredients} />
+                    <BurgerConstructorList list={listIngredients} fnRemove={removeItem} />
                 }
             </div>
             
@@ -52,7 +88,7 @@ function BurgerConstructor() {
                 
                 <div className="ml-10">
                     <Button
-                        onClick={openDetails}
+                        onClick={createOrder}
                         className='ml-10'
                         type="primary" 
                         size="large"
@@ -66,10 +102,11 @@ function BurgerConstructor() {
 }
 
 function TotalPrice(list){
+    const initialValue = 0;
+
     try {
         const bun = list.filter( firstData => firstData.type === "bun" )[0].price
 
-        const initialValue = 0;
         const sumWithInitial = list
             .filter( firstData => firstData.type !== "bun" )
             .map(x=>x.price)
@@ -78,7 +115,13 @@ function TotalPrice(list){
                 initialValue);
         return sumWithInitial + bun * 2
     } catch {
-        return 0
+        const sumWithInitial = list
+            .filter( firstData => firstData.type !== "bun" )
+            .map(x=>x.price)
+            .reduce( 
+                (previousValue, currentValue) => previousValue + currentValue,
+                initialValue);
+        return sumWithInitial
     }
 }
 
@@ -86,7 +129,7 @@ TotalPrice.propTypes= {
     list: PropTypes.arrayOf(dataPropTypes)
 }
 
-function BurgerConstructorList({list}){
+function BurgerConstructorList({list, fnRemove}){
     try{
         const bun = list.filter( firstData => firstData.type === "bun" )[0]
         return(
@@ -116,7 +159,7 @@ function BurgerConstructorList({list}){
                                     text={x.name}
                                     price={x.price}
                                     thumbnail={x.image}
-                                    handleClose={()=>{console.log('LAL', x._id)}}
+                                    handleClose={()=>{fnRemove(x._id)}}
                                 />
 
                             </div>
@@ -139,6 +182,27 @@ function BurgerConstructorList({list}){
     catch{
         return (
             <div className={style.all_list}> 
+            {
+                    list
+                    .filter( firstData => firstData.type !== "bun" )
+                    .map((x, index)=>{
+                        return(
+                            <div key={index} className={style.item + " mt-2 mb-2"}>
+                                <div className={style.margin_height_auto}>
+                                    <DragIcon type="primary"/>
+                                </div>
+
+                                <ConstructorElement
+                                    text={x.name}
+                                    price={x.price}
+                                    thumbnail={x.image}
+                                    handleClose={()=>{fnRemove(x._id)}}
+                                />
+
+                            </div>
+                            )
+                    })
+                }
             </div>
         )
     }

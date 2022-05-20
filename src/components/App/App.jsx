@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback} from 'react';
+import { useEffect, useCallback} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 // components
@@ -17,13 +17,10 @@ import OrderDetails from '../OrderDetails/OrderDetails';
 
 //config
 
-import testListData from '../../utils/data';
 import { CLOSE_INFO, CLOSE_ORDER } from '../../services/actions/detals';
 import { GET_ITEMS_SUCCESS, GET_ITEMS_FAILED, GET_ITEMS_REQUEST} from '../../services/actions/components';
 
-const url = "https://norma.nomoreparties.space"
-const path = "/api/ingredients"
-
+import { url, path } from '../../utils/settings'
 // style for App.tsx is empty
 
 

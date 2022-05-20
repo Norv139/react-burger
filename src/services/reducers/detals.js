@@ -1,10 +1,24 @@
-import { SET_INFO, OPEN_INFO, CLOSE_INFO, OPEN_ORDER, CLOSE_ORDER } from "../actions/detals"
+import { 
+    SET_INFO, 
+    OPEN_INFO, 
+    CLOSE_INFO, 
+    OPEN_ORDER, 
+    CLOSE_ORDER,
+    POST_ORDER_SUCCESS ,
+    POST_ORDER_REQUEST ,
+    POST_ORDER_FAILED
+
+} from "../actions/detals"
 
 const initialState = {
-    order: [],
-    info: {},
+    order: {},
+
+    orderRequest: false,
+    orderFailed: false,
 
     isOpenOrder: false,
+
+    info: {},
     isOpenInfo: false
 }
 
@@ -21,6 +35,28 @@ const initialState = {
             return {...state, isOpenInfo: false}
         }
 
+        case POST_ORDER_SUCCESS: {
+            return { 
+                ...state, 
+                orderFailed: false, 
+                order: {...action.items}, 
+                orderRequest: false,
+                isOpenOrder: true
+            };
+          }
+        case POST_ORDER_REQUEST: {
+            return {
+              ...state,
+              orderRequest: true
+            };
+          }
+        case POST_ORDER_FAILED: {
+            return { 
+                ...state,
+                orderRequest: false,
+                orderFailed: true
+            };
+        }
 
         case OPEN_ORDER: {
             return {...state, isOpenOrder: true}

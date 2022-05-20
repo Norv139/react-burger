@@ -9,9 +9,10 @@ import { CLOSE_ORDER } from '../../services/actions/detals';
 import style from './style.module.css'
 
 function OrderDetails(){
-    const dispatch = useDispatch()
-    const {isOpenOrder} = useSelector(state => state.detals)
 
+    const dispatch = useDispatch()
+    const {isOpenOrder, order} = useSelector(state => state.detals)
+    /// {"success":true,"name":"Space флюоресцентный бургер","order":{"number":9652}}
     const setActive = () => {
         dispatch({type:CLOSE_ORDER})
     }
@@ -27,7 +28,7 @@ function OrderDetails(){
                         </div>
 
                         <div className={style.model_main+' mr-25 ml-25'}>
-                            <p className="text text_type_digits-large mt-9">034536</p>
+                            <p className="text text_type_digits-large mt-9">{order.order.number}</p>
 
                             <p className="text text_type_main-default mt-8">идентификатор заказа</p>
 
