@@ -35,13 +35,21 @@ const componentReduser = (state = initialState, action) => {
 
         case DECREASE_LIST_ITEM: {
             return {
-                ...state, list: [...state.list.filter(x=>x._id!==action.id), ...state.list.filter(x=>x._id===action.id).slice(0,-1)]
+                ...state, 
+                list: [
+                    ...state.list.filter(x=>x._id!==action.id), 
+                    ...state.list.filter(x=>x._id===action.id).slice(0,-1)
+                ]
               };
         }
         case INCREASE_LIST_ITEM: {
             return action.items.type === "bun" ? 
             {...state, list: [...state.list.filter(x=>x.type!=='bun'), action.items]} :
             {...state, list: [...state.list, action.items]}
+        }
+
+        case 'CHANGE_LIST': {
+            return {...state, list: [action.items]}
         }
 
         default: {

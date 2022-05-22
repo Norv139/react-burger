@@ -1,5 +1,3 @@
-import { useEffect, useCallback} from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 
 // components
 import AppHeader from '../Header/AppHeader'
@@ -17,48 +15,10 @@ import OrderDetails from '../OrderDetails/OrderDetails';
 
 //config
 
-import { CLOSE_INFO, CLOSE_ORDER } from '../../services/actions/detals';
-import { GET_ITEMS_SUCCESS, GET_ITEMS_FAILED, GET_ITEMS_REQUEST} from '../../services/actions/components';
 
-import { url, path } from '../../utils/settings'
-// style for App.tsx is empty
 
 
 function App() {
-  const dispatch = useDispatch()
-  const {isOpenInfo, isOpenOrder } = useSelector(state => state.detals)
-
-  const escFunction = useCallback((event) => {
-    if (event.key === 'Escape') {
-      dispatch({type:CLOSE_ORDER});
-      dispatch({type:CLOSE_INFO})
-    }
-  }, [dispatch]);
-
-  useEffect(()=>{
-    document.addEventListener("keydown", escFunction);
-
-    fetch(url+path)
-    .then( (response) => {
-      if (response.ok) { 
-        dispatch({type: GET_ITEMS_REQUEST});
-        return response.json();
-      } else {
-        return Promise.reject(response.status);
-      }
-    })
-    .then( (response) => {
-      dispatch({type: GET_ITEMS_SUCCESS, items:response.data})
-    })
-    .catch( (error) => {
-      console.log(error);
-      dispatch({type: GET_ITEMS_FAILED})
-    });
-
-    return () => {
-      document.removeEventListener("keydown", escFunction);
-    };
-  }, [escFunction, dispatch])
 
   return (
     <div className="App">
@@ -68,12 +28,10 @@ function App() {
             <BurgerConstructor />
           </main>
          <ModalOverlay>
-            {(isOpenInfo || isOpenOrder) &&
                 <Modal>
                   <OrderDetails/>
                   <IngredientDetails/>
                 </Modal>
-             }   
          </ModalOverlay>
     </div>
   );

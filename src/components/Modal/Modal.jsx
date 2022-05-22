@@ -1,19 +1,33 @@
-import { useDispatch } from 'react-redux';
-import { CLOSE_INFO, CLOSE_ORDER } from '../../services/actions/detals';
 import style from './style.module.css'
+
+import { useEffect, useCallback} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { CLOSE_INFO, CLOSE_ORDER } from '../../services/actions/detals';
+
+  
+
+
 
 function Modal({children}){
     const dispatch = useDispatch()
-    const setActive = ()=>{
+
+    const escFunction = useCallback((event) => {
+        if (event.key === 'Escape') {
         dispatch({type:CLOSE_ORDER});
         dispatch({type:CLOSE_INFO})
-    }
+        }
+    }, [dispatch]);
 
-    return  <div className={style.modal} onClick={setActive}>
-                <div className={style.model_content} onClick={e=>e.stopPropagation()}>
-                    {children}
-                </div>
-            </div>
+    useEffect(()=>{
+        document.addEventListener("keydown", escFunction);
+        return () => {
+        document.removeEventListener("keydown", escFunction);
+        };
+    }, [escFunction, dispatch])
+
+
+    return  (<div >{children}</div>)
 }
 
 export default Modal;

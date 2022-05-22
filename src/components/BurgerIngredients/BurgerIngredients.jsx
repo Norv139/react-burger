@@ -9,9 +9,7 @@ import dataPropTypes from '../../utils/type.js'
 
 import style from './style.module.css'
 
-
-
-
+import { getAllItems } from '../../services/actions/index.js';
 
 
 function BurgerIngredients() {
@@ -27,7 +25,10 @@ function BurgerIngredients() {
         return listIngredients.filter( x => {return x._id === _id}).length
     }
     
-    const openDetals = (data) => {dispatch({type:SET_INFO, item:{...data}}); dispatch({type: OPEN_INFO})}
+    const openDetals = (data) => {
+        dispatch({type:SET_INFO, item:{...data}}); 
+        dispatch({type: OPEN_INFO})
+    }
 
     const borderRef = useRef(null)
     const bunRef = useRef(null);
@@ -45,6 +46,7 @@ function BurgerIngredients() {
 
     useEffect(() => {
       window.addEventListener("scroll", scrollHandler, true);
+      dispatch(getAllItems())
       return () => {
         window.removeEventListener("scroll", scrollHandler, true);
       };

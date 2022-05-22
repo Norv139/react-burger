@@ -20,25 +20,27 @@ function OrderDetails(){
     return(  
             <>
                 { isOpenOrder &&
-                    <span onClick={e=>e.stopPropagation()}> 
-                        <div className={style.model_close_btn + ' mt-15 mr-10 ml-10'}>
-                            <button className={style.btn} onClick={setActive}>
-                                <img src={IconClose} alt="X" />
-                            </button>
-                        </div>
+                    <div className={style.modal}>
+                        <span onClick={e=>e.stopPropagation()} className={style.model_content}> 
+                            <div className={style.model_close_btn + ' mt-15 mr-10 ml-10'}>
+                                <button className={style.btn} onClick={setActive}>
+                                    <img src={IconClose} alt="X" />
+                                </button>
+                            </div>
 
-                        <div className={style.model_main+' mr-25 ml-25'}>
-                            <p className="text text_type_digits-large mt-9">{order.order.number}</p>
+                            <div className={style.model_main+' mr-25 ml-25'}>
+                                <p className="text text_type_digits-large mt-9">{order.order.number}</p>
 
-                            <p className="text text_type_main-default mt-8">идентификатор заказа</p>
+                                <p className="text text_type_main-default mt-8">идентификатор заказа</p>
 
-                            <img src={ImgDone} alt='V' className='mt-15 mb-15' />
+                                <img src={ImgDone} alt='V' className='mt-15 mb-15' />
 
-                            <p className="text text_type_main-default mb-2">Ваш заказ начали готовить</p>
+                                <p className="text text_type_main-default mb-2">Ваш заказ начали готовить</p>
 
-                            <p className={"text text_type_main-default mb-30 " + style.secondary}>Дождитесь готовности на орбитальной станции</p>
-                        </div>
-                    </span>
+                                <p className={"text text_type_main-default mb-30 " + style.secondary}>Дождитесь готовности на орбитальной станции</p>
+                            </div>
+                        </span>
+                    </div>
                 }     
             </>
         )

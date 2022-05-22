@@ -44,12 +44,14 @@ const initialState = {
                 isOpenOrder: true
             };
           }
+
         case POST_ORDER_REQUEST: {
             return {
               ...state,
               orderRequest: true
             };
           }
+          
         case POST_ORDER_FAILED: {
             return { 
                 ...state,
