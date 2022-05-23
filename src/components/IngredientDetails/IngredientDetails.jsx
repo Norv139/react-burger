@@ -24,6 +24,7 @@ function IngredientDetails(){
         <>
             { isOpenInfo &&
                 <div className={style.modal}>
+                    <p className="text text_type_main-medium ml-10"> Детали ингидиета </p>
                     <span className={style.model_content + ' pt-10 pl-10 pr-10 pb-15'}>
                         
                         <img src={data.image_large} alt='img'/>

@@ -6,8 +6,8 @@ import BurgerIngredients from '../BurgerIngredients/BurgerIngredients'
 
 //modal
 
-import Modal from '../Modal/Modal';
 import ModalOverlay from '../ModalOverlay/ModalOverlay';
+import Modal from '../Modal/Modal';
 
 // Overlay
 import IngredientDetails from '../IngredientDetails/IngredientDetails';
@@ -36,13 +36,13 @@ function App() {
             <BurgerIngredients />
             <BurgerConstructor />
           </main>
-         <ModalOverlay>
+         <Modal>
            { (isOpenOrder || isOpenInfo) &&
-            <Modal fnClose={fnclose}>
+            <ModalOverlay fnClose={fnclose}>
                   <OrderDetails/>
                   <IngredientDetails/>
-            </Modal>  } 
-         </ModalOverlay>
+            </ModalOverlay>  } 
+         </Modal>
     </div>
   );
 }
