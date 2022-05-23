@@ -118,6 +118,9 @@ function BurgerConstructorList({list, fnRemove, fnReorder}){
       };
 
     try{
+        const onReorder = (e, from, to) => {
+            fnReorder([bun, ...move(list_ingridients, from, to)])
+          };
         
         return(
             <span >
@@ -179,12 +182,15 @@ function BurgerConstructorList({list, fnRemove, fnReorder}){
         )
     }
     catch{
+        const onReorder = (e, from, to) => {
+            fnReorder([...move(list_ingridients, from, to)])
+          };
         return (
+            
             <Reorder
                     className={style.all_list}
                     reorderId="my-list" // Unique ID that is used internally to track this list (required)
                     reorderGroup="reorder-group" // A group ID that allows items to be dragged between lists of the same group (optional)
-                    // getRef={this.storeRef.bind(this)} // Function that is passed a reference to the root node when mounted (optional)
                     component="div" // Tag name or Component to be used for the wrapping element (optional), defaults to 'div'
                     lock="horizontal" // Lock the dragging direction (optional): vertical, horizontal (do not use with groups)
                     onReorder={onReorder} // Callback when an item is dropped (you will need this to update your state)
@@ -194,8 +200,7 @@ function BurgerConstructorList({list, fnRemove, fnReorder}){
                     
                     >
                 {
-                    list
-                    .filter( firstData => firstData.type !== "bun" )
+                    list_ingridients
                     .map((x)=>{
                         return(
                             <div key={x.uuid}  className={style.item + " mt-2 mb-2"} >
