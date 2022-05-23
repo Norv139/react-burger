@@ -6,7 +6,6 @@ import BurgerIngredients from '../BurgerIngredients/BurgerIngredients'
 
 //modal
 
-import ModalOverlay from '../ModalOverlay/ModalOverlay';
 import Modal from '../Modal/Modal';
 
 // Overlay
@@ -24,7 +23,7 @@ function App() {
   const dispatch = useDispatch()
   const {isOpenOrder, isOpenInfo } = useSelector(state => state.detals)
 
-  const fnclose =()=>{
+  const closeAllPopups = ()=>{
     dispatch({type:CLOSE_ORDER});
     dispatch({type:CLOSE_INFO})
   }
@@ -36,13 +35,12 @@ function App() {
             <BurgerIngredients />
             <BurgerConstructor />
           </main>
-         <Modal>
            { (isOpenOrder || isOpenInfo) &&
-            <ModalOverlay fnClose={fnclose}>
+            <Modal closeAllPopups={closeAllPopups}>
                   <OrderDetails/>
                   <IngredientDetails/>
-            </ModalOverlay>  } 
-         </Modal>
+            </Modal>  
+            } 
     </div>
   );
 }
