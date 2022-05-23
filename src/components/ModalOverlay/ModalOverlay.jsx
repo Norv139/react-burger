@@ -28,7 +28,9 @@ function ModalOverlay({children, fnClose}){
         <div className={style.modal} onClick={()=>{fnClose()}} >
             <span onClick={e=>e.stopPropagation()} className={style.model_content}> 
                 <div className={style.model_close_btn + ' mt-10 mr-10 ml-10'}>
-                    <CloseIcon onClick={()=>{fnClose()}} className={style.btn}/>
+                    <div className={style.btn}>
+                        <CloseIcon onClick={()=>{fnClose()}}/>
+                    </div>
                 </div>
                 {children}
             </span>

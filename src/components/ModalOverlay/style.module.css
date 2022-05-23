@@ -20,12 +20,15 @@
     border-radius: 40px;
     flex-direction: column;
 }
+
 .model_close_btn{
+    position: relative;
     display: flex;
     justify-content: end;
 }
 
 .btn{
+    position: absolute;
     cursor:pointer;
     padding: 0;
     border: none;
