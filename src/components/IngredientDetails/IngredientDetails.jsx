@@ -3,9 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { CLOSE_INFO } from '../../services/actions/detals';
 
-import { } from '@ya.praktikum/react-developer-burger-ui-components'
+import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 
-import IconClose from '../../images/iconClose.svg'
 import style from './style.module.css'
 
 
@@ -26,13 +25,6 @@ function IngredientDetails(){
             { isOpenInfo &&
                 <div className={style.modal}>
                     <span className={style.model_content + ' pt-10 pl-10 pr-10 pb-15'}>
-                    
-                        <div className={style.modal_top}>
-                            <p className="text text_type_main-large mr-20">Детали ингредиента</p>
-                            <button className={style.btn} onClick={setActive}>
-                                <img src={IconClose} alt="X" />
-                            </button>
-                        </div>
                         
                         <img src={data.image_large} alt='img'/>
 
