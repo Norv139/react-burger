@@ -3,6 +3,9 @@ import { useRef, useEffect, useState } from 'react'
 import {Tab, CurrencyIcon, Counter} from '@ya.praktikum/react-developer-burger-ui-components'
 import { useDispatch, useSelector } from 'react-redux'
 import { OPEN_INFO, SET_INFO } from '../../services/actions/detals.js'
+
+
+
 import { useDrag } from 'react-dnd'
 
 import dataPropTypes from '../../utils/type.js'

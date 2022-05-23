@@ -4,7 +4,8 @@ import {
     GET_ITEMS_REQUEST,
 
     DECREASE_LIST_ITEM,
-    INCREASE_LIST_ITEM
+    INCREASE_LIST_ITEM,
+    CHANGE_LIST
 
 } from "../actions/components";
 import testListData from "../../utils/data";
@@ -48,8 +49,8 @@ const componentReduser = (state = initialState, action) => {
             {...state, list: [...state.list, action.items]}
         }
 
-        case 'CHANGE_LIST': {
-            return {...state, list: [action.items]}
+        case CHANGE_LIST: {
+            return {...state, list: [...action.items]}
         }
 
         default: {
