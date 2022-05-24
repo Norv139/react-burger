@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { CLOSE_INFO, CLOSE_ORDER } from '../../services/actions/detals';
 
-
+// Спасибо, что проверяете мой код
 
 function App() {
   const dispatch = useDispatch()
@@ -25,7 +25,7 @@ function App() {
 
   const closeAllPopups = ()=>{
     dispatch({type:CLOSE_ORDER});
-    dispatch({type:CLOSE_INFO})
+    dispatch({type:CLOSE_INFO});
   }
 
   return (
@@ -36,7 +36,7 @@ function App() {
             <BurgerConstructor />
           </main>
            { (isOpenOrder || isOpenInfo) &&
-            <Modal closeAllPopups={closeAllPopups}>
+            <Modal onClose={closeAllPopups}>
                   <OrderDetails/>
                   <IngredientDetails/>
             </Modal>  

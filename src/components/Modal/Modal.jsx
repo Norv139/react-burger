@@ -4,14 +4,15 @@ import { useEffect, useCallback} from 'react';
 
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import style from './style.module.css'
+import ModalOverlay from '../ModalOverlay/ModalOverlay';
 
-function Modal({children, closeAllPopups }){
+function Modal({children, onClose }){
 
     const escFunction = useCallback((event) => {
         if (event.key === 'Escape') {
-            closeAllPopups();
+            onClose();
         };
-    }, [closeAllPopups]);
+    }, [onClose]);
 
     useEffect(()=>{
         document.addEventListener("keydown", escFunction);
@@ -22,16 +23,16 @@ function Modal({children, closeAllPopups }){
     }, [escFunction])
 
     return ReactDOM.createPortal(
-        <div className={style.modal} onClick={()=>{closeAllPopups()}} >
+        <ModalOverlay onClose={onClose}>
             <span onClick={e=>e.stopPropagation()} className={style.model_content}> 
                 <div className={style.model_close_btn + ' mt-10 mr-10 ml-10'}>
                     <div className={style.btn}>
-                        <CloseIcon onClick={()=>{closeAllPopups()}}/>
+                        <CloseIcon onClick={()=>{onClose()}}/>
                     </div>
                 </div>
                 {children}
             </span>
-        </div>,
+        </ModalOverlay>,
         document.getElementById('portal'))
 }
 
