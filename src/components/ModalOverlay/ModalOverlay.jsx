@@ -1,7 +1,11 @@
-import ReactDOM from 'react-dom';
+import style from './style.module.css'
 
-function ModalOverlay({children}){
-    return ReactDOM.createPortal(<>{children}</>,document.getElementById('portal'))
+function ModalOverlay({children, onClose}){
+    return(
+            <div className={style.modal} onClick={()=>{onClose()}}>
+                {children}
+            </div>
+        )
 }
 
 export default ModalOverlay;

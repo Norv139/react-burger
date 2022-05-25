@@ -13,7 +13,35 @@
     background-color: rgba(0, 0, 0, 0.4);
 }
 
+.model_content{
+    display: flex;
+    background-color: rgb(29, 28, 33) !important;
+    flex-basis: min-content;
+    border-radius: 40px;
+    flex-direction: column;
+}
+
+.modal{
+    height: 100vh;
+    width: 100vw;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: rgba(0, 0, 0, 0.4);
+}
+.model_close_btn{
+    display: flex;
+    justify-content: end;
+}
+
 .model_main{
+    min-width: 450px;
     display: flex;
     justify-content: center;
     align-items: center;

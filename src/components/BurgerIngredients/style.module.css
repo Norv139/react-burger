@@ -1,3 +1,8 @@
+.counter_box{
+    position: relative;
+}
+
+
 .tab{
     display: flex;
 }
