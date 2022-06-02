@@ -15,12 +15,16 @@ function AppHeader(){
                     <div className={style.conteiner}>
                         <CastomButton 
                             type={primary}
-                            icon={<BurgerIcon type="primary" />} 
+                            icon={
+                                <BurgerIcon type="primary" />
+                            } 
                             text="Конструктор"
                         />
                         <CastomButton 
                             type={secondary} 
-                            icon={<ListIcon type="secondary" />} 
+                            icon={
+                                <ListIcon type="secondary" />
+                            } 
                             text="Лента заказов" 
                         />
                     </div>
@@ -35,8 +39,9 @@ function AppHeader(){
                     
                         <CastomButton 
                             type={secondary}  
-                            icon={<ProfileIcon 
-                            type="secondary" />} 
+                            icon={
+                            <ProfileIcon type="secondary" />
+                            } 
                             text="Личный кабинет" 
                         />
                     </div>

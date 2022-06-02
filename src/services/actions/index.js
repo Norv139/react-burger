@@ -1,18 +1,22 @@
 import { url, orders, path } from "../../utils/settings";
-import { 
-    POST_ORDER_FAILED, 
-    POST_ORDER_REQUEST, 
-    POST_ORDER_SUCCESS 
-} from "./detals";
 
 import { 
-    GET_ITEMS_REQUEST,
-    GET_ITEMS_SUCCESS,
-    GET_ITEMS_FAILED
-} from "./components";
+    getItems_REQUEST, 
+    getItems_SUCCESS, 
+    getItems_FAILED 
+} from "../reducers/components";
+
+import { 
+    postOrder_SUCCESS, 
+    postOrder_REQUEST, 
+    postOrder_FAILED 
+} from "../reducers/detals";
+
+//
 
 const axios = require('axios').default;
 
+//
 
 export function sendOrder (listItems) {
     return dispatch => {
@@ -21,7 +25,7 @@ export function sendOrder (listItems) {
 
     dispatch(postOrderRequest())
 
-    axios.post(url + orders, data)
+    axios.post(`${url}${orders}`, data)
     .then( (response) => {
         dispatch(postOrderSuccess(response.data));
         console.log(response);
@@ -32,23 +36,26 @@ export function sendOrder (listItems) {
     })
 }}
 
-const postOrderSuccess = items => ({
-    type: POST_ORDER_SUCCESS, items: {...items}
-})
-const postOrderRequest= () => ({
-    type: POST_ORDER_REQUEST
-})
-const postOrderFailed= () => ({
-    type: POST_ORDER_FAILED
-})
+const postOrderSuccess = items => (
+    postOrder_SUCCESS(
+        {items: {...items}}
+    )
+)
+const postOrderRequest= () => (
+    postOrder_REQUEST()
+)
+const postOrderFailed= () => (
+    postOrder_FAILED()
+)
 
+//
 
 export function getAllItems() {
     return dispatch => {
 
         dispatch(getItemsRequest)
 
-        axios.get(url+path)
+        axios.get(`${url}${path}`)
         .then( (response) => {
             dispatch(getItemsSuccess(response.data.data));
         })
@@ -60,15 +67,16 @@ export function getAllItems() {
 
 }}
 
-const getItemsSuccess = response => ({
-    type: GET_ITEMS_SUCCESS, 
-    items: response
-})
-const getItemsRequest= () => ({
-    type: GET_ITEMS_REQUEST
-})
-const getItemsFailed= () => ({
-    type: GET_ITEMS_FAILED
-})
+const getItemsSuccess = response => (
+    getItems_SUCCESS(
+        {items: response}
+    )
+)
+const getItemsRequest= () => (
+    getItems_REQUEST()
+)
+const getItemsFailed= () => (
+    getItems_FAILED()
+)
 
 

@@ -13,7 +13,8 @@ import move from "lodash-move";
 
 import { v4 as uuidv4 } from 'uuid';
 
-import { DECREASE_LIST_ITEM, INCREASE_LIST_ITEM, CHANGE_LIST } from '../../services/actions/components'
+
+import { decrease_list_item, increase_list_item, change_list } from '../../services/reducers/components';
 
 import { sendOrder } from '../../services/actions/index.js';
 
@@ -32,16 +33,23 @@ function BurgerConstructor() {
 
     const dispatch = useDispatch() 
 
-    const removeItem = (itemId) => dispatch({type: DECREASE_LIST_ITEM, id: itemId})
-    const chngeList = (newList) => dispatch({type: CHANGE_LIST, items: newList})
+    const removeItem = (itemId) => dispatch(
+        decrease_list_item({id: itemId})
+    )
+    const chngeList = (newList) => dispatch(
+        change_list({items: newList})
+    )
 
     const listIngredients = useSelector(store=>store.components.list)
 
     const [, drop] = useDrop(() => ({
         accept: 'item',
         drop: (item) => {
-          console.log(item);
-          dispatch({type:INCREASE_LIST_ITEM, items:{...item, uuid: uuidv4()} })
+          
+          dispatch(
+            increase_list_item({items:{...item, uuid: uuidv4()}})
+          )
+          
         },
       }), [])
 
@@ -113,9 +121,7 @@ function BurgerConstructorList({list, fnRemove, fnReorder}){
     const list_ingridients = list.filter( firstData => firstData.type !== "bun" )
     const bun = list.filter( firstData => firstData.type === "bun" )[0]
 
-    const onReorder = (e, from, to) => {
-        fnReorder([bun, ...move(list_ingridients, from, to)])
-      };
+
 
     try{
         const onReorder = (e, from, to) => {

@@ -1,76 +1,92 @@
-import { 
-    SET_INFO, 
-    OPEN_INFO, 
-    CLOSE_INFO, 
-    OPEN_ORDER, 
-    CLOSE_ORDER,
-    POST_ORDER_SUCCESS ,
-    POST_ORDER_REQUEST ,
-    POST_ORDER_FAILED
+import { createSlice } from "@reduxjs/toolkit";
 
-} from "../actions/detals"
+const detalsSlice = createSlice({
+    name: 'detals',
 
-const initialState = {
-    order: {},
+    initialState: {
+        order: {},
+    
+        orderRequest: false,
+        orderFailed: false,
+    
+        isOpenOrder: false,
+    
+        info: {},
+        isOpenInfo: false
+    },
 
-    orderRequest: false,
-    orderFailed: false,
+    reducers: {
+        setInfo: (state, action) => {
+            return {
+                ...state, 
+                info: {...action.payload.item}
+            };
+        },
+        openInfo: (state) => {
+            return {
+                ...state, 
+                isOpenInfo: true
+            };
+        },
+        closeInfo: (state)=> {
+            return {
+                ...state, 
+                isOpenInfo: false
+            };
+        },
 
-    isOpenOrder: false,
-
-    info: {},
-    isOpenInfo: false
-}
-
- const detalsReduser = (state = initialState, action) => {
-    switch (action.type) {
-
-        case SET_INFO:{
-            return {...state, info: {...action.item}}
-        }
-        case OPEN_INFO: {
-            return {...state, isOpenInfo: true}
-        }
-        case CLOSE_INFO: {
-            return {...state, isOpenInfo: false}
-        }
-
-        case POST_ORDER_SUCCESS: {
+        postOrder_SUCCESS: (state, action)=>{
             return { 
                 ...state, 
                 orderFailed: false, 
-                order: {...action.items}, 
+                order: {...action.payload.items}, 
                 orderRequest: false,
                 isOpenOrder: true
             };
-          }
+        },
 
-        case POST_ORDER_REQUEST: {
+        postOrder_REQUEST: (state)=>{
             return {
               ...state,
               orderRequest: true
             };
-          }
+          },
           
-        case POST_ORDER_FAILED: {
+          postOrder_FAILED: (state)=>{
             return { 
                 ...state,
                 orderRequest: false,
                 orderFailed: true
             };
-        }
+        },
 
-        case OPEN_ORDER: {
-            return {...state, isOpenOrder: true}
-        }
-        case CLOSE_ORDER: {
-            return {...state, isOpenOrder: false}
-        }
-
-        default: {
-            return state
+        openOrder: (state)=>{
+            return {
+                ...state,  
+                isOpenOrder: true
+            };
+        },
+        closeOrder: (state)=>{
+            return {
+                ...state,  
+                isOpenOrder: false
+            };
         }
     }
-}
+})
 
-export default detalsReduser
+
+export const { 
+    setInfo, 
+    openInfo, closeInfo, 
+    openOrder, closeOrder,
+
+    postOrder_SUCCESS,
+    postOrder_REQUEST,
+    postOrder_FAILED
+
+
+
+} = detalsSlice.actions;
+
+export default detalsSlice.reducer;

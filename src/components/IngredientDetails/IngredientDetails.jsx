@@ -1,8 +1,6 @@
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { CLOSE_INFO } from '../../services/actions/detals';
-
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 
 import style from './style.module.css'
@@ -16,9 +14,7 @@ function IngredientDetails(){
     const data = useSelector(state=>state.detals.info)
     const isOpenInfo = useSelector(state=>state.detals.isOpenInfo)
 
-    const setActive = () => {
-        dispatch({type: CLOSE_INFO})
-    }
+
     
     return( 
         <>

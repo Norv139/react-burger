@@ -1,48 +1,54 @@
+import React from "react";
 
-// components
 import AppHeader from '../Header/AppHeader'
-import BurgerConstructor from '../BurgerConstructor/BurgerConstructor'
-import BurgerIngredients from '../BurgerIngredients/BurgerIngredients'
 
-//modal
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route, 
+  
+} from "react-router-dom";
 
-import Modal from '../Modal/Modal';
 
-// Overlay
-import IngredientDetails from '../IngredientDetails/IngredientDetails';
-import OrderDetails from '../OrderDetails/OrderDetails';
-import { useDispatch, useSelector } from 'react-redux';
-
-//config
-
-import { CLOSE_INFO, CLOSE_ORDER } from '../../services/actions/detals';
-
-// Спасибо, что проверяете мой код
+import { Shop, Login, Register, ForgotPassword, ResetPassword, Profile  } from '../../pages'
 
 function App() {
-  const dispatch = useDispatch()
-  const {isOpenOrder, isOpenInfo } = useSelector(state => state.detals)
-
-  const closeAllPopups = ()=>{
-    dispatch({type:CLOSE_ORDER});
-    dispatch({type:CLOSE_INFO});
-  }
-
   return (
     <div className="App">
-        <AppHeader/>
-          <main>
-            <BurgerIngredients />
-            <BurgerConstructor />
-          </main>
-           { (isOpenOrder || isOpenInfo) &&
-            <Modal onClose={closeAllPopups}>
-                  <OrderDetails/>
-                  <IngredientDetails/>
-            </Modal>  
-            } 
-    </div>
-  );
-}
+      <AppHeader/>
+      <Router>
 
+        <Routes>
+          <Route path="/profile" element={<Profile/>}/>
+        </Routes>
+        <Routes>
+          <Route path="/profile/orders" element={<Login/>}/>
+        </Routes>
+        <Routes>
+          <Route path="/profile/orders/:id" element={<Login/>}/>
+        </Routes>
+
+        
+
+        <Routes>
+          <Route path="/shop" element={<Shop/>}/>
+        </Routes>
+
+        <Routes>
+          <Route path="/login" element={<Login/>}/>
+        </Routes>
+        <Routes>
+          <Route path="/register" element={<Register/>}/>
+        </Routes>
+        <Routes>
+          <Route path="/forgot-password" element={<ForgotPassword/>}/>
+        </Routes>
+        <Routes>
+          <Route path="/reset-password" element={<ResetPassword/>}/>
+        </Routes>
+
+      </Router>
+    </div>
+  )
+}
 export default App;
