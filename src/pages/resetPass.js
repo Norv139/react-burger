@@ -1,17 +1,30 @@
 import React, { useCallback, useState } from 'react';
 import {Input, Button} from '@ya.praktikum/react-developer-burger-ui-components'
+import { useDispatch } from 'react-redux';
 
 import style from './style.module.css'
 
-export function ResetPassword(){
+import { postData } from '../services/actions/user';
+import { userURL, reset_step2 } from '../utils/settings';
 
-    const [form, setValue] = useState({ email: '', password: '' });
+export function ResetPassword(){
+    const dispatch = useDispatch()
+
+    const initValue = { password: '', token: '' }
+
+    const [form, setValue] = useState(initValue);
     const [icon, setIcon] = useState(true);
 
 
     const onChange = e => {
         setValue({ ...form, [e.target.name]: e.target.value });
       };
+    
+    const onClick = e =>{
+        e.preventDefault(); 
+        setValue(initValue)
+        dispatch(postData(`${userURL}${reset_step2}` ,form))
+    }
 
     return(
         <div className={style.over}>
@@ -22,7 +35,7 @@ export function ResetPassword(){
                 <form className={style.main}>
                 <Input 
                         placeholder={'Введите новый пароль'} 
-                        type='password'
+                        type={icon?'password':'text'}
                         name='password'
                         icon={icon?'ShowIcon':'HideIcon'}
                         value={form.password}
@@ -32,9 +45,8 @@ export function ResetPassword(){
                     <div className='mt-6'/>
                     <Input 
                         placeholder={'Введите код из письма'}
-                        type='email'
-                        name='email'
-                        value={form.email} 
+                        name='token'
+                        value={form.token} 
                         onChange={onChange}
                     />
                     <div className='mt-6'/>
@@ -42,10 +54,7 @@ export function ResetPassword(){
                         type="primary" 
                         size="medium"
                         onClick={
-                            e=>{
-                                e.preventDefault(); 
-                                console.log(form)
-                            }
+                            onClick
                         }
                     >
                         Сохранить
@@ -53,7 +62,10 @@ export function ResetPassword(){
                 </form>
                 
                 <p className="text text_type_main-default mt-20 text_color_inactive">
-                    Вспомнили пароль? <a className={style.link}>Войти</a>
+                    Вспомнили пароль? 
+                    <a className={style.link}
+                        onClick={()=>{}}
+                    >Войти</a>
                 </p>
             </main>
         </div>

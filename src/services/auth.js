@@ -1,13 +1,22 @@
-import {  } from "../utils/settings";
+import { useSelector, useDispatch } from "react-redux";
+import { setCookie, getCookie } from "./utils";
+import {userURL, token} from '../utils/settings'
+
+const axios = require('axios').default;
 
 
-export const post = async form => {
-    axios.get(`${url}${path}`)
-        .then( (response) => {
-            dispatch(getItemsSuccess(response.data.data));
-        })
-        .catch( (error) => {
-            dispatch(getItemsFailed());
-            console.log(error);
-        })
+
+export function refreshToken(){
+    
+    const refreshToken = getCookie('refreshToken')
+
+    axios.post(`${userURL}${token}`, {
+        "token": `${refreshToken}`
+    })
+    .then((response)=>{
+        setCookie(response.data);
+    })
+    .catch((error) => {console.log(error)})
+
 }
+

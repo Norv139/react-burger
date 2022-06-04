@@ -1,18 +1,34 @@
 
 import React, { useCallback, useState } from 'react';
 import {Input, Button} from '@ya.praktikum/react-developer-burger-ui-components'
+import { useDispatch } from 'react-redux';
 
 import style from './style.module.css'
 
+import { postData } from '../services/actions/user';
+import { userURL, register } from '../utils/settings';
+
 export function Register(){
 
-    const [form, setValue] = useState({ email: '', password: '', name: '' });
+    const dispatch = useDispatch()
+
+    const initValue = { email: '', password: '', name: '' }
+
+    const [form, setValue] = useState(initValue);
     const [icon, setIcon] = useState(true);
 
 
     const onChange = e => {
         setValue({ ...form, [e.target.name]: e.target.value });
       };
+
+    const onClick = e=>{
+        e.preventDefault(); 
+        console.log(form)
+        dispatch(postData( `${userURL}${register}`, form))
+        setValue(initValue);
+        
+    }
 
     return(
         <div className={style.over}>
@@ -23,7 +39,7 @@ export function Register(){
                 <form className={style.main}>
                     <Input 
                         placeholder={'Имя'}
-                        type='name'
+                        type='text'
                         name='name'
                         value={form.name} 
                         onChange={onChange}
@@ -39,7 +55,7 @@ export function Register(){
                     <div className='mt-6'/>
                     <Input 
                         placeholder={'Пароль'} 
-                        type='password'
+                        type={icon?'password':'text'}
                         name='password'
                         icon={icon?'ShowIcon':'HideIcon'}
                         value={form.password}
@@ -50,12 +66,7 @@ export function Register(){
                     <Button 
                         type="primary" 
                         size="medium"
-                        onClick={
-                            e=>{
-                                e.preventDefault(); 
-                                console.log(form)
-                            }
-                        }
+                        onClick={onClick}
                     >
                         Зарегистрироваться
                     </Button>
