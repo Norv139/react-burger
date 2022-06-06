@@ -5,52 +5,74 @@ import AppHeader from '../Header/AppHeader'
 import {
   Route,
   Switch
-  
 } from "react-router-dom";
 
+import { ProtectedRoute, ProtectedRouteForLogin as ProtectedRouteFL } from "../protected-route";
 
-import { Shop, Login, Register, ForgotPassword, ResetPassword, Profile  } from '../../pages'
+
+
+import { Shop, Login, Register, ForgotPassword, ResetPassword, Profile, PageIngredient  } from '../../pages'
+import { useSelector } from "react-redux";
 
 function App() {
+  
+  const pathUrl = useSelector(store=>store.user.previousPath)
+
+  console.log(pathUrl)
+
   return (
     <div className="App">
       <AppHeader/>
-
-        <Switch>
-          <Route path="/" exact={true}>
+      
+       <Switch>
+          <ProtectedRoute path="/" exact={true}>
             <Shop/>
-          </Route> 
+          </ProtectedRoute> 
+
+          <ProtectedRoute path="/ingredients/:id" exact={true}>
+            {
+              pathUrl[1] == null ? (
+                <PageIngredient/>
+              ):(
+                <Shop/>
+              )
+            }
+
+           
+          </ProtectedRoute> 
           
-          <Route path="/profile" exact={true}>
+          
+          <ProtectedRoute path="/profile" exact={true}>
             <Profile/>
-          </Route>
+          </ProtectedRoute>
           
-          <Route path="/profile/orders" exact={true}>
+          <ProtectedRoute path="/profile/orders" exact={true}>
             <Login/>
-          </Route>
+          </ProtectedRoute>
 
-          <Route path="/profile/orders/:id" exact={true}>
-            <Login/>
-          </Route> 
+          <ProtectedRoute path="/profile/orders/:id" exact={true}>
+            
+          </ProtectedRoute> 
 
           
 
-          <Route path="/login" exact={true}>
+          <ProtectedRouteFL path="/login" exact={true}>
             <Login/>
-          </Route>
+          </ProtectedRouteFL>
 
-          <Route path="/register" exact={true}>
+          <ProtectedRouteFL path="/register" exact={true}>
             <Register/>
-          </Route> 
-          <Route path="/forgot-password" exact={true}>
+          </ProtectedRouteFL> 
+          <ProtectedRouteFL path="/forgot-password" exact={true}>
             <ForgotPassword/>
-          </Route> 
+          </ProtectedRouteFL> 
 
-          <Route path="/reset-password" exact={true}>
+          <ProtectedRouteFL path="/reset-password" exact={true}>
             <ResetPassword/>
-          </Route>
+          </ProtectedRouteFL>
 
         </Switch>
+        
         
     </div>
   )

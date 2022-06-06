@@ -1,30 +1,49 @@
 
 import React, { useCallback, useState } from 'react';
-import {Input, Button} from '@ya.praktikum/react-developer-burger-ui-components'
+import { useLocation } from 'react-router-dom';
+import {Input} from '@ya.praktikum/react-developer-burger-ui-components'
 
 import style from './style.module.css'
 
-export function Profile(){
+export function Profile(){  
+
+    const initValue = {
+        profile: "text_color_inactive",
+        orders: "text_color_inactive",
+        logout: "text_color_inactive"
+    }
 
     const [form, setValue] = useState({ email: '', password: '', name: '' });
-    const [icon, setIcon] = useState(true);
+    const [select, setSelect] = useState(initValue);
 
 
-    const onChange = e => {
-        setValue({ ...form, [e.target.name]: e.target.value });
-      };
+    const onChange =  e => {
+            e.preventDefault()
+            setValue({ ...form, [e.target.name]: e.target.value });
+        }
+    
+    
 
     return(
         <div className={style.over}>
-            <div className={style.box}>
+            <main className={style.box}>
                 <span className='mr-15'>
-                    <p className={style.p_text + " text text_type_main-medium"}>
+
+                    <p 
+                        className={style.p_text + " text text_type_main-medium " + select.profile}
+                    >
                         Профиль
                     </p>
-                    <p className={style.p_text + " text text_type_main-medium text_color_inactive"}>
+
+                    <p 
+                        className={style.p_text + " text text_type_main-medium " + select.orders}
+                    >
                         История заказов
                     </p>
-                    <p className={style.p_text + " text text_type_main-medium text_color_inactive"}>
+
+                    <p 
+                        className={style.p_text + " text text_type_main-medium " + select.logout}
+                    >
                         Выход
                     </p>
 
@@ -40,7 +59,7 @@ export function Profile(){
                 <form className={style.main}>
                     <Input 
                         placeholder={'Имя'}
-                        type='name'
+                        type='text'
                         name='name'
                         icon={'EditIcon'}
                         value={form.name} 
@@ -65,7 +84,7 @@ export function Profile(){
                         onChange={onChange}
                     />
                 </form>
-            </div>
+            </main>
         </div>
     )
 }

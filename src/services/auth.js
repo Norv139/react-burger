@@ -1,10 +1,7 @@
-import { useSelector, useDispatch } from "react-redux";
 import { setCookie, getCookie } from "./utils";
 import {userURL, token} from '../utils/settings'
 
 const axios = require('axios').default;
-
-
 
 export function refreshToken(){
     

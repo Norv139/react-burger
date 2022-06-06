@@ -14,14 +14,16 @@ import { useDispatch, useSelector } from 'react-redux';
 
 // config
 import { closeInfo, closeOrder } from '../services/reducers/detals';
+import { useRedirect } from '../services/utils';
 
-// Спасибо, что проверяете мой код
 
 export function Shop() {
+  const redirect = useRedirect()
   const dispatch = useDispatch()
   const {isOpenOrder, isOpenInfo } = useSelector(state => state.detals)
 
   const closeAllPopups = ()=>{
+    redirect("/")
     dispatch(closeOrder());
     dispatch(closeInfo());
   }

@@ -1,0 +1,33 @@
+
+
+.model_content{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.model_info{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    white-space: pre;
+    
+}
+
+.modal_top{
+    display: flex;
+    justify-content: space-between;
+    white-space: nowrap;
+}
+
+.secondary{
+    color: #8585AD;
+}
+
+.btn{
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+}

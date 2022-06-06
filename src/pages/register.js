@@ -8,8 +8,10 @@ import style from './style.module.css'
 import { postData } from '../services/actions/user';
 import { userURL, register } from '../utils/settings';
 
-export function Register(){
+import { useRedirect } from '../services/utils';
 
+export function Register(){
+    const redirect = useRedirect()
     const dispatch = useDispatch()
 
     const initValue = { email: '', password: '', name: '' }
@@ -73,7 +75,10 @@ export function Register(){
                 </form>
                 
                 <p className="text text_type_main-default mt-20 text_color_inactive">
-                    Уже зарегистрированы? <a className={style.link}>Войти</a>
+                    Уже зарегистрированы? 
+                    <a className={style.link}
+                        onClick={()=>{redirect('/login')}}
+                    >Войти</a>
                 </p>
             </main>
         </div>

@@ -14,7 +14,9 @@ import { userURL, login } from '../utils/settings';
 export function Login(){
     const redirect = useRedirect()
     const initValue = { email: 'nikita.babenko.2015@gmail.com', password: 'Aa5aA_kak_slozhna' }
+
     const dispatch = useDispatch()
+
     const [form, setValue] = useState(initValue);
     const [icon, setIcon] = useState(true);
 
@@ -26,6 +28,8 @@ export function Login(){
         e.preventDefault();
         dispatch(postData(`${userURL}${login}`,form));
         setValue(initValue);
+
+        //redirect('/')
     }
 
     return(

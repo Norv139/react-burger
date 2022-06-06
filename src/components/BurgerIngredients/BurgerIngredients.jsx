@@ -4,6 +4,7 @@ import {Tab, CurrencyIcon, Counter} from '@ya.praktikum/react-developer-burger-u
 import { useDispatch, useSelector } from 'react-redux'
 import { setInfo, openInfo } from '../../services/reducers/detals.js'
 
+import { useRedirect } from '../../services/utils.js'
 
 import { useDrag } from 'react-dnd'
 
@@ -19,6 +20,7 @@ function BurgerIngredients() {
     const [current, setCurrent] = useState('bun')
 
     const dispatch = useDispatch()
+    const redirect = useRedirect()
 
     const dataIngredients = useSelector(state=>state.components.items)
     const listIngredients = useSelector(state=>state.components.list)
@@ -28,6 +30,7 @@ function BurgerIngredients() {
     }
     
     const openDetals = (data) => { 
+        redirect(`/ingredients/${data._id}`)
         dispatch(setInfo({item:data}));
         dispatch(openInfo()); 
     }

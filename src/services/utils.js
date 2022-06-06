@@ -1,4 +1,6 @@
 import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setPreviousPath } from './reducers/user';
 import Cookies from 'js-cookie'
 
 export function setCookie (response) {
@@ -24,12 +26,12 @@ export function deleteCookie(name) {
     Cookies.set(name, '', {expires: -1})
 }
 
-export function usePrivatRedirect(path){
-    const history = useHistory()
-    return (path)=>{history.replace({ pathname: `${path}` });}
-}
-
 export function useRedirect(path){
+    const dispatch = useDispatch()
     const history = useHistory()
-    return (path)=>{history.push({ pathname: `${path}` });}
+    
+    return (path)=>{
+        dispatch(setPreviousPath(`${path}`));
+        history.push({ pathname: `${path}` });
+    }
 }

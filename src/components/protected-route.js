@@ -1,40 +1,44 @@
-import { useAuth } from '../services/auth';
 import { Redirect, Route } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { refreshToken } from '../services/auth';
 import { getCookie } from '../services/utils';
 
-import { useHistory } from 'react-router';
+export function ProtectedRoute({ children, path, exact }) {
 
-export function ProtectedRoute({ children, ...rest }) {
-  const history = useHistory()
+  const accessToken = getCookie('accessToken')
 
-  let { getUser, ...auth } = useAuth();
-  const [isUserLoaded, setUserLoaded] = useState(false);
-
-  const init = async () => {
-    await getCookie('accessToken')
-    setUserLoaded(true);
-  };
-
-  useEffect(() => {
-    init();
-  }, []);
-
-  if (!isUserLoaded) {
-    return null;
+  if (accessToken === undefined){
+    refreshToken()
   }
-  
 
   return (
-    <Route
-      {...rest}
-      render={({ location }) =>
-        auth.user ? (
+    <Route path={path} exact={exact}>
+      {
+        accessToken ?
+        (
           children
-        ) : (
-          
+        ):(
+          <Redirect to={{pathname: '/login'}} />
         )
       }
-    />
+    </Route>
+  );
+}
+
+export function ProtectedRouteForLogin ({ children, path, exact }) {
+
+  const accessToken = getCookie('accessToken')
+
+
+  return (
+    <Route path={path} exact={exact}>
+      {
+        accessToken !== undefined ?
+        ( 
+          <Redirect to={{pathname: '/'}}/>
+        ):(
+          children
+        )
+      }
+    </Route>
   );
 }

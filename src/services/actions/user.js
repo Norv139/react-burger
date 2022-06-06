@@ -1,22 +1,29 @@
 import {
     req_FAILED,
     req_REQUEST,
-    req_SUCCESS
+    req_SUCCESS,
+    setLogin
 } from "../reducers/user"
 
 import {setCookie, getCookie, deleteCookie} from '../utils'
-import { refreshToken } from "../auth";
 
 const axios = require('axios').default;
 
 export function postData(url, form) {
+
     return dispatch => {
         dispatch(reqRequest)
 
         axios.post(url, form)
         .then( (response) => {
             setCookie(response.data);
+
+            //console.log(response.data)
             dispatch(reqSuccess(response.data));
+
+            if (url.indexOf('/login') !== -1){
+                    dispatch(setLogin(true))
+            }
 
         })
         .catch( (error) => {
@@ -25,6 +32,7 @@ export function postData(url, form) {
         })
     }
 }
+
 
 const reqSuccess = response => (
     req_SUCCESS(response)
