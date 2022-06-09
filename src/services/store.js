@@ -10,9 +10,8 @@ function loadFromLocalStorage() {
 
         var obj = {...JSON.parse(serialisedState)}
 
-        obj.components.list=[]
-
-        console.log(obj)
+        obj.components.list=[];
+        obj.user.previousPath=[null, null];
 
         return {...obj};
     } catch (e) {
@@ -30,7 +29,6 @@ function saveToLocalStorage(state) {
     }
 }
 
-
 const composeEnhancers =
     typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
         ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
@@ -38,15 +36,8 @@ const composeEnhancers =
 
 const enhancer = composeEnhancers(applyMiddleware(thunk));
 
-
-
 const store = createStore(rootReducer, loadFromLocalStorage(), enhancer);
 
-
-
 store.subscribe(() => saveToLocalStorage(store.getState()));
-
-
-
 
 export default store

@@ -13,7 +13,7 @@ import { userURL, login } from '../utils/settings';
 
 export function Login(){
     const redirect = useRedirect()
-    const initValue = { email: 'nikita.babenko.2015@gmail.com', password: 'Aa5aA_kak_slozhna' }
+    const initValue = { email: '', password: '' }
 
     const dispatch = useDispatch()
 
@@ -29,7 +29,7 @@ export function Login(){
         dispatch(postData(`${userURL}${login}`,form));
         setValue(initValue);
 
-        //redirect('/')
+        redirect('/')
     }
 
     return(

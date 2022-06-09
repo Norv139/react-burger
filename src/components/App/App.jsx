@@ -18,7 +18,6 @@ import { useSelector } from "react-redux";
 function App() {
 
   const pathUrl = useSelector(store=>store.user.previousPath)
-  const { isOpenOrder } = useSelector(state => state.detals)
 
   return (
     <div className="App">
@@ -31,7 +30,7 @@ function App() {
 
           <Route path="/ingredients/:id" exact={true}>
             {
-              pathUrl[1] == '/' && !isOpenOrder  ? (
+              pathUrl[1] == null  ? (
                 <PageIngredient/>
               ):(
                 <Shop/>
