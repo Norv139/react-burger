@@ -52,7 +52,7 @@ function BurgerIngredients() {
     useEffect(() => {
       window.addEventListener("scroll", scrollHandler, true);
 
-      dispatch(getAllItems())
+        dispatch(getAllItems())
 
       return () => {
         window.removeEventListener("scroll", scrollHandler, true);

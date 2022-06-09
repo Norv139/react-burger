@@ -24,11 +24,20 @@ import dataPropTypes from '../../utils/type.js'
 
 import style from './style.module.css'
 
+import { getCookie } from '../../services/utils';
+import { useRedirect } from '../../services/utils';
+
 
 function BurgerConstructor() {
+    const redirect = useRedirect()
 
     const createOrder = () =>{
-        return dispatch(sendOrder(listIngredients))
+        if(getCookie('accessToken') !== undefined) {
+            return dispatch(sendOrder(listIngredients))
+        }else{
+            return redirect('/login')
+        }
+
     }
 
     const dispatch = useDispatch() 

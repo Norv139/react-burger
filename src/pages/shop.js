@@ -23,9 +23,10 @@ export function Shop() {
   const {isOpenOrder, isOpenInfo } = useSelector(state => state.detals)
 
   const closeAllPopups = ()=>{
-    redirect("/")
+    
     dispatch(closeOrder());
     dispatch(closeInfo());
+    redirect("/")
   }
 
   return (

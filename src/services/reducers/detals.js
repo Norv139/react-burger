@@ -88,5 +88,4 @@ export const {
 
 
 } = detalsSlice.actions;
-
 export default detalsSlice.reducer;

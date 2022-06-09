@@ -16,11 +16,16 @@ const axios = require('axios').default;
 
 
 export function PageIngredient(){  
-    const [allItem, setAllItem] = useState({});
+
+
+    const [allItem, setAllItem] = useState({})
     const location = useLocation();
     const id = location.pathname.split('/').pop();
+    const items = useSelector(state=>state.components.items)
+
 
     useEffect( ()=>{
+        if (items.length == 0){
             axios.get(`${url}${path}`)
             .then( (response) => {
                 console.log(response.data.data)
@@ -29,6 +34,11 @@ export function PageIngredient(){
             .catch( (error) => {
                 console.log(error);
             })
+        }
+        else{
+            
+            setAllItem(items.filter(x=>x._id == id)[0])
+        }
         },[setAllItem, axios, id]
     )
 

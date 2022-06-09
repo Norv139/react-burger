@@ -4,7 +4,8 @@ import AppHeader from '../Header/AppHeader'
 
 import {
   Route,
-  Switch
+  Switch,
+  useLocation
 } from "react-router-dom";
 
 import { ProtectedRoute, ProtectedRouteForLogin as ProtectedRouteFL } from "../protected-route";
@@ -15,10 +16,9 @@ import { Shop, Login, Register, ForgotPassword, ResetPassword, Profile, PageIngr
 import { useSelector } from "react-redux";
 
 function App() {
-  
-  const pathUrl = useSelector(store=>store.user.previousPath)
 
-  console.log(pathUrl)
+  const pathUrl = useSelector(store=>store.user.previousPath)
+  const { isOpenOrder } = useSelector(state => state.detals)
 
   return (
     <div className="App">
@@ -29,29 +29,26 @@ function App() {
             <Shop/>
           </ProtectedRoute> 
 
-          <ProtectedRoute path="/ingredients/:id" exact={true}>
+          <Route path="/ingredients/:id" exact={true}>
             {
-              pathUrl[1] == null ? (
+              pathUrl[1] == '/' && !isOpenOrder  ? (
                 <PageIngredient/>
               ):(
                 <Shop/>
               )
             }
-
-           
-          </ProtectedRoute> 
-          
+          </Route> 
           
           <ProtectedRoute path="/profile" exact={true}>
             <Profile/>
           </ProtectedRoute>
           
           <ProtectedRoute path="/profile/orders" exact={true}>
-            <Login/>
+            <>orders</>
           </ProtectedRoute>
 
           <ProtectedRoute path="/profile/orders/:id" exact={true}>
-            
+            <>orders id</>
           </ProtectedRoute> 
 
           
@@ -63,6 +60,7 @@ function App() {
           <ProtectedRouteFL path="/register" exact={true}>
             <Register/>
           </ProtectedRouteFL> 
+
           <ProtectedRouteFL path="/forgot-password" exact={true}>
             <ForgotPassword/>
           </ProtectedRouteFL> 
@@ -70,7 +68,6 @@ function App() {
           <ProtectedRouteFL path="/reset-password" exact={true}>
             <ResetPassword/>
           </ProtectedRouteFL>
-
         </Switch>
         
         
