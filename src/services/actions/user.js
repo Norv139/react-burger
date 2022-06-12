@@ -46,9 +46,10 @@ const reqFailed= () => (
 
 function logoutUser(form){
     const url = "https://norma.nomoreparties.space/api/auth/logout"
-    axios.post(url, form)
+    axios.post(url, {"token": `${getCookie('refreshToken')}`})
     .then( (response) => {
-        setCookie(response.data);
+        deleteCookie('refreshToken')
+        deleteCookie('accessToken')
     })
     .catch( (error) => {
         console.log("error", error);
@@ -65,7 +66,7 @@ function postAuthorizationData(body, url){
     return dispatch => {
         dispatch(reqRequest)
 
-        axios.post(url, body, )
+        axios.post(url, body, headers )
         .then( (response) => {
             console.log(response)
 

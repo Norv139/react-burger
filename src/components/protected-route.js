@@ -24,7 +24,7 @@ export function ProtectedRoute({ children, path, exact }) {
   );
 }
 
-export function ProtectedRouteForLogin ({ children, path, exact }) {
+export function PublicRoute ({ children, path, exact }) {
 
   const accessToken = getCookie('accessToken')
 

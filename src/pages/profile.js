@@ -1,26 +1,78 @@
 
-import React, { useCallback, useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import {Input} from '@ya.praktikum/react-developer-burger-ui-components'
+import React, { useEffect, useState } from 'react';
+import {Input, Button} from '@ya.praktikum/react-developer-burger-ui-components'
+import { getCookie, useRedirect } from '../services/utils';
+
+
 
 import style from './style.module.css'
 
-export function Profile(){  
 
-    const initValue = {
+const axios = require('axios').default;
+
+export function Profile(){  
+    const redirect = useRedirect()
+
+    const initValueType = {
         profile: "text_color_inactive",
         orders: "text_color_inactive",
         logout: "text_color_inactive"
-    }
+    };
+    const initValueUser = { 
+        email: '', 
+        password: '', 
+        name: '' };
 
-    const [form, setValue] = useState({ email: '', password: '', name: '' });
-    const [select, setSelect] = useState(initValue);
+    const [actuslForm, setActuslForm] = useState(initValueUser);
+
+    const [form, setValue] = useState(initValueUser);
+    const [select, setSelect] = useState(initValueType);
+
+    const [wasAChange, setWasAChange] = useState(false);
+
+    useEffect(()=>{
+
+        axios.get(
+            'https://norma.nomoreparties.space/api/auth/user',
+            {headers: {'authorization': `${getCookie('accessToken')}`}}
+        ).then( (response) => {
+            setValue({...initValueUser, ...response.data.user})
+            setActuslForm({...initValueUser, ...response.data.user})
+        }).catch( (error) => {
+            console.log("error", error);
+        })
+
+    }, [])
 
 
     const onChange =  e => {
             e.preventDefault()
             setValue({ ...form, [e.target.name]: e.target.value });
+            setWasAChange(true)
         }
+    
+        const onSave =  e => {
+            e.preventDefault()
+
+            axios.patch(
+                'https://norma.nomoreparties.space/api/auth/user', 
+                {...form},
+                {headers: {'authorization': `${getCookie('accessToken')}`}}
+            ).then( (response) => {
+                setValue({...initValueUser, ...response.data.user})
+                setActuslForm({...initValueUser, ...response.data.user})
+                setWasAChange(false)
+            }).catch( (error) => {
+                console.log("error", error);
+            })
+            
+        }
+        const onCancel =  e => {
+            e.preventDefault()
+            setValue(actuslForm)
+            setWasAChange(false)
+        }
+    
     
     
 
@@ -37,6 +89,7 @@ export function Profile(){
 
                     <p 
                         className={style.p_text + " text text_type_main-medium " + select.orders}
+                        onClick={()=>{redirect('/profile/orders')}}
                     >
                         История заказов
                     </p>
@@ -83,6 +136,18 @@ export function Profile(){
                         value={form.password}
                         onChange={onChange}
                     />
+                    <div className='mt-6'/>
+                    { wasAChange &&
+                    <>
+                        <Button onClick={onSave}>
+                            Сохранить
+                        </Button>
+                        <div className='mt-6'/>
+                        <Button onClick={onCancel}>
+                            Отмена
+                        </Button>
+                    </>
+                    }
                 </form>
             </main>
         </div>

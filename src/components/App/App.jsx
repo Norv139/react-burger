@@ -8,7 +8,7 @@ import {
   useLocation
 } from "react-router-dom";
 
-import { ProtectedRoute, ProtectedRouteForLogin as ProtectedRouteFL } from "../protected-route";
+import { ProtectedRoute, PublicRoute } from "../protected-route";
 
 
 
@@ -28,7 +28,7 @@ function App() {
             <Shop/>
           </ProtectedRoute> 
 
-          <Route path="/ingredients/:id" exact={true}>
+          <ProtectedRoute path="/ingredients/:id" exact={true}>
             {
               pathUrl[1] == null  ? (
                 <PageIngredient/>
@@ -36,7 +36,7 @@ function App() {
                 <Shop/>
               )
             }
-          </Route> 
+          </ProtectedRoute> 
           
           <ProtectedRoute path="/profile" exact={true}>
             <Profile/>
@@ -52,21 +52,21 @@ function App() {
 
           
 
-          <ProtectedRouteFL path="/login" exact={true}>
+          <PublicRoute path="/login" exact={true}>
             <Login/>
-          </ProtectedRouteFL>
+          </PublicRoute>
 
-          <ProtectedRouteFL path="/register" exact={true}>
+          <PublicRoute path="/register" exact={true}>
             <Register/>
-          </ProtectedRouteFL> 
+          </PublicRoute> 
 
-          <ProtectedRouteFL path="/forgot-password" exact={true}>
+          <PublicRoute path="/forgot-password" exact={true}>
             <ForgotPassword/>
-          </ProtectedRouteFL> 
+          </PublicRoute> 
 
-          <ProtectedRouteFL path="/reset-password" exact={true}>
+          <PublicRoute path="/reset-password" exact={true}>
             <ResetPassword/>
-          </ProtectedRouteFL>
+          </PublicRoute>
         </Switch>
         
         
