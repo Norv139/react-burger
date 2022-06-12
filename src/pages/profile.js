@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import {Input, Button} from '@ya.praktikum/react-developer-burger-ui-components'
 import { getCookie, useRedirect } from '../services/utils';
-
+import { logoutUser } from '../services/actions';
 
 
 import style from './style.module.css'
@@ -96,6 +96,7 @@ export function Profile(){
 
                     <p 
                         className={style.p_text + " text text_type_main-medium " + select.logout}
+                        onClick={()=>{logoutUser(); redirect('/login')}}
                     >
                         Выход
                     </p>

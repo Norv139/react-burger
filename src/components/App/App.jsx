@@ -8,8 +8,8 @@ import {
   useLocation
 } from "react-router-dom";
 
-import { ProtectedRoute, PublicRoute } from "../protected-route";
-
+import { ProtectedRoute } from "../ProtectedRoute/protectedRoute";
+import { PublicRoute } from "../ProtectedRoute/PublicRoute";
 
 
 import { Shop, Login, Register, ForgotPassword, ResetPassword, Profile, PageIngredient  } from '../../pages'

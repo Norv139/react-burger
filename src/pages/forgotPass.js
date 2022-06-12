@@ -40,7 +40,7 @@ export function ForgotPassword(){
                 <p className="text text_type_main-medium mb-6">
                 Восстановление пароля
                 </p>
-                <form className={style.main}>
+                <form className={style.main} onSubmit={onClick}>
                     <Input 
                         placeholder={'E-mail'}
                         type='email'

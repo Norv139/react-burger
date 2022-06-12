@@ -39,15 +39,15 @@ export function ResetPassword(){
         {
             pathHistory[1] !== '/reset-password'?
             (
-                <Redirect to={{pathname: `/forgot-password`}}/>
+                <Redirect to={{pathname: `/k`}}/>
             ):(
                 <div className={style.over}>
                 <main className={style.main}>
                     <p className="text text_type_main-medium mb-6">
                     Восстановление пароля
                     </p>
-                    <form className={style.main}>
-                    <Input 
+                    <form className={style.main} onSubmit={onClick}>
+                        <Input 
                             placeholder={'Введите новый пароль'} 
                             type={icon?'password':'text'}
                             name='password'

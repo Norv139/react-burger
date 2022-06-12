@@ -38,7 +38,7 @@ export function Login(){
                 <p className="text text_type_main-medium mb-6">
                     Вход
                 </p>
-                <form className={style.main}>
+                <form className={style.main} onSubmit={onClick}>
                     <Input 
                         placeholder={'E-mail'}
                         type='email'

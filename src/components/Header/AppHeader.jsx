@@ -47,7 +47,7 @@ function AppHeader(){
                             onClickBnt={
                                 ()=>{
                                     setObjButton({...initValue, orderFeed: true})
-                                    redirect('/orders')
+                                    redirect('/profile/orders')
                                 }
                             }
                         />

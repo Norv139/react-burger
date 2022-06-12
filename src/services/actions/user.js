@@ -44,7 +44,7 @@ const reqFailed= () => (
     req_FAILED()
 )
 
-function logoutUser(form){
+export function logoutUser(form){
     const url = "https://norma.nomoreparties.space/api/auth/logout"
     axios.post(url, {"token": `${getCookie('refreshToken')}`})
     .then( (response) => {

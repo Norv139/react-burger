@@ -29,7 +29,7 @@ export function Register(){
         console.log(form)
         dispatch(postData( `${userURL}${register}`, form))
         setValue(initValue);
-        
+        redirect('/')
     }
 
     return(
@@ -38,7 +38,7 @@ export function Register(){
                 <p className="text text_type_main-medium mb-6">
                     Регистрация
                 </p>
-                <form className={style.main}>
+                <form className={style.main} onSubmit={onClick}>
                     <Input 
                         placeholder={'Имя'}
                         type='text'
