@@ -1,62 +1,69 @@
-import {
-    GET_ITEMS_SUCCESS,
-    GET_ITEMS_FAILED, 
-    GET_ITEMS_REQUEST,
+import { createSlice } from "@reduxjs/toolkit";
 
-    DECREASE_LIST_ITEM,
-    INCREASE_LIST_ITEM,
-    CHANGE_LIST
+const componentsSlice = createSlice({
+    name: 'detals',
 
-} from "../actions/components";
-import testListData from "../../utils/data";
+    initialState: {
+        items: [],
+        itemsRequest: false,
+        itemsFailed: false,
+    
+        list: []
+    },
 
-const initialState = {
-    items: [],
-    itemsRequest: false,
-    itemsFailed: false,
-
-    list: []
-}
-
-const componentReduser = (state = initialState, action) => {
-    switch (action.type) {
-
-        case GET_ITEMS_SUCCESS: {
-            return { ...state, itemsFailed: false, items: action.items, itemsRequest: false };
-          }
-        case GET_ITEMS_REQUEST: {
-            return {
-              ...state,
-              itemsRequest: true
+    reducers: {
+        getItems_SUCCESS: (state, action)=>{
+            return { 
+                ...state, 
+                itemsFailed: false, 
+                items: action.payload.items, 
+                itemsRequest: false 
             };
-          }
-        case GET_ITEMS_FAILED: {
-            return { ...state, itemsFailed: true, itemsRequest: false };
-        }
+        },
+        getItems_REQUEST: (state)=>{
+            return {
+                ...state,
+                itemsRequest: true
+              };
+        },
+        getItems_FAILED: (state)=>{
+            return { 
+                ...state, 
+                itemsFailed: true, 
+                itemsRequest: false 
+            };
+        },
 
-        case DECREASE_LIST_ITEM: {
+        decrease_list_item: (state,action)=>{
             return {
                 ...state, 
                 list: [
-                    ...state.list.filter(x=>x._id!==action.id), 
-                    ...state.list.filter(x=>x._id===action.id).slice(0,-1)
+                    ...state.list.filter(x=>x._id!==action.payload.id), 
+                    ...state.list.filter(x=>x._id===action.payload.id).slice(0,-1)
                 ]
               };
-        }
-        case INCREASE_LIST_ITEM: {
-            return action.items.type === "bun" ? 
-            {...state, list: [...state.list.filter(x=>x.type!=='bun'), action.items]} :
-            {...state, list: [...state.list, action.items]}
-        }
+        },
+        increase_list_item: (state, action)=>{
+            return action.payload.items.type === "bun" ? 
+            {...state, list: [...state.list.filter(x=>x.type!=='bun'), action.payload.items]} :
+            {...state, list: [...state.list, action.payload.items]}
+        },
 
-        case CHANGE_LIST: {
-            return {...state, list: [...action.items]}
-        }
-
-        default: {
-            return state
-        }
+        change_list: (state, action)=>{
+            return {...state, list: [...action.payload.items]}
+        },
     }
-}
+})
 
-export default componentReduser
+
+export const { 
+    getItems_SUCCESS, 
+    getItems_REQUEST, 
+    getItems_FAILED,
+
+    decrease_list_item,
+    increase_list_item,
+    change_list
+} = componentsSlice.actions;
+
+export default componentsSlice.reducer;

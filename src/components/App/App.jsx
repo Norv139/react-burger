@@ -1,48 +1,76 @@
+import React from "react";
 
-// components
 import AppHeader from '../Header/AppHeader'
-import BurgerConstructor from '../BurgerConstructor/BurgerConstructor'
-import BurgerIngredients from '../BurgerIngredients/BurgerIngredients'
 
-//modal
+import {
+  Route,
+  Switch,
+  useLocation
+} from "react-router-dom";
 
-import Modal from '../Modal/Modal';
+import { ProtectedRoute } from "../ProtectedRoute/protectedRoute";
+import { PublicRoute } from "../ProtectedRoute/PublicRoute";
 
-// Overlay
-import IngredientDetails from '../IngredientDetails/IngredientDetails';
-import OrderDetails from '../OrderDetails/OrderDetails';
-import { useDispatch, useSelector } from 'react-redux';
 
-//config
-
-import { CLOSE_INFO, CLOSE_ORDER } from '../../services/actions/detals';
-
-// Спасибо, что проверяете мой код
+import { Shop, Login, Register, ForgotPassword, ResetPassword, Profile, PageIngredient  } from '../../pages'
+import { useSelector } from "react-redux";
 
 function App() {
-  const dispatch = useDispatch()
-  const {isOpenOrder, isOpenInfo } = useSelector(state => state.detals)
 
-  const closeAllPopups = ()=>{
-    dispatch({type:CLOSE_ORDER});
-    dispatch({type:CLOSE_INFO});
-  }
+  const pathUrl = useSelector(store=>store.user.previousPath)
 
   return (
     <div className="App">
-        <AppHeader/>
-          <main>
-            <BurgerIngredients />
-            <BurgerConstructor />
-          </main>
-           { (isOpenOrder || isOpenInfo) &&
-            <Modal onClose={closeAllPopups}>
-                  <OrderDetails/>
-                  <IngredientDetails/>
-            </Modal>  
-            } 
-    </div>
-  );
-}
+      <AppHeader/>
+      
+       <Switch>
+          <ProtectedRoute path="/" exact={true}>
+            <Shop/>
+          </ProtectedRoute> 
 
+          <ProtectedRoute path="/ingredients/:id" exact={true}>
+            {
+              pathUrl[1] == null  ? (
+                <PageIngredient/>
+              ):(
+                <Shop/>
+              )
+            }
+          </ProtectedRoute> 
+          
+          <ProtectedRoute path="/profile" exact={true}>
+            <Profile/>
+          </ProtectedRoute>
+          
+          <ProtectedRoute path="/profile/orders" exact={true}>
+            <>orders</>
+          </ProtectedRoute>
+
+          <ProtectedRoute path="/profile/orders/:id" exact={true}>
+            <>orders id</>
+          </ProtectedRoute> 
+
+          
+
+          <PublicRoute path="/login" exact={true}>
+            <Login/>
+          </PublicRoute>
+
+          <PublicRoute path="/register" exact={true}>
+            <Register/>
+          </PublicRoute> 
+
+          <PublicRoute path="/forgot-password" exact={true}>
+            <ForgotPassword/>
+          </PublicRoute> 
+
+          <PublicRoute path="/reset-password" exact={true}>
+            <ResetPassword/>
+          </PublicRoute>
+        </Switch>
+        
+        
+    </div>
+  )
+}
 export default App;

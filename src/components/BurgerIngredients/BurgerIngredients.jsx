@@ -2,9 +2,9 @@ import PropTypes from 'prop-types'
 import { useRef, useEffect, useState } from 'react'
 import {Tab, CurrencyIcon, Counter} from '@ya.praktikum/react-developer-burger-ui-components'
 import { useDispatch, useSelector } from 'react-redux'
-import { OPEN_INFO, SET_INFO } from '../../services/actions/detals.js'
+import { setInfo, openInfo } from '../../services/reducers/detals.js'
 
-
+import { useRedirect } from '../../services/utils.js'
 
 import { useDrag } from 'react-dnd'
 
@@ -20,6 +20,7 @@ function BurgerIngredients() {
     const [current, setCurrent] = useState('bun')
 
     const dispatch = useDispatch()
+    const redirect = useRedirect()
 
     const dataIngredients = useSelector(state=>state.components.items)
     const listIngredients = useSelector(state=>state.components.list)
@@ -28,9 +29,10 @@ function BurgerIngredients() {
         return listIngredients.filter( x => {return x._id === _id}).length
     }
     
-    const openDetals = (data) => {
-        dispatch({type:SET_INFO, item:{...data}}); 
-        dispatch({type: OPEN_INFO})
+    const openDetals = (data) => { 
+        redirect(`/ingredients/${data._id}`)
+        dispatch(setInfo({item:data}));
+        dispatch(openInfo()); 
     }
 
     const borderRef = useRef(null)
@@ -49,7 +51,9 @@ function BurgerIngredients() {
 
     useEffect(() => {
       window.addEventListener("scroll", scrollHandler, true);
-      dispatch(getAllItems())
+
+        dispatch(getAllItems())
+
       return () => {
         window.removeEventListener("scroll", scrollHandler, true);
       };
@@ -151,9 +155,10 @@ function Сard ({data, openDetals, count}) {
             <div className={ style.card_frame + ' ml-4 mr-4'}>
                 { count !== 0 ?(
                     <div className={style.counter_box}>
-                        <Counter count={ 
-                                count
-                            } size="default" />
+                        <Counter 
+                            count={count} 
+                            size="default" 
+                        />
                     </div>
                     ):(
                     null

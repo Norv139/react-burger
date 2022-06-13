@@ -1,8 +1,38 @@
-export const GET_ITEMS_REQUEST = "GET_ITEMS_REQUEST"
-export const GET_ITEMS_SUCCESS = "GET_ITEMS_SUCCESS"
-export const GET_ITEMS_FAILED = "GET_ITEMS_FAILED"
+import { 
+    getItems_REQUEST, 
+    getItems_SUCCESS, 
+    getItems_FAILED 
+} from "../reducers/components";
 
-export const DECREASE_LIST_ITEM = "DECREASE_LIST_ITEM"
-export const INCREASE_LIST_ITEM = "INCREASE_LIST_ITEM"
+import { url, path } from "../../utils/settings";
 
-export const CHANGE_LIST = "CHANGE_LIST"
+const axios = require('axios').default;
+
+export function getAllItems() {
+    return dispatch => {
+
+        dispatch(getItemsRequest)
+
+        axios.get(`${url}${path}`)
+        .then( (response) => {
+            dispatch(getItemsSuccess(response.data.data));
+        })
+        .catch( (error) => {
+            dispatch(getItemsFailed());
+            console.log(error);
+        })
+
+
+}}
+
+const getItemsSuccess = response => (
+    getItems_SUCCESS(
+        {items: response}
+    )
+)
+const getItemsRequest= () => (
+    getItems_REQUEST()
+)
+const getItemsFailed= () => (
+    getItems_FAILED()
+)
