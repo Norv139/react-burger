@@ -3,6 +3,8 @@ import thunk from 'redux-thunk';
 import { rootReducer } from './reducers';
 import { createStore } from 'redux';
 
+import {initialState as detalsInit} from './reducers/detals'
+
 function loadFromLocalStorage() {
     try {
         const serialisedState = localStorage.getItem("persistantState");
@@ -12,6 +14,7 @@ function loadFromLocalStorage() {
 
         obj.components.list=[];
         obj.user.previousPath=[null, null];
+        obj.detals = detalsInit
 
         return {...obj};
     } catch (e) {

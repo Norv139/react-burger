@@ -1,3 +1,4 @@
+import { FC } from 'react'
 import PropTypes from 'prop-types'
 import { useRef, useEffect, useState } from 'react'
 import {Tab, CurrencyIcon, Counter} from '@ya.praktikum/react-developer-burger-ui-components'
@@ -8,51 +9,72 @@ import { useRedirect } from '../../services/utils.js'
 
 import { useDrag } from 'react-dnd'
 
-import dataPropTypes from '../../utils/type.js'
+import { getAllItems } from '../../services/actions/index.js';
+import { TdataPropTypes } from '../../utils/type/type';
 
 import style from './style.module.css'
 
-import { getAllItems } from '../../services/actions/index.js';
+
+declare module 'react' {
+    interface FunctionComponent<P = {}> {
+      (props: PropsWithChildren<P>): ReactElement<any, any> | null;
+    }
+  }
 
 
-function BurgerIngredients() {
+interface IStore{
+    components: {
+        items:TdataPropTypes[];
+        list: TdataPropTypes[]
+    }
+}
+
+
+const BurgerIngredients: FC = () => {
 
     const [current, setCurrent] = useState('bun')
 
     const dispatch = useDispatch()
     const redirect = useRedirect()
 
-    const dataIngredients = useSelector(state=>state.components.items)
-    const listIngredients = useSelector(state=>state.components.list)
 
-    function fnCaunt(_id){
-        return listIngredients.filter( x => {return x._id === _id}).length
+    const dataIngredients = useSelector((state:IStore)=>state.components.items)
+    const listIngredients = useSelector((state:IStore)=>state.components.list)
+
+    function fnCaunt(_id:string){
+        return listIngredients.filter( (x: TdataPropTypes ) => {return x._id === _id}).length
     }
     
-    const openDetals = (data) => { 
+    const openDetals = (data:TdataPropTypes) => { 
         redirect(`/ingredients/${data._id}`)
         dispatch(setInfo({item:data}));
         dispatch(openInfo()); 
     }
 
-    const borderRef = useRef(null)
-    const bunRef = useRef(null);
-    const souseRef = useRef(null)
+    const borderRef = useRef<HTMLDivElement>(null)
+    const bunRef = useRef<HTMLParagraphElement>(null);
+    const souseRef = useRef<HTMLParagraphElement>(null)
 
-    const scrollHandler = _ => {
-        var top = borderRef.current.getBoundingClientRect().top
-        var bun = bunRef.current.getBoundingClientRect().top -30 
-        var souse = souseRef.current.getBoundingClientRect().top -30
-        setCurrent(
-            bun > 0 ? 'bun' : 
-            souse > -top ? 'souse' : 'main'
-        );
+    const scrollHandler = (_: any) => {
+        if(borderRef && borderRef.current && bunRef && bunRef.current && souseRef && souseRef.current) {
+            
+          
+            var top = borderRef.current.getBoundingClientRect().top;
+            var bun = bunRef.current.getBoundingClientRect().top -30;
+            var souse = souseRef.current.getBoundingClientRect().top -30;
+
+            setCurrent(
+                bun   > 0 ? 'bun' : 
+                souse  > -top ? 'souse' : 'main'
+            );
+        }
+
     };
 
     useEffect(() => {
       window.addEventListener("scroll", scrollHandler, true);
 
-        dispatch(getAllItems())
+        dispatch(getAllItems()  as any)
 
       return () => {
         window.removeEventListener("scroll", scrollHandler, true);
@@ -68,13 +90,15 @@ function BurgerIngredients() {
             </p>
 
             <div className={style.tab}>
-                <Tab value="bun" active={current === 'bun'}>
+                <Tab value="bun" active={current === 'bun'} onClick={()=>{}}>
                     Булки
                 </Tab>
-                <Tab value="souse" active={current === 'souse'}>
+
+                <Tab value="souse" active={current === 'souse'} onClick={()=>{}}>
                     Соусы
                 </Tab>
-                <Tab value="main" active={current === 'main'}>
+
+                <Tab value="main" active={current === 'main'} onClick={()=>{}}>
                     Начинка
                 </Tab>
             </div>
@@ -111,15 +135,21 @@ function BurgerIngredients() {
     )
 }
 
+interface ISortCards{
+    data:TdataPropTypes[];
+    filterName: string;
+    openDetals: (data:TdataPropTypes)=>void;
+    fnCount: (any:string)=>number;
+}
 
-function SortCards({data, filterName, openDetals, fnCount}){
+function SortCards({data, filterName, openDetals, fnCount}:ISortCards){
     
     return(
         <div className={style.content}>
             {
                 data
-                .filter( firstData => firstData.type === filterName )
-                .map( renderData => 
+                .filter( (firstData:  TdataPropTypes ) => firstData.type === filterName )
+                .map( (renderData: TdataPropTypes) => 
                     { return(
                          
                     <Сard 
@@ -133,13 +163,15 @@ function SortCards({data, filterName, openDetals, fnCount}){
         </div>
     )
 }
-SortCards.propTypes = {
-    data: PropTypes.arrayOf(dataPropTypes),
-    filterName: PropTypes.string.isRequired,
-    openDetals: PropTypes.func
+
+
+interface ICart{
+    data: any;
+    openDetals: (data:TdataPropTypes)=>void;
+    count: number;
 }
 
-function Сard ({data, openDetals, count}) {
+function Сard ({data, openDetals, count}:ICart) {
 
     const [,drag] = useDrag(() => ({
         type: 'item',

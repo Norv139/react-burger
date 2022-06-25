@@ -1,29 +1,28 @@
-import React from "react";
-
-import AppHeader from '../Header/AppHeader'
-
-import {
-  Route,
-  Switch,
-  useLocation
-} from "react-router-dom";
+import React, {FC} from "react";
+import { useSelector } from "react-redux";
+import { Switch } from "react-router-dom";
 
 import { ProtectedRoute } from "../ProtectedRoute/protectedRoute";
 import { PublicRoute } from "../ProtectedRoute/PublicRoute";
 
-
+import AppHeader from '../Header/AppHeader'
 import { Shop, Login, Register, ForgotPassword, ResetPassword, Profile, PageIngredient  } from '../../pages'
-import { useSelector } from "react-redux";
 
-function App() {
+interface IRootStore {
+  user:{
+    previousPath:string|null[]
+  }
+}
 
-  const pathUrl = useSelector(store=>store.user.previousPath)
+const App: FC = () => {
+
+  const pathUrl : string|null[] = useSelector((store:IRootStore)=>store.user.previousPath)
 
   return (
     <div className="App">
       <AppHeader/>
       
-       <Switch>
+        <Switch>
           <ProtectedRoute path="/" exact={true}>
             <Shop/>
           </ProtectedRoute> 
@@ -50,7 +49,6 @@ function App() {
             <>orders id</>
           </ProtectedRoute> 
 
-          
 
           <PublicRoute path="/login" exact={true}>
             <Login/>
@@ -68,8 +66,6 @@ function App() {
             <ResetPassword/>
           </PublicRoute>
         </Switch>
-        
-        
     </div>
   )
 }

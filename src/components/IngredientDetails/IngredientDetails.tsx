@@ -1,17 +1,21 @@
-import PropTypes from 'prop-types';
+
 import { useSelector } from 'react-redux';
 
-import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components'
-
 import style from './style.module.css'
+import { TdataPropTypes } from '../../utils/type/type';
 
 
-
+interface IStore{
+    detals: {
+        info: TdataPropTypes;
+        isOpenInfo: boolean;
+    }
+}
 
 function IngredientDetails(){
     
-    const data = useSelector(state=>state.detals.info)
-    const isOpenInfo = useSelector(state=>state.detals.isOpenInfo)
+    const data = useSelector((state:IStore)=>state.detals.info)
+    const isOpenInfo = useSelector((state:IStore)=>state.detals.isOpenInfo)
 
 
     

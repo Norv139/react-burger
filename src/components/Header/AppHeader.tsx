@@ -1,6 +1,4 @@
-import PropTypes from 'prop-types';
-import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useState } from 'react';
 
 import { BurgerIcon, ListIcon, ProfileIcon, Logo} from '@ya.praktikum/react-developer-burger-ui-components'
 
@@ -8,17 +6,22 @@ import style from './style.module.css'
 import { useRedirect } from '../../services/utils';
 
 
+interface IInitValue{
+    constructor: boolean;
+    orderFeed: boolean;
+    cabinet: boolean;
+}
+
 function AppHeader(){
 
-    const pathURL = useSelector(state=>state.user.previousPath)
 
-    const initValue = { 
+    const initValue:IInitValue = { 
         constructor: false, orderFeed: false, cabinet: false
     }
 
     const [objButton, setObjButton] = useState(initValue)
     const redirect = useRedirect()
-    const boolType = (anyBool) => {return anyBool ? "primary" : "secondary"}
+    const boolType = (anyBool:boolean) => {return anyBool ? "primary" : "secondary"}
 
     return(
         <header className={style.navigation_panel}>
@@ -81,12 +84,22 @@ function AppHeader(){
     )
 }
 
-function CastomButton({onClickBnt, icon, type, text}){
+
+
+
+interface ICastomButton{
+    onClickBnt: ()=>void;
+    icon: any;
+    type: string; 
+    text: string
+}
+
+function CastomButton({onClickBnt, icon, type, text}:ICastomButton){
     return(
     <div 
         className='mt-4 mb-4 pl-5 pr-5'
     >
-        <div className={style.conteiner} type="secondary" onClick={onClickBnt}>
+        <div className={style.conteiner} onClick={onClickBnt}>
 
             <div className='pt-4 pb-4'>
                 {icon}
@@ -100,11 +113,5 @@ function CastomButton({onClickBnt, icon, type, text}){
     )
 }
 
-PropTypes.CastomButton = {
-    onClickBnt: PropTypes.func, 
-    icon: PropTypes.object, 
-    type: PropTypes.string, 
-    text: PropTypes.string
-}
 
 export default AppHeader;

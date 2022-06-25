@@ -1,71 +1,83 @@
+import React, { FC } from 'react';
 import PropTypes from 'prop-types'
 import { CurrencyIcon, Button, ConstructorElement, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-
-import { useSelector, useDispatch } from 'react-redux';
-
 import Reorder, {
     reorder,
     reorderImmutable,
     reorderFromTo,
     reorderFromToImmutable
-  } from "react-reorder";
+} from "react-reorder";
 import move from "lodash-move";
-
 import { v4 as uuidv4 } from 'uuid';
-
-
-import { decrease_list_item, increase_list_item, change_list } from '../../services/reducers/components';
-
-import { sendOrder } from '../../services/actions/index.js';
-
 import { useDrop} from 'react-dnd'
+import { useSelector, useDispatch } from 'react-redux';
 
-import dataPropTypes from '../../utils/type.js'
-
-import style from './style.module.css'
-
+import { 
+    decrease_list_item, 
+    increase_list_item, 
+    change_list 
+} from '../../services/reducers/components';
+import { sendOrder } from '../../services/actions/index.js';
+import {dataPropTypes} from '../../utils/type.js'
 import { getCookie } from '../../services/utils';
 import { useRedirect } from '../../services/utils';
 
+import { TdataPropTypes } from '../../utils/type/type';
 
-function BurgerConstructor() {
+import style from './style.module.css';
+
+declare module 'react' {
+    interface FunctionComponent<P = {}> {
+      (props: PropsWithChildren<P>): ReactElement<any, any> | null;
+    }
+  }
+
+interface IRootStor {
+    components: {
+        list: TdataPropTypes[]
+    }
+}
+
+const BurgerConstructor: FC = () => {
+    
+
     const redirect = useRedirect()
+    const dispatch = useDispatch() 
+
+    const listIngredients = useSelector((store:IRootStor)=>store.components.list)
 
     const createOrder = () =>{
         if(getCookie('accessToken') !== undefined) {
-            return dispatch(sendOrder(listIngredients))
+            return dispatch( sendOrder(listIngredients) as any )
         }else{
             return redirect('/login')
         }
 
     }
-
-    const dispatch = useDispatch() 
-
-    const removeItem = (itemId) => dispatch(
+    const removeItem = (itemId: string) => dispatch(
         decrease_list_item({id: itemId})
     )
-    const chngeList = (newList) => dispatch(
+    const chngeList = (newList: TdataPropTypes[]) => dispatch(
         change_list({items: newList})
     )
 
-    const listIngredients = useSelector(store=>store.components.list)
-
     const [, drop] = useDrop(() => ({
         accept: 'item',
-        drop: (item) => {
+        drop: (item: TdataPropTypes) => {
           
           dispatch(
-            increase_list_item({items:{...item, uuid: uuidv4()}})
+            increase_list_item(
+                    { items:{...item, uuid: uuidv4()} }
+                )
           )
           
         },
       }), [])
 
     return(
-        <div className={"mt-20"} >
+        <div className={"mt-20"} ref={drop}>
 
-            <div ref={drop}>
+            <div>
                 {   listIngredients &&
                     <BurgerConstructorList list={listIngredients} fnReorder={chngeList} fnRemove={removeItem} />
                 }
@@ -75,29 +87,29 @@ function BurgerConstructor() {
             <div className={style.form_pay + " mt-10"}>
 
                 <p className={"text text_type_digits-medium "+style.margin_height_auto}>
-                    {TotalPrice(listIngredients)}
+                    {TotalPrice(listIngredients)} <CurrencyIcon type="primary" />
                 </p>
 
-                <div className={style.margin_height_auto }>
-                    <CurrencyIcon type="primary" className={style.icon_pay} />
-                </div>
                 
                 <div className="ml-10">
-                    <Button
-                        onClick={createOrder}
-                        className='ml-10'
-                        type="primary" 
-                        size="large"
-                    >
-                        Оформить заказ
-                    </Button>
+                    <div className='pl-10'>
+                        <Button
+                            onClick={createOrder}
+                            
+                            type="primary" 
+                            size="large"
+                        >
+                            Оформить заказ
+                        </Button>
+                    </div>
+                    
                 </div>
             </div>
         </div>
     )
 }
 
-function TotalPrice(list){
+function TotalPrice(list:TdataPropTypes[]){
     const initialValue = 0;
 
     try {
@@ -121,11 +133,14 @@ function TotalPrice(list){
     }
 }
 
-TotalPrice.propTypes= {
-    list: PropTypes.arrayOf(dataPropTypes)
+
+interface IBurgerConstructorList{
+    list: TdataPropTypes[],
+    fnRemove: (IDitem:string)=>void,
+    fnReorder: (list: TdataPropTypes[])=>any,
 }
 
-function BurgerConstructorList({list, fnRemove, fnReorder}){
+const BurgerConstructorList = ({list, fnRemove, fnReorder}:IBurgerConstructorList ) => {
 
     const list_ingridients = list.filter( firstData => firstData.type !== "bun" )
     const bun = list.filter( firstData => firstData.type === "bun" )[0]
@@ -133,7 +148,7 @@ function BurgerConstructorList({list, fnRemove, fnReorder}){
 
 
     try{
-        const onReorder = (e, from, to) => {
+        const onReorder = (from:number, to:number) => {
             fnReorder([bun, ...move(list_ingridients, from, to)])
           };
         
@@ -141,7 +156,6 @@ function BurgerConstructorList({list, fnRemove, fnReorder}){
             <span >
                 <div className='ml-6 mb-2'>
                     <ConstructorElement
-                        className='ml-8'
                         type="top"
                         isLocked={true}
                         text={bun.name + '(верх)'}
@@ -164,7 +178,7 @@ function BurgerConstructorList({list, fnRemove, fnReorder}){
                     >
                 {
                     list_ingridients
-                    .map((x)=>{
+                    .map((x:TdataPropTypes)=>{
                         return(
                             <div key={x.uuid}  className={style.item + " mt-2 mb-2"} >
                                 <div className={style.margin_height_auto}>
@@ -197,7 +211,7 @@ function BurgerConstructorList({list, fnRemove, fnReorder}){
         )
     }
     catch{
-        const onReorder = (e, from, to) => {
+        const onReorder = ( from:number, to:number) => {
             fnReorder([...move(list_ingridients, from, to)])
           };
         return (
@@ -216,7 +230,7 @@ function BurgerConstructorList({list, fnRemove, fnReorder}){
                     >
                 {
                     list_ingridients
-                    .map((x)=>{
+                    .map((x:TdataPropTypes)=>{
                         return(
                             <div key={x.uuid}  className={style.item + " mt-2 mb-2"} >
                                 <div className={style.margin_height_auto}>
@@ -237,10 +251,6 @@ function BurgerConstructorList({list, fnRemove, fnReorder}){
                 </Reorder>
         )
     }
-}
-
-BurgerConstructorList.propTypes = {
-    list: PropTypes.arrayOf(dataPropTypes).isRequired
 }
 
 export default BurgerConstructor;

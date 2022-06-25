@@ -3,12 +3,22 @@ import { } from '@ya.praktikum/react-developer-burger-ui-components'
 
 import ImgDone from '../../images/done.svg'
 
-
 import style from './style.module.css'
+
+interface IState{
+    detals: {
+        isOpenOrder: boolean; 
+        order: {
+            order: {
+                number: number
+            }
+        }
+    }
+}
 
 
 function OrderDetails(){
-    const {isOpenOrder, order} = useSelector(state => state.detals)
+    const {isOpenOrder, order} = useSelector((state:IState) => state.detals)
 
     return(  
             <>
