@@ -1,34 +1,35 @@
-
 import React, { useCallback, useState } from 'react';
 import {Input, Button} from '@ya.praktikum/react-developer-burger-ui-components'
+
 import { useDispatch } from 'react-redux';
+
+import { useRedirect } from '../services/utils';
+
 
 import style from './style.module.css'
 
 import { postData } from '../services/actions/user';
-import { userURL, register } from '../utils/settings';
+import { userURL, login } from '../utils/settings';
 
-import { useRedirect } from '../services/utils';
-
-export function Register(){
+export function Login(){
     const redirect = useRedirect()
-    const dispatch = useDispatch()
+    const initValue = { email: '', password: '' }
 
-    const initValue = { email: '', password: '', name: '' }
+    const dispatch = useDispatch()
 
     const [form, setValue] = useState(initValue);
     const [icon, setIcon] = useState(true);
 
-
-    const onChange = e => {
+    const onChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         setValue({ ...form, [e.target.name]: e.target.value });
       };
+    
+    const onClick = (e:React.ChangeEvent<HTMLFormElement>) =>{
+        e.preventDefault();
 
-    const onClick = e=>{
-        e.preventDefault(); 
-        console.log(form)
-        dispatch(postData( `${userURL}${register}`, form))
+        dispatch(postData(`${userURL}${login}`,form) as any);
         setValue(initValue);
+
         redirect('/')
     }
 
@@ -36,17 +37,9 @@ export function Register(){
         <div className={style.over}>
             <main className={style.main}>
                 <p className="text text_type_main-medium mb-6">
-                    Регистрация
+                    Вход
                 </p>
                 <form className={style.main} onSubmit={onClick}>
-                    <Input 
-                        placeholder={'Имя'}
-                        type='text'
-                        name='name'
-                        value={form.name} 
-                        onChange={onChange}
-                    />
-                    <div className='mt-6'/>
                     <Input 
                         placeholder={'E-mail'}
                         type='email'
@@ -68,17 +61,22 @@ export function Register(){
                     <Button 
                         type="primary" 
                         size="medium"
-                        onClick={onClick}
                     >
-                        Зарегистрироваться
+                        Вход
                     </Button>
                 </form>
                 
                 <p className="text text_type_main-default mt-20 text_color_inactive">
-                    Уже зарегистрированы? 
+                    Вы — новый пользователь? 
+                    <a className={style.link} 
+                        onClick={()=>{redirect('/register')}}
+                    >Зарегистрироваться</a>
+                </p>
+                <p className="text text_type_main-default mt-4 text_color_inactive">
+                    Забыли пароль? 
                     <a className={style.link}
-                        onClick={()=>{redirect('/login')}}
-                    >Войти</a>
+                        onClick={()=>{redirect('/forgot-password')}}
+                    >Восстановить пароль</a>
                 </p>
             </main>
         </div>

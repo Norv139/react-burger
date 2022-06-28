@@ -16,7 +16,7 @@ interface IRootStore {
 
 const App: FC = () => {
 
-  const pathUrl : string|null[] = useSelector((store:IRootStore)=>store.user.previousPath)
+  const pathUrl = useSelector((store:IRootStore)=>store.user.previousPath)
 
   return (
     <div className="App">

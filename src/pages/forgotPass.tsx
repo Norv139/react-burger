@@ -1,4 +1,7 @@
 import React, { useCallback, useState } from 'react';
+
+import { FC } from 'react';
+
 import {Input, Button} from '@ya.praktikum/react-developer-burger-ui-components'
 
 import style from './style.module.css'
@@ -7,10 +10,10 @@ import { useDispatch } from 'react-redux';
 import { postData } from '../services/actions/user';
 import { userURL, reset_step1 } from '../utils/settings';
 
-import { useRedirect, usePrivatRedirect } from '../services/utils';
+import { useRedirect } from '../services/utils';
 
 
-export function ForgotPassword(){
+export const ForgotPassword: FC = ()=> {
 
     const redirect = useRedirect()
     const pispatch = useDispatch()
@@ -18,14 +21,14 @@ export function ForgotPassword(){
     const [form, setValue] = useState(initValue);
 
 
-    const onChange = e => {
+    const onChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         setValue({ ...form, [e.target.name]: e.target.value });
       };
 
-    const onClick = e =>{
+    const onClick = (e:React.ChangeEvent<HTMLFormElement>) =>{
             e.preventDefault(); 
             if (form != initValue){
-                pispatch(postData(`${userURL}${reset_step1}`, form))
+                pispatch(postData(`${userURL}${reset_step1}`, form) as any)
                 setValue(initValue)
 
                 redirect('/reset-password') 
@@ -52,7 +55,6 @@ export function ForgotPassword(){
                     <Button 
                         type="primary" 
                         size="medium"
-                        onClick={onClick}
                     >
                         Восстановить
                     </Button>

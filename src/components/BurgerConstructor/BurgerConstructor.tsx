@@ -1,5 +1,4 @@
-import React, { FC } from 'react';
-import PropTypes from 'prop-types'
+import { FC } from 'react';
 import { CurrencyIcon, Button, ConstructorElement, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import Reorder, {
     reorder,
@@ -18,7 +17,6 @@ import {
     change_list 
 } from '../../services/reducers/components';
 import { sendOrder } from '../../services/actions/index.js';
-import {dataPropTypes} from '../../utils/type.js'
 import { getCookie } from '../../services/utils';
 import { useRedirect } from '../../services/utils';
 

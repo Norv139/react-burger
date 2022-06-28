@@ -4,16 +4,23 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Redirect } from 'react-router-dom';
 
-import style from './style.module.css'
 
 import { postData } from '../services/actions/user';
 import { userURL, reset_step2 } from '../utils/settings';
 import { useRedirect } from '../services/utils';
 import { setPreviousPath } from '../services/reducers/user';
 
-export function ResetPassword(){
+import style from './style.module.css'
 
-    const pathHistory = useSelector(store=>store.user.previousPath)
+interface IStore{
+    user:{
+        previousPath: Array< null | string >
+    }
+}
+
+export const ResetPassword: React.FC = () => {
+
+    const pathHistory = useSelector((store:IStore)=>store.user.previousPath)
 
     const redirect = useRedirect()
     const dispatch = useDispatch()
@@ -23,15 +30,15 @@ export function ResetPassword(){
     const [form, setValue] = useState(initValue);
     const [icon, setIcon] = useState(true);
 
-    const onChange = e => {
+    const onChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         setValue({ ...form, [e.target.name]: e.target.value });
       };
     
-    const onClick = e =>{
+    const onClick = (e:React.ChangeEvent<HTMLFormElement>) =>{
         e.preventDefault(); 
         setValue(initValue)
         dispatch(setPreviousPath('/forgot-password'))
-        dispatch(postData(`${userURL}${reset_step2}` ,form))
+        dispatch( postData(`${userURL}${reset_step2}` ,form) as any)
     }
 
     return(
@@ -39,7 +46,7 @@ export function ResetPassword(){
         {
             pathHistory[1] !== '/reset-password'?
             (
-                <Redirect to={{pathname: `/k`}}/>
+                <Redirect to={{pathname: `/forgot-password`}}/>
             ):(
                 <div className={style.over}>
                 <main className={style.main}>
@@ -67,9 +74,6 @@ export function ResetPassword(){
                         <Button 
                             type="primary" 
                             size="medium"
-                            onClick={
-                                onClick
-                            }
                         >
                             Сохранить
                         </Button>

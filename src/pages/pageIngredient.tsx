@@ -1,37 +1,48 @@
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 
 import { getAllItems } from '../services/actions/index.js';
 
-import { path, url } from '../utils/settings.js';
+import { path, url } from '../utils/settings';
 
+import { TdataPropTypes, NulldataPropTypes } from '../utils/type/type';
 
 import style from './style.module.css'
-
 import styleIngredient from './styleIngredient.module.css'
 
 const axios = require('axios').default;
 
 
-export function PageIngredient(){  
+interface IStore {
+    components:{
+        items: TdataPropTypes[]
+    }
+}
 
+interface IResponse extends Response{
+    data: {
+        data: TdataPropTypes[]
+    }
+}
 
-    const [allItem, setAllItem] = useState({})
+export const PageIngredient: React.FC = () =>  {  
+
+    const [allItem, setAllItem] = useState<TdataPropTypes>(NulldataPropTypes)
     const location = useLocation();
     const id = location.pathname.split('/').pop();
-    const items = useSelector(state=>state.components.items)
+    const items = useSelector((state:IStore)=>state.components.items)
 
 
     useEffect( ()=>{
         if (items.length == 0){
             axios.get(`${url}${path}`)
-            .then( (response) => {
+            .then( (response: IResponse) => {
                 console.log(response.data.data)
                 setAllItem(response.data.data.filter(x=>x._id == id)[0])
             })
-            .catch( (error) => {
+            .catch( (error: Response) => {
                 console.log(error);
             })
         }

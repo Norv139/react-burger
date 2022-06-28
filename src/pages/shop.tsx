@@ -16,11 +16,23 @@ import { useDispatch, useSelector } from 'react-redux';
 import { closeInfo, closeOrder } from '../services/reducers/detals';
 import { useRedirect } from '../services/utils';
 
+declare module 'react' {
+  interface FunctionComponent<P = {}> {
+    (props: PropsWithChildren<P>): ReactElement<any, any> | null;
+  }
+}
 
-export function Shop() {
+interface IState{
+  detals:{
+    isOpenOrder: boolean;
+    isOpenInfo: boolean;
+  }
+}
+
+export const Shop: React.FC = () => {
   const redirect = useRedirect()
   const dispatch = useDispatch()
-  const {isOpenOrder, isOpenInfo } = useSelector(state => state.detals)
+  const {isOpenOrder, isOpenInfo } = useSelector((state:IState) => state.detals)
 
   const closeAllPopups = ()=>{
     
@@ -35,11 +47,12 @@ export function Shop() {
         <BurgerIngredients />
         <BurgerConstructor />
       </main>
-      { (isOpenOrder || isOpenInfo) &&
-      <Modal onClose={closeAllPopups}>
-              <OrderDetails/>
-              <IngredientDetails/>
-      </Modal>  
+      { 
+        (isOpenOrder || isOpenInfo) &&
+        <Modal onClose={closeAllPopups}>
+                <OrderDetails/>
+                <IngredientDetails/>
+        </Modal>  
       } 
     </>
   );

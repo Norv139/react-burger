@@ -2,11 +2,11 @@ import React from 'react';
 import style from './style.module.css'
 
 interface IModalOverlay{
-    children: React.ReactElement;
-    onClose: ()=>void;
+    children: React.ReactNode;
+    onClose: any
 }
 
-function ModalOverlay({children, onClose}:IModalOverlay){
+const ModalOverlay = ({children, onClose}:IModalOverlay) => {
     return(
             <div className={style.modal} onClick={()=>{onClose()}}>
                 {children}

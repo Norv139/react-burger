@@ -1,34 +1,34 @@
+
 import React, { useCallback, useState } from 'react';
 import {Input, Button} from '@ya.praktikum/react-developer-burger-ui-components'
-
 import { useDispatch } from 'react-redux';
-
-import { useRedirect } from '../services/utils';
-
 
 import style from './style.module.css'
 
 import { postData } from '../services/actions/user';
-import { userURL, login } from '../utils/settings';
+import { userURL, register } from '../utils/settings';
 
-export function Login(){
+import { useRedirect } from '../services/utils';
+
+export const Register: React.FC = () => {
     const redirect = useRedirect()
-    const initValue = { email: '', password: '' }
-
     const dispatch = useDispatch()
+
+    const initValue = { email: '', password: '', name: '' }
 
     const [form, setValue] = useState(initValue);
     const [icon, setIcon] = useState(true);
 
-    const onChange = e => {
+
+    const onChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         setValue({ ...form, [e.target.name]: e.target.value });
       };
-    
-    const onClick = e =>{
-        e.preventDefault();
-        dispatch(postData(`${userURL}${login}`,form));
-        setValue(initValue);
 
+    const onClick = (e:React.ChangeEvent<HTMLFormElement>) =>{
+        e.preventDefault(); 
+        console.log(form)
+        dispatch(postData( `${userURL}${register}`, form) as any)
+        setValue(initValue);
         redirect('/')
     }
 
@@ -36,9 +36,17 @@ export function Login(){
         <div className={style.over}>
             <main className={style.main}>
                 <p className="text text_type_main-medium mb-6">
-                    Вход
+                    Регистрация
                 </p>
                 <form className={style.main} onSubmit={onClick}>
+                    <Input 
+                        placeholder={'Имя'}
+                        type='text'
+                        name='name'
+                        value={form.name} 
+                        onChange={onChange}
+                    />
+                    <div className='mt-6'/>
                     <Input 
                         placeholder={'E-mail'}
                         type='email'
@@ -60,25 +68,16 @@ export function Login(){
                     <Button 
                         type="primary" 
                         size="medium"
-                        onClick={
-                            onClick
-                        }
                     >
-                        Вход
+                        Зарегистрироваться
                     </Button>
                 </form>
                 
                 <p className="text text_type_main-default mt-20 text_color_inactive">
-                    Вы — новый пользователь? 
-                    <a className={style.link} 
-                        onClick={()=>{redirect('/register')}}
-                    >Зарегистрироваться</a>
-                </p>
-                <p className="text text_type_main-default mt-4 text_color_inactive">
-                    Забыли пароль? 
+                    Уже зарегистрированы? 
                     <a className={style.link}
-                        onClick={()=>{redirect('/forgot-password')}}
-                    >Восстановить пароль</a>
+                        onClick={()=>{redirect('/login')}}
+                    >Войти</a>
                 </p>
             </main>
         </div>

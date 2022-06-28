@@ -3,13 +3,13 @@ import PropTypes from 'prop-types'
 import { useRef, useEffect, useState } from 'react'
 import {Tab, CurrencyIcon, Counter} from '@ya.praktikum/react-developer-burger-ui-components'
 import { useDispatch, useSelector } from 'react-redux'
-import { setInfo, openInfo } from '../../services/reducers/detals.js'
+import { setInfo, openInfo } from '../../services/reducers/detals'
 
-import { useRedirect } from '../../services/utils.js'
+import { useRedirect } from '../../services/utils'
 
 import { useDrag } from 'react-dnd'
 
-import { getAllItems } from '../../services/actions/index.js';
+import { getAllItems } from '../../services/actions/index';
 import { TdataPropTypes } from '../../utils/type/type';
 
 import style from './style.module.css'

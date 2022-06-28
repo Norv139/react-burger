@@ -1,8 +1,15 @@
+import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import { refreshToken } from '../../services/auth';
 import { getCookie } from '../../services/utils';
 
-export function ProtectedRoute({ children, path, exact }) {
+interface IProtectedRoute{
+  children: React.ReactNode;
+  path: string;
+  exact?:boolean
+}
+
+export function ProtectedRoute({ children, path, exact }: IProtectedRoute ) {
 
   const accessToken = getCookie('accessToken')
 
@@ -11,7 +18,7 @@ export function ProtectedRoute({ children, path, exact }) {
   }
 
   return (
-    <Route path={path} exact={exact}>
+    <Route path={path}>
       {
         accessToken ?
         (

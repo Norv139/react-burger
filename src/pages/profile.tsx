@@ -10,7 +10,23 @@ import style from './style.module.css'
 
 const axios = require('axios').default;
 
-export function Profile(){  
+
+interface IResponse extends Response {
+    data:{
+        user:{
+            email: string;
+            name: string;
+        }
+    }
+}
+
+interface IInitValueType{
+    profile: string;
+    orders: string;
+    logout: "text_color_inactive"
+}
+
+export const Profile: React.FC = () => {  
     const redirect = useRedirect()
 
     const initValueType = {
@@ -18,6 +34,7 @@ export function Profile(){
         orders: "text_color_inactive",
         logout: "text_color_inactive"
     };
+
     const initValueUser = { 
         email: '', 
         password: '', 
@@ -35,40 +52,44 @@ export function Profile(){
         axios.get(
             'https://norma.nomoreparties.space/api/auth/user',
             {headers: {'authorization': `${getCookie('accessToken')}`}}
-        ).then( (response) => {
+        ).then( (response: IResponse) => {
             setValue({...initValueUser, ...response.data.user})
             setActuslForm({...initValueUser, ...response.data.user})
-        }).catch( (error) => {
+        }).catch( (error: Response) => {
             console.log("error", error);
         })
 
     }, [])
 
 
-    const onChange =  e => {
+    const onChange =  (e:React.ChangeEvent<HTMLInputElement>) => {
             e.preventDefault()
             setValue({ ...form, [e.target.name]: e.target.value });
             setWasAChange(true)
         }
     
-        const onSave =  e => {
-            e.preventDefault()
+        const onSave =  (e?:React.ChangeEvent<HTMLButtonElement>) => {
+            if (e){
+                e.preventDefault()
+            }
 
             axios.patch(
                 'https://norma.nomoreparties.space/api/auth/user', 
                 {...form},
                 {headers: {'authorization': `${getCookie('accessToken')}`}}
-            ).then( (response) => {
+            ).then( (response:IResponse) => {
                 setValue({...initValueUser, ...response.data.user})
                 setActuslForm({...initValueUser, ...response.data.user})
                 setWasAChange(false)
-            }).catch( (error) => {
+            }).catch( (error:Response) => {
                 console.log("error", error);
             })
             
         }
-        const onCancel =  e => {
-            e.preventDefault()
+        const onCancel =  (e?:React.ChangeEvent<HTMLButtonElement>) => {
+            if (e){
+                e.preventDefault()
+            }
             setValue(actuslForm)
             setWasAChange(false)
         }
@@ -96,7 +117,7 @@ export function Profile(){
 
                     <p 
                         className={style.p_text + " text text_type_main-medium " + select.logout}
-                        onClick={()=>{logoutUser(); redirect('/login')}}
+                        onClick={()=>{logoutUser(); redirect('/')}}
                     >
                         Выход
                     </p>
