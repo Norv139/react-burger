@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import style from './style.module.css'
 
 import { postData } from '../services/actions/user';
-import { userURL, register } from '../utils/settings';
+import { url, register } from '../utils/settings';
 
 import { useRedirect } from '../services/utils';
 
@@ -24,10 +24,10 @@ export const Register: React.FC = () => {
         setValue({ ...form, [e.target.name]: e.target.value });
       };
 
-    const onClick = (e:React.ChangeEvent<HTMLFormElement>) =>{
+    const onClick = (e:React.FormEvent<HTMLFormElement>) =>{
         e.preventDefault(); 
         console.log(form)
-        dispatch(postData( `${userURL}${register}`, form) as any)
+        dispatch(postData( `${url}${register}`, form) as any)
         setValue(initValue);
         redirect('/')
     }

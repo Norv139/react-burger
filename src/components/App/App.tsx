@@ -1,6 +1,6 @@
 import React, {FC} from "react";
 import { useSelector } from "react-redux";
-import { Switch } from "react-router-dom";
+import { Switch, Route} from "react-router-dom";
 
 import { ProtectedRoute } from "../ProtectedRoute/protectedRoute";
 import { PublicRoute } from "../ProtectedRoute/PublicRoute";
@@ -23,11 +23,37 @@ const App: FC = () => {
       <AppHeader/>
       
         <Switch>
-          <ProtectedRoute path="/" exact={true}>
-            <Shop/>
+          
+          <ProtectedRoute path="/profile/orders/:id">
+            <>orders id</>
           </ProtectedRoute> 
+          
+          <ProtectedRoute path="/profile/orders">
+            <>orders</>
+          </ProtectedRoute>
 
-          <ProtectedRoute path="/ingredients/:id" exact={true}>
+          <ProtectedRoute path="/profile" >
+            <Profile/>
+          </ProtectedRoute>
+
+
+          <PublicRoute path="/login" >
+            <Login/>
+          </PublicRoute>
+
+          <PublicRoute path="/register">
+            <Register/>
+          </PublicRoute> 
+
+          <PublicRoute path="/forgot-password">
+            <ForgotPassword/>
+          </PublicRoute> 
+
+          <PublicRoute path="/reset-password">
+            <ResetPassword/>
+          </PublicRoute>
+
+          <Route path={"/ingredients/:id"} >
             {
               pathUrl[1] == null  ? (
                 <PageIngredient/>
@@ -35,36 +61,12 @@ const App: FC = () => {
                 <Shop/>
               )
             }
-          </ProtectedRoute> 
-          
-          <ProtectedRoute path="/profile" exact={true}>
-            <Profile/>
-          </ProtectedRoute>
-          
-          <ProtectedRoute path="/profile/orders" exact={true}>
-            <>orders</>
-          </ProtectedRoute>
+          </Route> 
 
-          <ProtectedRoute path="/profile/orders/:id" exact={true}>
-            <>orders id</>
-          </ProtectedRoute> 
+          <Route path={"/"}>
+            <Shop/>
+          </Route> 
 
-
-          <PublicRoute path="/login" exact={true}>
-            <Login/>
-          </PublicRoute>
-
-          <PublicRoute path="/register" exact={true}>
-            <Register/>
-          </PublicRoute> 
-
-          <PublicRoute path="/forgot-password" exact={true}>
-            <ForgotPassword/>
-          </PublicRoute> 
-
-          <PublicRoute path="/reset-password" exact={true}>
-            <ResetPassword/>
-          </PublicRoute>
         </Switch>
     </div>
   )

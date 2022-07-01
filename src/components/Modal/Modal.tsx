@@ -18,7 +18,7 @@ interface IModal{
 const Modal = ({children, onClose }:IModal) => {
     const portal = document.getElementById('portal') as HTMLElement;
 
-    const escFunction = useCallback((event:any) => {
+    const escFunction = useCallback((event:KeyboardEvent) => {
         if (event.key === 'Escape') {
             onClose();
         };

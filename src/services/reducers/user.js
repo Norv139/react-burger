@@ -14,7 +14,7 @@ const user = createSlice({
         setPreviousPath: (state, action)=>{
             return{
                 ...state,
-                previousPath: [ ...state.previousPath ,action.payload].slice(-2)
+                previousPath: [ ...state.previousPath, action.payload].slice(-2)
             }
         },
 

@@ -8,7 +8,7 @@ import style from './style.module.css'
 import { useDispatch } from 'react-redux';
 
 import { postData } from '../services/actions/user';
-import { userURL, reset_step1 } from '../utils/settings';
+import { url, reset_step1 } from '../utils/settings';
 
 import { useRedirect } from '../services/utils';
 
@@ -25,10 +25,10 @@ export const ForgotPassword: FC = ()=> {
         setValue({ ...form, [e.target.name]: e.target.value });
       };
 
-    const onClick = (e:React.ChangeEvent<HTMLFormElement>) =>{
+    const onClick = (e:React.FormEvent<HTMLFormElement>) =>{
             e.preventDefault(); 
             if (form != initValue){
-                pispatch(postData(`${userURL}${reset_step1}`, form) as any)
+                pispatch(postData(`${url}${reset_step1}`, form) as any)
                 setValue(initValue)
 
                 redirect('/reset-password') 

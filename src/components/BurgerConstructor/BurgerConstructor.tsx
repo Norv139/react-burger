@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { CurrencyIcon, Button, ConstructorElement, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import Reorder, {
     reorder,
@@ -30,10 +30,13 @@ declare module 'react' {
     }
   }
 
-interface IRootStor {
+interface IRootStore {
     components: {
         list: TdataPropTypes[]
-    }
+    };
+    user:{
+        previousPath:Array<string|null>
+      }
 }
 
 const BurgerConstructor: FC = () => {
@@ -42,7 +45,10 @@ const BurgerConstructor: FC = () => {
     const redirect = useRedirect()
     const dispatch = useDispatch() 
 
-    const listIngredients = useSelector((store:IRootStor)=>store.components.list)
+    const listIngredients = useSelector((store:IRootStore)=>store.components.list)
+    const pathUrl = useSelector((store:IRootStore)=>store.user.previousPath)
+
+    
 
     const createOrder = () =>{
         if(getCookie('accessToken') !== undefined) {
@@ -59,6 +65,15 @@ const BurgerConstructor: FC = () => {
         change_list({items: newList})
     )
 
+
+    useEffect(()=>{
+        if(pathUrl[0] === '/login') {
+            console.log('AAAA')
+            dispatch( sendOrder(listIngredients) as any )
+        }
+    }, []
+    )
+   
     const [, drop] = useDrop(() => ({
         accept: 'item',
         drop: (item: TdataPropTypes) => {
@@ -146,7 +161,7 @@ const BurgerConstructorList = ({list, fnRemove, fnReorder}:IBurgerConstructorLis
 
 
     try{
-        const onReorder = (from:number, to:number) => {
+        const onReorder = (e:any, from:number, to:number) => {
             fnReorder([bun, ...move(list_ingridients, from, to)])
           };
         
@@ -209,7 +224,7 @@ const BurgerConstructorList = ({list, fnRemove, fnReorder}:IBurgerConstructorLis
         )
     }
     catch{
-        const onReorder = ( from:number, to:number) => {
+        const onReorder = (e:any, from:number, to:number) => {
             fnReorder([...move(list_ingridients, from, to)])
           };
         return (

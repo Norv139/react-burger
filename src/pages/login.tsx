@@ -1,21 +1,29 @@
 import React, { useCallback, useState } from 'react';
 import {Input, Button} from '@ya.praktikum/react-developer-burger-ui-components'
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { useRedirect } from '../services/utils';
 
 
 import style from './style.module.css'
 
 import { postData } from '../services/actions/user';
-import { userURL, login } from '../utils/settings';
+import { url, login } from '../utils/settings';
+import { setLogin } from '../services/reducers/user';
+import { Link, useHistory } from 'react-router-dom';
+
+interface IRootStore {
+    user:{
+      previousPath:Array<string|null>
+    }
+  }
 
 export function Login(){
-    const redirect = useRedirect()
+    
     const initValue = { email: '', password: '' }
 
     const dispatch = useDispatch()
+    let history = useHistory();
 
     const [form, setValue] = useState(initValue);
     const [icon, setIcon] = useState(true);
@@ -24,13 +32,13 @@ export function Login(){
         setValue({ ...form, [e.target.name]: e.target.value });
       };
     
-    const onClick = (e:React.ChangeEvent<HTMLFormElement>) =>{
+    const onClick = (e:React.FormEvent<HTMLFormElement>) =>{
         e.preventDefault();
 
-        dispatch(postData(`${userURL}${login}`,form) as any);
+        dispatch(postData(`${url}${login}`,form) as any);
         setValue(initValue);
-
-        redirect('/')
+        setLogin(true);
+        history.goBack();
     }
 
     return(
@@ -68,15 +76,11 @@ export function Login(){
                 
                 <p className="text text_type_main-default mt-20 text_color_inactive">
                     Вы — новый пользователь? 
-                    <a className={style.link} 
-                        onClick={()=>{redirect('/register')}}
-                    >Зарегистрироваться</a>
+                    <Link to='/register' className={style.link}>Зарегистрироваться </Link>
                 </p>
                 <p className="text text_type_main-default mt-4 text_color_inactive">
                     Забыли пароль? 
-                    <a className={style.link}
-                        onClick={()=>{redirect('/forgot-password')}}
-                    >Восстановить пароль</a>
+                    <Link to="/forgot-password" className={style.link}>Восстановить пароль </Link>
                 </p>
             </main>
         </div>

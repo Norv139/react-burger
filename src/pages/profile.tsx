@@ -26,7 +26,13 @@ interface IInitValueType{
     logout: "text_color_inactive"
 }
 
+
+    
+
 export const Profile: React.FC = () => {  
+
+    
+
     const redirect = useRedirect()
 
     const initValueType = {
@@ -117,7 +123,7 @@ export const Profile: React.FC = () => {
 
                     <p 
                         className={style.p_text + " text text_type_main-medium " + select.logout}
-                        onClick={()=>{logoutUser(); redirect('/')}}
+                        onClick={()=>{logoutUser(); redirect('/ ')}}
                     >
                         Выход
                     </p>

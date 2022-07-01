@@ -5,6 +5,8 @@ import {
     setLogin
 } from "../reducers/user"
 
+import { url, login, logout } from "../../utils/settings";
+
 import {setCookie, getCookie, deleteCookie} from '../utils'
 
 const axios = require('axios').default;
@@ -45,8 +47,8 @@ const reqFailed= () => (
 )
 
 export function logoutUser(form){
-    const url = "https://norma.nomoreparties.space/api/auth/logout"
-    axios.post(url, {"token": `${getCookie('refreshToken')}`})
+    const urlLogout = "https://norma.nomoreparties.space/api/auth/logout"
+    axios.post(`${url}${logout}`, {"token": `${getCookie('refreshToken')}`})
     .then( (response) => {
         deleteCookie('refreshToken')
         deleteCookie('accessToken')

@@ -59,9 +59,9 @@ const BurgerIngredients: FC = () => {
         if(borderRef && borderRef.current && bunRef && bunRef.current && souseRef && souseRef.current) {
             
           
-            var top = borderRef.current.getBoundingClientRect().top;
-            var bun = bunRef.current.getBoundingClientRect().top -30;
-            var souse = souseRef.current.getBoundingClientRect().top -30;
+            const top = borderRef.current.getBoundingClientRect().top;
+            const bun = bunRef.current.getBoundingClientRect().top -30;
+            const souse = souseRef.current.getBoundingClientRect().top -30;
 
             setCurrent(
                 bun   > 0 ? 'bun' : 

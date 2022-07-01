@@ -4,6 +4,8 @@ import {
     postOrder_FAILED 
 } from "../reducers/detals";
 
+import { clearList } from "../reducers/components";
+
 import { url, orders } from "../../utils/settings";
 import { getCookie } from "../utils";
 
@@ -25,6 +27,7 @@ export function sendOrder (listItems) {
     .then( (response) => {
         dispatch(postOrderSuccess(response.data));
         console.log(response);
+        dispatch(clearList())
     })
     .catch( (error) => {
         dispatch(postOrderFailed());

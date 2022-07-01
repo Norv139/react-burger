@@ -1,21 +1,27 @@
 import React from 'react';
-import { Redirect, Route } from 'react-router-dom';
-import { refreshToken } from '../../services/auth';
+import { Redirect, Route, RouteProps } from 'react-router-dom';
+import { refreshToken as refreshTokenFn } from '../../services/auth';
 import { getCookie } from '../../services/utils';
+import { useSelector } from 'react-redux';
 
-interface IProtectedRoute{
-  children: React.ReactNode;
-  path: string;
-  exact?:boolean
+
+interface IRootStore {
+  user:{
+    previousPath:Array<string|null>
+  }
 }
 
-export function ProtectedRoute({ children, path, exact }: IProtectedRoute ) {
+export function ProtectedRoute({ children, path }: RouteProps ) {
 
   const accessToken = getCookie('accessToken')
+  const refreshToken = getCookie('refreshToken')
+  const pathUrl = useSelector((store:IRootStore)=>store.user.previousPath)
 
-  if (accessToken === undefined){
-    refreshToken()
+  if (accessToken === undefined && refreshToken ){
+    refreshTokenFn()
   }
+
+  console.log(pathUrl)
 
   return (
     <Route path={path}>

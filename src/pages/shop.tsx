@@ -1,6 +1,5 @@
 
 // components
-import AppHeader from '../components/Header/AppHeader'
 import BurgerConstructor from '../components/BurgerConstructor/BurgerConstructor'
 import BurgerIngredients from '../components/BurgerIngredients/BurgerIngredients'
 
@@ -33,6 +32,7 @@ export const Shop: React.FC = () => {
   const redirect = useRedirect()
   const dispatch = useDispatch()
   const {isOpenOrder, isOpenInfo } = useSelector((state:IState) => state.detals)
+  
 
   const closeAllPopups = ()=>{
     

@@ -6,7 +6,7 @@ import { Redirect } from 'react-router-dom';
 
 
 import { postData } from '../services/actions/user';
-import { userURL, reset_step2 } from '../utils/settings';
+import { url, reset_step2 } from '../utils/settings';
 import { useRedirect } from '../services/utils';
 import { setPreviousPath } from '../services/reducers/user';
 
@@ -34,11 +34,11 @@ export const ResetPassword: React.FC = () => {
         setValue({ ...form, [e.target.name]: e.target.value });
       };
     
-    const onClick = (e:React.ChangeEvent<HTMLFormElement>) =>{
+    const onClick = (e:React.FormEvent<HTMLFormElement>) =>{
         e.preventDefault(); 
         setValue(initValue)
         dispatch(setPreviousPath('/forgot-password'))
-        dispatch( postData(`${userURL}${reset_step2}` ,form) as any)
+        dispatch( postData(`${url}${reset_step2}` ,form) as any)
     }
 
     return(
