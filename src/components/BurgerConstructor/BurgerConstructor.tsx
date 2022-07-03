@@ -23,6 +23,7 @@ import { useRedirect } from '../../services/utils';
 import { TdataPropTypes } from '../../utils/type/type';
 
 import style from './style.module.css';
+import { useHistory } from 'react-router-dom';
 
 declare module 'react' {
     interface FunctionComponent<P = {}> {
@@ -32,29 +33,30 @@ declare module 'react' {
 
 interface IRootStore {
     components: {
-        list: TdataPropTypes[]
+        list: TdataPropTypes[];
     };
     user:{
-        previousPath:Array<string|null>
+        isLogin: boolean;
       }
 }
 
 const BurgerConstructor: FC = () => {
     
-
+    const history = useHistory()
     const redirect = useRedirect()
     const dispatch = useDispatch() 
 
+    const isLogin = useSelector((store:IRootStore)=>store.user.isLogin)
     const listIngredients = useSelector((store:IRootStore)=>store.components.list)
-    const pathUrl = useSelector((store:IRootStore)=>store.user.previousPath)
+    
 
     
 
     const createOrder = () =>{
-        if(getCookie('accessToken') !== undefined) {
+        if(isLogin) {
             return dispatch( sendOrder(listIngredients) as any )
         }else{
-            return redirect('/login')
+            history.push({ pathname: "/login", state: { from: '/' } });
         }
 
     }
@@ -67,8 +69,8 @@ const BurgerConstructor: FC = () => {
 
 
     useEffect(()=>{
-        if(pathUrl[0] === '/login') {
-            console.log('AAAA')
+        
+        if(isLogin && listIngredients.length!==0) {
             dispatch( sendOrder(listIngredients) as any )
         }
     }, []

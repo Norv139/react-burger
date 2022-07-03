@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 // config
 import { closeInfo, closeOrder } from '../services/reducers/detals';
 import { useRedirect } from '../services/utils';
+import { useHistory, useLocation } from 'react-router-dom';
 
 declare module 'react' {
   interface FunctionComponent<P = {}> {
@@ -29,29 +30,31 @@ interface IState{
 }
 
 export const Shop: React.FC = () => {
-  const redirect = useRedirect()
-  const dispatch = useDispatch()
-  const {isOpenOrder, isOpenInfo } = useSelector((state:IState) => state.detals)
+
+  const location = useLocation();
+  const history = useHistory();
+  
+  const dispatch = useDispatch();
+  const {isOpenOrder} = useSelector((state:IState) => state.detals)
   
 
   const closeAllPopups = ()=>{
-    
+
     dispatch(closeOrder());
     dispatch(closeInfo());
-    redirect("/")
+    history.push({ pathname: "/", state: { from: location } })
   }
-
-  return (
+  console.log(location)
+  return ( 
     <>
       <main>
         <BurgerIngredients />
         <BurgerConstructor />
       </main>
       { 
-        (isOpenOrder || isOpenInfo) &&
+        isOpenOrder &&
         <Modal onClose={closeAllPopups}>
                 <OrderDetails/>
-                <IngredientDetails/>
         </Modal>  
       } 
     </>

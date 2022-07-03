@@ -10,6 +10,7 @@ const user = createSlice({
         itemsFailed: false,
         itemsRequest: false
     },
+
     reducers: {
         setPreviousPath: (state, action)=>{
             return{
@@ -51,6 +52,7 @@ const user = createSlice({
 
 
 export const {
+    initialState,
     req_FAILED,
     req_REQUEST,
     req_SUCCESS,

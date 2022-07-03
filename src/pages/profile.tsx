@@ -6,6 +6,8 @@ import { logoutUser } from '../services/actions';
 
 
 import style from './style.module.css'
+import { useDispatch } from 'react-redux';
+import { setLogin } from '../services/reducers/user';
 
 
 const axios = require('axios').default;
@@ -26,12 +28,9 @@ interface IInitValueType{
     logout: "text_color_inactive"
 }
 
-
-    
-
 export const Profile: React.FC = () => {  
 
-    
+    const dispatch = useDispatch()    
 
     const redirect = useRedirect()
 
@@ -66,6 +65,7 @@ export const Profile: React.FC = () => {
         })
 
     }, [])
+
 
 
     const onChange =  (e:React.ChangeEvent<HTMLInputElement>) => {
@@ -123,7 +123,7 @@ export const Profile: React.FC = () => {
 
                     <p 
                         className={style.p_text + " text text_type_main-medium " + select.logout}
-                        onClick={()=>{logoutUser(); redirect('/ ')}}
+                        onClick={()=>{ dispatch(setLogin(false)); logoutUser(); redirect('/ '); }}
                     >
                         Выход
                     </p>

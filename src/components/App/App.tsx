@@ -1,28 +1,56 @@
 import React, {FC} from "react";
-import { useSelector } from "react-redux";
-import { Switch, Route} from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Switch, Route, useLocation, useHistory} from "react-router-dom";
 
 import { ProtectedRoute } from "../ProtectedRoute/protectedRoute";
 import { PublicRoute } from "../ProtectedRoute/PublicRoute";
 
+import Modal from "../Modal/Modal";
+import IngredientDetails from "../IngredientDetails/IngredientDetails";
+import { closeInfo, closeOrder } from "../../services/reducers/detals";
 import AppHeader from '../Header/AppHeader'
 import { Shop, Login, Register, ForgotPassword, ResetPassword, Profile, PageIngredient  } from '../../pages'
 
+
 interface IRootStore {
   user:{
-    previousPath:string|null[]
+    previousPath:string|null[];
+    isLogin: boolean
+  }
+  detals:{
+    isOpenInfo: boolean
+  }
+}
+
+interface IBackground{
+  location:{
+    state:{
+      background: any;
+    }
   }
 }
 
 const App: FC = () => {
+  const dispatch = useDispatch();
+  const history = useHistory();
 
-  const pathUrl = useSelector((store:IRootStore)=>store.user.previousPath)
+  let location = useLocation();
+  
+  const isLogin = useSelector((store:IRootStore)=>store.user.isLogin)
+  const isOpenInfo = useSelector((store:IRootStore)=>store.detals.isOpenInfo)
+
+  const closeAllPopups = ()=>{
+    
+    dispatch(closeOrder());
+    dispatch(closeInfo());
+    history.push('/')
+  }
 
   return (
     <div className="App">
       <AppHeader/>
       
-        <Switch>
+        <Switch location={location}>
           
           <ProtectedRoute path="/profile/orders/:id">
             <>orders id</>
@@ -43,24 +71,28 @@ const App: FC = () => {
 
           <PublicRoute path="/register">
             <Register/>
-          </PublicRoute> 
+          </PublicRoute>
 
           <PublicRoute path="/forgot-password">
             <ForgotPassword/>
-          </PublicRoute> 
+          </PublicRoute>
 
           <PublicRoute path="/reset-password">
             <ResetPassword/>
           </PublicRoute>
 
+
           <Route path={"/ingredients/:id"} >
-            {
-              pathUrl[1] == null  ? (
-                <PageIngredient/>
+            {(isOpenInfo)?(
+                <>
+                  <Shop/>
+                  <Modal onClose={closeAllPopups}>
+                    <IngredientDetails/>
+                  </Modal>
+                </>
               ):(
-                <Shop/>
-              )
-            }
+                <PageIngredient/>
+              )}
           </Route> 
 
           <Route path={"/"}>
@@ -68,6 +100,8 @@ const App: FC = () => {
           </Route> 
 
         </Switch>
+        
+
     </div>
   )
 }

@@ -11,6 +11,7 @@ import { postData } from '../services/actions/user';
 import { url, login } from '../utils/settings';
 import { setLogin } from '../services/reducers/user';
 import { Link, useHistory } from 'react-router-dom';
+import { getCookie } from '../services/utils';
 
 interface IRootStore {
     user:{
@@ -23,23 +24,28 @@ export function Login(){
     const initValue = { email: '', password: '' }
 
     const dispatch = useDispatch()
-    let history = useHistory();
+    const history = useHistory();
+
 
     const [form, setValue] = useState(initValue);
     const [icon, setIcon] = useState(true);
 
     const onChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         setValue({ ...form, [e.target.name]: e.target.value });
-      };
+    };
     
     const onClick = (e:React.FormEvent<HTMLFormElement>) =>{
         e.preventDefault();
 
         dispatch(postData(`${url}${login}`,form) as any);
+
         setValue(initValue);
-        setLogin(true);
-        history.goBack();
-    }
+
+        if (getCookie('accessToken') !== undefined){
+            dispatch(setLogin(true));
+            history.push(history.location.state)
+        }
+    }   
 
     return(
         <div className={style.over}>
@@ -80,7 +86,7 @@ export function Login(){
                 </p>
                 <p className="text text_type_main-default mt-4 text_color_inactive">
                     Забыли пароль? 
-                    <Link to="/forgot-password" className={style.link}>Восстановить пароль </Link>
+                    <Link to={{pathname: "/forgot-password", state: { from: "/login" }}} className={style.link}>Восстановить пароль </Link>
                 </p>
             </main>
         </div>
