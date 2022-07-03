@@ -13,20 +13,8 @@ import { Shop, Login, Register, ForgotPassword, ResetPassword, Profile, PageIngr
 
 
 interface IRootStore {
-  user:{
-    previousPath:string|null[];
-    isLogin: boolean
-  }
   detals:{
     isOpenInfo: boolean
-  }
-}
-
-interface IBackground{
-  location:{
-    state:{
-      background: any;
-    }
   }
 }
 
@@ -34,9 +22,8 @@ const App: FC = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  let location = useLocation();
+  const location = useLocation();
   
-  const isLogin = useSelector((store:IRootStore)=>store.user.isLogin)
   const isOpenInfo = useSelector((store:IRootStore)=>store.detals.isOpenInfo)
 
   const closeAllPopups = ()=>{
@@ -45,6 +32,8 @@ const App: FC = () => {
     dispatch(closeInfo());
     history.push('/')
   }
+
+  console.log(history, location)
 
   return (
     <div className="App">
@@ -83,13 +72,17 @@ const App: FC = () => {
 
 
           <Route path={"/ingredients/:id"} >
-            {(isOpenInfo)?(
-                <>
-                  <Shop/>
-                  <Modal onClose={closeAllPopups}>
-                    <IngredientDetails/>
-                  </Modal>
-                </>
+            {(history.location.state)?(
+                (history.location.state.from.pathname === '/' && isOpenInfo)?(
+                  <>
+                    <Shop/>
+                    <Modal onClose={closeAllPopups}>
+                      <IngredientDetails/>
+                    </Modal>
+                  </>
+                ):(
+                  <PageIngredient/>
+                )
               ):(
                 <PageIngredient/>
               )}

@@ -10,12 +10,14 @@ import { useDispatch } from 'react-redux';
 import { postData } from '../services/actions/user';
 import { url, reset_step1 } from '../utils/settings';
 
-import { Redirect, useHistory } from 'react-router-dom';
+import { Redirect, useHistory, useLocation } from 'react-router-dom';
 
 
 export const ForgotPassword: FC = ()=> {
 
     const history = useHistory();
+    const location = useLocation();
+
     const pispatch = useDispatch()
     const initValue = { email: ''}
     const [form, setValue] = useState(initValue);
@@ -34,7 +36,7 @@ export const ForgotPassword: FC = ()=> {
                 pispatch(postData(`${url}${reset_step1}`, form) as any)
                 setValue(initValue)
 
-                history.push({ pathname: "/reset-password", state: { from: "/forgot-password" }}) 
+                history.push({ pathname: "/reset-password", state: { from: location }}) 
                 
                 console.log(history)
             }
@@ -68,7 +70,7 @@ export const ForgotPassword: FC = ()=> {
                 <p className="text text_type_main-default mt-20 text_color_inactive">
                     Вспомнили пароль? 
                     <a className={style.link}
-                        onClick={()=>{ history.push({ pathname: '/login', state: { from: "/forgot-password" }}) }}
+                        onClick={()=>{ history.push({ pathname: '/login', state: { from: location}}) }}
                     >Войти</a>
                 </p>
             </main>

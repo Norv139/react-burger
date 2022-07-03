@@ -18,12 +18,11 @@ import {
 } from '../../services/reducers/components';
 import { sendOrder } from '../../services/actions/index.js';
 import { getCookie } from '../../services/utils';
-import { useRedirect } from '../../services/utils';
 
 import { TdataPropTypes } from '../../utils/type/type';
 
 import style from './style.module.css';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 
 declare module 'react' {
     interface FunctionComponent<P = {}> {
@@ -42,8 +41,9 @@ interface IRootStore {
 
 const BurgerConstructor: FC = () => {
     
-    const history = useHistory()
-    const redirect = useRedirect()
+    const history = useHistory();
+    const location = useLocation();
+    // { pathname: "/login", state: { from: location } }
     const dispatch = useDispatch() 
 
     const isLogin = useSelector((store:IRootStore)=>store.user.isLogin)
@@ -56,7 +56,7 @@ const BurgerConstructor: FC = () => {
         if(isLogin) {
             return dispatch( sendOrder(listIngredients) as any )
         }else{
-            history.push({ pathname: "/login", state: { from: '/' } });
+            history.push({ pathname: "/login", state: { from: location } });
         }
 
     }

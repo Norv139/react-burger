@@ -7,11 +7,13 @@ import style from './style.module.css'
 
 import { postData } from '../services/actions/user';
 import { url, register } from '../utils/settings';
+import { useHistory, useLocation } from 'react-router-dom';
 
-import { useRedirect } from '../services/utils';
 
 export const Register: React.FC = () => {
-    const redirect = useRedirect()
+    const history = useHistory();
+    const location = useLocation();
+
     const dispatch = useDispatch()
 
     const initValue = { email: '', password: '', name: '' }
@@ -29,7 +31,7 @@ export const Register: React.FC = () => {
         console.log(form)
         dispatch(postData( `${url}${register}`, form) as any)
         setValue(initValue);
-        redirect('/')
+        history.push({pathname: '/', state: { from: location}});
     }
 
     return(
@@ -76,7 +78,9 @@ export const Register: React.FC = () => {
                 <p className="text text_type_main-default mt-20 text_color_inactive">
                     Уже зарегистрированы? 
                     <a className={style.link}
-                        onClick={()=>{redirect('/login')}}
+                        onClick={()=>{
+                            history.push({pathname: '/login', state: { from: location}})
+                        }}
                     >Войти</a>
                 </p>
             </main>

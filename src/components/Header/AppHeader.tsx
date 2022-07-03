@@ -3,7 +3,8 @@ import { useState } from 'react';
 import { BurgerIcon, ListIcon, ProfileIcon, Logo} from '@ya.praktikum/react-developer-burger-ui-components'
 
 import style from './style.module.css'
-import { useRedirect } from '../../services/utils';
+import { useHistory, useLocation } from 'react-router-dom';
+
 
 
 interface IInitValue{
@@ -20,7 +21,11 @@ function AppHeader(){
     }
 
     const [objButton, setObjButton] = useState(initValue)
-    const redirect = useRedirect()
+
+    const history = useHistory();
+    const location = useLocation();
+
+    
     const boolType = (anyBool:boolean) => {return anyBool ? "primary" : "secondary"}
 
     return(
@@ -36,7 +41,7 @@ function AppHeader(){
                             onClickBnt={
                                 ()=>{
                                     setObjButton({...initValue, constructor: true})
-                                    redirect('/')
+                                    history.push({ pathname: "/", state: { from: location } })
                                 }
                             }
                             
@@ -50,7 +55,7 @@ function AppHeader(){
                             onClickBnt={
                                 ()=>{
                                     setObjButton({...initValue, orderFeed: true})
-                                    redirect('/profile/orders')
+                                    history.push({ pathname: "/profile/orders", state: { from: location } })
                                 }
                             }
                         />
@@ -73,7 +78,7 @@ function AppHeader(){
                             onClickBnt={
                                 ()=>{
                                     setObjButton({...initValue, cabinet: true})
-                                    redirect('/profile')
+                                    history.push({ pathname: "/profile", state: { from: location } })
                                 }
                             }
                         />

@@ -10,7 +10,7 @@ import style from './style.module.css'
 import { postData } from '../services/actions/user';
 import { url, login } from '../utils/settings';
 import { setLogin } from '../services/reducers/user';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation} from 'react-router-dom';
 import { getCookie } from '../services/utils';
 
 interface IRootStore {
@@ -25,6 +25,7 @@ export function Login(){
 
     const dispatch = useDispatch()
     const history = useHistory();
+    const location = useLocation();
 
 
     const [form, setValue] = useState(initValue);
@@ -86,7 +87,7 @@ export function Login(){
                 </p>
                 <p className="text text_type_main-default mt-4 text_color_inactive">
                     Забыли пароль? 
-                    <Link to={{pathname: "/forgot-password", state: { from: "/login" }}} className={style.link}>Восстановить пароль </Link>
+                    <Link to={{pathname: "/forgot-password", state: { from: location }}} className={style.link}>Восстановить пароль </Link>
                 </p>
             </main>
         </div>

@@ -13,7 +13,6 @@ import { useDispatch, useSelector } from 'react-redux';
 
 // config
 import { closeInfo, closeOrder } from '../services/reducers/detals';
-import { useRedirect } from '../services/utils';
 import { useHistory, useLocation } from 'react-router-dom';
 
 declare module 'react' {

@@ -26,13 +26,3 @@ export function getCookie(name:string){
 export function deleteCookie(name:string) {
     Cookies.set(name, '', {expires: -1})
 }
-
-export function useRedirect(){
-    const dispatch = useDispatch()
-    const history = useHistory()
-    
-    return (path:string)=>{
-        dispatch(setPreviousPath(`${path}`));
-        history.push({ pathname: `${path}` });
-    }
-}

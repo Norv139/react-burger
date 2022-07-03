@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import {Input, Button} from '@ya.praktikum/react-developer-burger-ui-components'
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Redirect } from 'react-router-dom';
+import { Redirect, useLocation } from 'react-router-dom';
 
 
 import { postData } from '../services/actions/user';
@@ -23,8 +23,10 @@ export const ResetPassword: React.FC = () => {
 
     const pathHistory = useSelector((store:IStore)=>store.user.previousPath)
 
-    const history = useHistory()
-    const dispatch = useDispatch()
+    const history = useHistory();
+    const location = useLocation();
+
+    const dispatch = useDispatch();
 
     const initValue = { password: '', token: '' }
 
@@ -43,11 +45,13 @@ export const ResetPassword: React.FC = () => {
     }
     
 
+    console.log(history.location.state.from)
+
     return(
         <>
         {
             history.location.state ? (
-                history.location.state.from == '/forgot-password' ? (
+                history.location.state.from.pathname == '/forgot-password' ? (
                         <div className={style.over}>
                         <main className={style.main}>
                             <p className="text text_type_main-medium mb-6">
@@ -83,17 +87,17 @@ export const ResetPassword: React.FC = () => {
                                 Вспомнили пароль? 
                                 <a className={style.link}
                                     onClick={()=>{
-                                        history.push({pathname: '/login', state: { from: "/reset-password" }})
+                                        history.push({pathname: '/login', state: { from: location }})
                                     }}
                                 >Войти</a>
                             </p>
                         </main>
                         </div>
                     ):(
-                        <Redirect to={{pathname: `/forgot-password`, state: { from: "/reset-password" }}}/>
+                        <Redirect to={{pathname: `/forgot-password`, state: { from: location }}}/>
                     )
             ):(
-                <Redirect to={{pathname: `/forgot-password`, state: { from: "/reset-password" }}}/>
+                <Redirect to={{pathname: `/forgot-password`, state: { from: location }}}/>
             )
         }
         

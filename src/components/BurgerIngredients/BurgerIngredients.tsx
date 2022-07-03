@@ -5,7 +5,6 @@ import {Tab, CurrencyIcon, Counter} from '@ya.praktikum/react-developer-burger-u
 import { useDispatch, useSelector } from 'react-redux'
 import { setInfo, openInfo } from '../../services/reducers/detals'
 
-import { useRedirect } from '../../services/utils'
 
 import { useDrag } from 'react-dnd'
 
@@ -13,6 +12,7 @@ import { getAllItems } from '../../services/actions/index';
 import { TdataPropTypes } from '../../utils/type/type';
 
 import style from './style.module.css'
+import { useHistory, useLocation } from 'react-router-dom'
 
 
 declare module 'react' {
@@ -35,8 +35,8 @@ const BurgerIngredients: FC = () => {
     const [current, setCurrent] = useState('bun')
 
     const dispatch = useDispatch()
-    const redirect = useRedirect()
-
+    const history = useHistory();
+    const location = useLocation();
 
     const dataIngredients = useSelector((state:IStore)=>state.components.items)
     const listIngredients = useSelector((state:IStore)=>state.components.list)
@@ -46,7 +46,9 @@ const BurgerIngredients: FC = () => {
     }
     
     const openDetals = (data:TdataPropTypes) => { 
-        redirect(`/ingredients/${data._id}`)
+        
+        history.push({ pathname: `/ingredients/${data._id}`, state: { from: location } })
+
         dispatch(setInfo({item:data}));
         dispatch(openInfo()); 
     }

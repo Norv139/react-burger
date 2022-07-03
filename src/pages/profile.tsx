@@ -1,13 +1,14 @@
 
 import React, { useEffect, useState } from 'react';
 import {Input, Button} from '@ya.praktikum/react-developer-burger-ui-components'
-import { getCookie, useRedirect } from '../services/utils';
+import { getCookie } from '../services/utils';
 import { logoutUser } from '../services/actions';
 
 
 import style from './style.module.css'
 import { useDispatch } from 'react-redux';
 import { setLogin } from '../services/reducers/user';
+import { useHistory, useLocation } from 'react-router-dom';
 
 
 const axios = require('axios').default;
@@ -32,7 +33,8 @@ export const Profile: React.FC = () => {
 
     const dispatch = useDispatch()    
 
-    const redirect = useRedirect()
+    const history = useHistory()
+    const location = useLocation();
 
     const initValueType = {
         profile: "text_color_inactive",
@@ -116,14 +118,18 @@ export const Profile: React.FC = () => {
 
                     <p 
                         className={style.p_text + " text text_type_main-medium " + select.orders}
-                        onClick={()=>{redirect('/profile/orders')}}
+                        onClick={()=>{history.push({pathname: '/profile/orders', state: { from: location } })}}
                     >
                         История заказов
                     </p>
 
                     <p 
                         className={style.p_text + " text text_type_main-medium " + select.logout}
-                        onClick={()=>{ dispatch(setLogin(false)); logoutUser(); redirect('/ '); }}
+                        onClick={()=>{ 
+                            dispatch(setLogin(false)); 
+                            logoutUser(); 
+                            history.push({pathname: '/', state: { from: location } });
+                        }}
                     >
                         Выход
                     </p>
