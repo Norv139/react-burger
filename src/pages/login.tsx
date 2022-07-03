@@ -1,36 +1,52 @@
 import React, { useCallback, useState } from 'react';
 import {Input, Button} from '@ya.praktikum/react-developer-burger-ui-components'
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { useRedirect } from '../services/utils';
 
 
 import style from './style.module.css'
 
 import { postData } from '../services/actions/user';
-import { userURL, login } from '../utils/settings';
+import { url, login } from '../utils/settings';
+import { setLogin } from '../services/reducers/user';
+import { Link, useHistory, useLocation} from 'react-router-dom';
+import { getCookie } from '../services/utils';
+
+interface IRootStore {
+    user:{
+      previousPath:Array<string|null>
+    }
+  }
 
 export function Login(){
-    const redirect = useRedirect()
+    
     const initValue = { email: '', password: '' }
 
     const dispatch = useDispatch()
+    const history = useHistory();
+    const location = useLocation();
+
 
     const [form, setValue] = useState(initValue);
     const [icon, setIcon] = useState(true);
 
-    const onChange = e => {
+    const onChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         setValue({ ...form, [e.target.name]: e.target.value });
-      };
+    };
     
-    const onClick = e =>{
+    const onClick = (e:React.FormEvent<HTMLFormElement>) =>{
         e.preventDefault();
-        dispatch(postData(`${userURL}${login}`,form));
+
+        dispatch(postData(`${url}${login}`,form) as any);
+
         setValue(initValue);
 
-        redirect('/')
-    }
+        if (getCookie('accessToken') !== undefined){
+            dispatch(setLogin(true));
+            history.push(history.location.state)
+        }
+    }   
 
     return(
         <div className={style.over}>
@@ -60,9 +76,6 @@ export function Login(){
                     <Button 
                         type="primary" 
                         size="medium"
-                        onClick={
-                            onClick
-                        }
                     >
                         Вход
                     </Button>
@@ -70,15 +83,11 @@ export function Login(){
                 
                 <p className="text text_type_main-default mt-20 text_color_inactive">
                     Вы — новый пользователь? 
-                    <a className={style.link} 
-                        onClick={()=>{redirect('/register')}}
-                    >Зарегистрироваться</a>
+                    <Link to='/register' className={style.link}>Зарегистрироваться </Link>
                 </p>
                 <p className="text text_type_main-default mt-4 text_color_inactive">
                     Забыли пароль? 
-                    <a className={style.link}
-                        onClick={()=>{redirect('/forgot-password')}}
-                    >Восстановить пароль</a>
+                    <Link to={{pathname: "/forgot-password", state: { from: location }}} className={style.link}>Восстановить пароль </Link>
                 </p>
             </main>
         </div>

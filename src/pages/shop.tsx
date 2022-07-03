@@ -1,6 +1,5 @@
 
 // components
-import AppHeader from '../components/Header/AppHeader'
 import BurgerConstructor from '../components/BurgerConstructor/BurgerConstructor'
 import BurgerIngredients from '../components/BurgerIngredients/BurgerIngredients'
 
@@ -14,32 +13,48 @@ import { useDispatch, useSelector } from 'react-redux';
 
 // config
 import { closeInfo, closeOrder } from '../services/reducers/detals';
-import { useRedirect } from '../services/utils';
+import { useHistory, useLocation } from 'react-router-dom';
 
+declare module 'react' {
+  interface FunctionComponent<P = {}> {
+    (props: PropsWithChildren<P>): ReactElement<any, any> | null;
+  }
+}
 
-export function Shop() {
-  const redirect = useRedirect()
-  const dispatch = useDispatch()
-  const {isOpenOrder, isOpenInfo } = useSelector(state => state.detals)
+interface IState{
+  detals:{
+    isOpenOrder: boolean;
+    isOpenInfo: boolean;
+  }
+}
+
+export const Shop: React.FC = () => {
+
+  const location = useLocation();
+  const history = useHistory();
+  
+  const dispatch = useDispatch();
+  const {isOpenOrder} = useSelector((state:IState) => state.detals)
+  
 
   const closeAllPopups = ()=>{
-    
+
     dispatch(closeOrder());
     dispatch(closeInfo());
-    redirect("/")
+    history.push({ pathname: "/", state: { from: location } })
   }
-
-  return (
+  console.log(location)
+  return ( 
     <>
       <main>
         <BurgerIngredients />
         <BurgerConstructor />
       </main>
-      { (isOpenOrder || isOpenInfo) &&
-      <Modal onClose={closeAllPopups}>
-              <OrderDetails/>
-              <IngredientDetails/>
-      </Modal>  
+      { 
+        isOpenOrder &&
+        <Modal onClose={closeAllPopups}>
+                <OrderDetails/>
+        </Modal>  
       } 
     </>
   );

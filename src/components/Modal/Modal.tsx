@@ -1,14 +1,24 @@
 import ReactDOM from 'react-dom';
-
-import { useEffect, useCallback} from 'react';
+import { FC, ReactChild, ReactChildren, useRef, ReactFragment } from 'react';
+import { useEffect, useCallback, ReactElement} from 'react';
 
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import style from './style.module.css'
 import ModalOverlay from '../ModalOverlay/ModalOverlay';
 
-function Modal({children, onClose }){
+//import content from '../../svg';
 
-    const escFunction = useCallback((event) => {
+
+interface IModal{
+    children:React.ReactNode;
+    onClose: ()=>void;
+}
+
+
+const Modal = ({children, onClose }:IModal) => {
+    const portal = document.getElementById('portal') as HTMLElement;
+
+    const escFunction = useCallback((event:KeyboardEvent) => {
         if (event.key === 'Escape') {
             onClose();
         };
@@ -22,18 +32,24 @@ function Modal({children, onClose }){
         };
     }, [escFunction])
 
+    
+    
     return ReactDOM.createPortal(
+    
         <ModalOverlay onClose={onClose}>
-            <span onClick={e=>e.stopPropagation()} className={style.model_content}> 
+            <div onClick={e=>e.stopPropagation()} className={style.model_content}> 
                 <div className={style.model_close_btn + ' mt-10 mr-10 ml-10'}>
                     <div className={style.btn}>
-                        <CloseIcon onClick={()=>{onClose()}}/>
+                        <CloseIcon type='secondary' onClick={()=>{onClose()}}/>
                     </div>
                 </div>
                 {children}
-            </span>
-        </ModalOverlay>,
-        document.getElementById('portal'))
+            </div>
+        </ModalOverlay>
+
+    ,
+    portal)
+    
 }
 
-export default Modal;
+export default Modal

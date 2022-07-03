@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { setPreviousPath } from './reducers/user';
 import Cookies from 'js-cookie'
 
-export function setCookie (response) {
+export function setCookie (response: { accessToken: string; refreshToken: string; }) {
     if(response.accessToken){
        var {accessToken, refreshToken} = response
 
@@ -12,26 +12,17 @@ export function setCookie (response) {
            'accessToken', accessToken, 
            {expires: in20Minutes}
         );
-
-       Cookies.set('refreshToken', refreshToken);
+       
+        Cookies.set('refreshToken', refreshToken);
+        
     }
 }
 
-export function getCookie(name){
+export function getCookie(name:string){
     return Cookies.get(name)
 }
   
 
-export function deleteCookie(name) {
+export function deleteCookie(name:string) {
     Cookies.set(name, '', {expires: -1})
-}
-
-export function useRedirect(path){
-    const dispatch = useDispatch()
-    const history = useHistory()
-    
-    return (path)=>{
-        dispatch(setPreviousPath(`${path}`));
-        history.push({ pathname: `${path}` });
-    }
 }

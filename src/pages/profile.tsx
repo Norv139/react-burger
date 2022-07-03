@@ -1,23 +1,47 @@
 
 import React, { useEffect, useState } from 'react';
 import {Input, Button} from '@ya.praktikum/react-developer-burger-ui-components'
-import { getCookie, useRedirect } from '../services/utils';
+import { getCookie } from '../services/utils';
 import { logoutUser } from '../services/actions';
 
 
 import style from './style.module.css'
+import { useDispatch } from 'react-redux';
+import { setLogin } from '../services/reducers/user';
+import { useHistory, useLocation } from 'react-router-dom';
 
 
 const axios = require('axios').default;
 
-export function Profile(){  
-    const redirect = useRedirect()
+
+interface IResponse extends Response {
+    data:{
+        user:{
+            email: string;
+            name: string;
+        }
+    }
+}
+
+interface IInitValueType{
+    profile: string;
+    orders: string;
+    logout: "text_color_inactive"
+}
+
+export const Profile: React.FC = () => {  
+
+    const dispatch = useDispatch()    
+
+    const history = useHistory()
+    const location = useLocation();
 
     const initValueType = {
         profile: "text_color_inactive",
         orders: "text_color_inactive",
         logout: "text_color_inactive"
     };
+
     const initValueUser = { 
         email: '', 
         password: '', 
@@ -35,40 +59,45 @@ export function Profile(){
         axios.get(
             'https://norma.nomoreparties.space/api/auth/user',
             {headers: {'authorization': `${getCookie('accessToken')}`}}
-        ).then( (response) => {
+        ).then( (response: IResponse) => {
             setValue({...initValueUser, ...response.data.user})
             setActuslForm({...initValueUser, ...response.data.user})
-        }).catch( (error) => {
+        }).catch( (error: Response) => {
             console.log("error", error);
         })
 
     }, [])
 
 
-    const onChange =  e => {
+
+    const onChange =  (e:React.ChangeEvent<HTMLInputElement>) => {
             e.preventDefault()
             setValue({ ...form, [e.target.name]: e.target.value });
             setWasAChange(true)
         }
     
-        const onSave =  e => {
-            e.preventDefault()
+        const onSave =  (e?:React.ChangeEvent<HTMLButtonElement>) => {
+            if (e){
+                e.preventDefault()
+            }
 
             axios.patch(
                 'https://norma.nomoreparties.space/api/auth/user', 
                 {...form},
                 {headers: {'authorization': `${getCookie('accessToken')}`}}
-            ).then( (response) => {
+            ).then( (response:IResponse) => {
                 setValue({...initValueUser, ...response.data.user})
                 setActuslForm({...initValueUser, ...response.data.user})
                 setWasAChange(false)
-            }).catch( (error) => {
+            }).catch( (error:Response) => {
                 console.log("error", error);
             })
             
         }
-        const onCancel =  e => {
-            e.preventDefault()
+        const onCancel =  (e?:React.ChangeEvent<HTMLButtonElement>) => {
+            if (e){
+                e.preventDefault()
+            }
             setValue(actuslForm)
             setWasAChange(false)
         }
@@ -89,14 +118,18 @@ export function Profile(){
 
                     <p 
                         className={style.p_text + " text text_type_main-medium " + select.orders}
-                        onClick={()=>{redirect('/profile/orders')}}
+                        onClick={()=>{history.push({pathname: '/profile/orders', state: { from: location } })}}
                     >
                         История заказов
                     </p>
 
                     <p 
                         className={style.p_text + " text text_type_main-medium " + select.logout}
-                        onClick={()=>{logoutUser(); redirect('/login')}}
+                        onClick={()=>{ 
+                            dispatch(setLogin(false)); 
+                            logoutUser(); 
+                            history.push({pathname: '/', state: { from: location } });
+                        }}
                     >
                         Выход
                     </p>

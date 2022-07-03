@@ -3,6 +3,9 @@ import thunk from 'redux-thunk';
 import { rootReducer } from './reducers';
 import { createStore } from 'redux';
 
+import {initialState as detalsInit} from './reducers/detals'
+import {initialState as userInit} from './reducers/user'
+
 function loadFromLocalStorage() {
     try {
         const serialisedState = localStorage.getItem("persistantState");
@@ -10,8 +13,8 @@ function loadFromLocalStorage() {
 
         var obj = {...JSON.parse(serialisedState)}
 
-        obj.components.list=[];
-        obj.user.previousPath=[null, null];
+        obj.user = userInit;
+        obj.detals = detalsInit;
 
         return {...obj};
     } catch (e) {
@@ -36,8 +39,8 @@ const composeEnhancers =
 
 const enhancer = composeEnhancers(applyMiddleware(thunk));
 
-const store = createStore(rootReducer, loadFromLocalStorage(), enhancer);
+const store = createStore(rootReducer, enhancer);
 
-store.subscribe(() => saveToLocalStorage(store.getState()));
+//store.subscribe(() => saveToLocalStorage(store.getState()));
 
 export default store

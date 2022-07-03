@@ -1,34 +1,44 @@
 import React, { useCallback, useState } from 'react';
+
+import { FC } from 'react';
+
 import {Input, Button} from '@ya.praktikum/react-developer-burger-ui-components'
 
 import style from './style.module.css'
 import { useDispatch } from 'react-redux';
 
 import { postData } from '../services/actions/user';
-import { userURL, reset_step1 } from '../utils/settings';
+import { url, reset_step1 } from '../utils/settings';
 
-import { useRedirect, usePrivatRedirect } from '../services/utils';
+import { Redirect, useHistory, useLocation } from 'react-router-dom';
 
 
-export function ForgotPassword(){
+export const ForgotPassword: FC = ()=> {
 
-    const redirect = useRedirect()
+    const history = useHistory();
+    const location = useLocation();
+
     const pispatch = useDispatch()
     const initValue = { email: ''}
     const [form, setValue] = useState(initValue);
 
 
-    const onChange = e => {
+    const onChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         setValue({ ...form, [e.target.name]: e.target.value });
       };
 
-    const onClick = e =>{
+    const onClick = (e:React.FormEvent<HTMLFormElement>) =>{
             e.preventDefault(); 
+
+            console.log('Good')
             if (form != initValue){
-                pispatch(postData(`${userURL}${reset_step1}`, form))
+                console.log(history)
+                pispatch(postData(`${url}${reset_step1}`, form) as any)
                 setValue(initValue)
 
-                redirect('/reset-password') 
+                history.push({ pathname: "/reset-password", state: { from: location }}) 
+                
+                console.log(history)
             }
             
         }
@@ -52,7 +62,6 @@ export function ForgotPassword(){
                     <Button 
                         type="primary" 
                         size="medium"
-                        onClick={onClick}
                     >
                         Восстановить
                     </Button>
@@ -61,7 +70,7 @@ export function ForgotPassword(){
                 <p className="text text_type_main-default mt-20 text_color_inactive">
                     Вспомнили пароль? 
                     <a className={style.link}
-                        onClick={()=>{redirect('/login')}}
+                        onClick={()=>{ history.push({ pathname: '/login', state: { from: location}}) }}
                     >Войти</a>
                 </p>
             </main>

@@ -6,12 +6,14 @@ import { useDispatch } from 'react-redux';
 import style from './style.module.css'
 
 import { postData } from '../services/actions/user';
-import { userURL, register } from '../utils/settings';
+import { url, register } from '../utils/settings';
+import { useHistory, useLocation } from 'react-router-dom';
 
-import { useRedirect } from '../services/utils';
 
-export function Register(){
-    const redirect = useRedirect()
+export const Register: React.FC = () => {
+    const history = useHistory();
+    const location = useLocation();
+
     const dispatch = useDispatch()
 
     const initValue = { email: '', password: '', name: '' }
@@ -20,16 +22,16 @@ export function Register(){
     const [icon, setIcon] = useState(true);
 
 
-    const onChange = e => {
+    const onChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         setValue({ ...form, [e.target.name]: e.target.value });
       };
 
-    const onClick = e=>{
+    const onClick = (e:React.FormEvent<HTMLFormElement>) =>{
         e.preventDefault(); 
         console.log(form)
-        dispatch(postData( `${userURL}${register}`, form))
+        dispatch(postData( `${url}${register}`, form) as any)
         setValue(initValue);
-        redirect('/')
+        history.push({pathname: '/', state: { from: location}});
     }
 
     return(
@@ -68,7 +70,6 @@ export function Register(){
                     <Button 
                         type="primary" 
                         size="medium"
-                        onClick={onClick}
                     >
                         Зарегистрироваться
                     </Button>
@@ -77,7 +78,9 @@ export function Register(){
                 <p className="text text_type_main-default mt-20 text_color_inactive">
                     Уже зарегистрированы? 
                     <a className={style.link}
-                        onClick={()=>{redirect('/login')}}
+                        onClick={()=>{
+                            history.push({pathname: '/login', state: { from: location}})
+                        }}
                     >Войти</a>
                 </p>
             </main>

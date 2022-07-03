@@ -33,6 +33,9 @@ const componentsSlice = createSlice({
                 itemsRequest: false 
             };
         },
+        clearList:(state)=>{
+            return { ...state, list: [] };
+        },
 
         decrease_list_item: (state,action)=>{
             return {
@@ -60,6 +63,8 @@ export const {
     getItems_SUCCESS, 
     getItems_REQUEST, 
     getItems_FAILED,
+
+    clearList,
 
     decrease_list_item,
     increase_list_item,
