@@ -53,7 +53,7 @@ const BurgerConstructor: FC = () => {
     
 
     const createOrder = () =>{
-        if(isLogin) {
+        if(isLogin && listIngredients && history.location.state.from.pathname === '/login') {
             return dispatch( sendOrder(listIngredients) as any )
         }else{
             history.push({ pathname: "/login", state: { from: location } });

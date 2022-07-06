@@ -43,7 +43,6 @@ export const Shop: React.FC = () => {
     dispatch(closeInfo());
     history.push({ pathname: "/", state: { from: location } })
   }
-  console.log(location)
   return ( 
     <>
       <main>

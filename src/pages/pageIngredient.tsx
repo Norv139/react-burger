@@ -39,7 +39,6 @@ export const PageIngredient: React.FC = () =>  {
         if (items.length == 0){
             axios.get(`${url}${path}`)
             .then( (response: IResponse) => {
-                console.log(response.data.data)
                 setAllItem(response.data.data.filter(x=>x._id == id)[0])
             })
             .catch( (error: Response) => {

@@ -25,7 +25,7 @@ export function PublicRoute({ children, path }: RouteProps ) {
     console.log("REFRESH")
     if ( accessToken !== undefined){
       dispatch(setLogin(true))
-      return <Redirect to={{ pathname: "/login", state: { from: path } }}  />
+      history.push({ pathname: "/login", state: { from: path } })
     }
   }
 
@@ -34,7 +34,7 @@ export function PublicRoute({ children, path }: RouteProps ) {
       { !isLogin ? (
         children
       ):( 
-          history.location.state.from ?(
+          history.location.state ?(
             <Redirect to={`${history.location.state.from}`}/>
           ):(
             <Redirect to='/'/>

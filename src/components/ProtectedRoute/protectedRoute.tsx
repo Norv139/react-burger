@@ -25,7 +25,7 @@ export function ProtectedRoute({ children, path }: RouteProps ) {
     console.log("REFRESH")
     if ( accessToken !== undefined){
       dispatch(setLogin(true))
-      return <Redirect to={{ pathname: "/login", state: { from: path } }}  />
+      history.push({ pathname: "/login", state: { from: path } })
     }
   }
 

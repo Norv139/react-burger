@@ -33,7 +33,7 @@ const App: FC = () => {
     history.push('/')
   }
 
-  console.log(history, location)
+  //console.log(history, location)
 
   return (
     <div className="App">
