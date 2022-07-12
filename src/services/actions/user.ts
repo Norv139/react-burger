@@ -7,11 +7,11 @@ import {
 
 import { url, login, logout } from "../../utils/settings";
 
-import {setCookie, getCookie, deleteCookie} from '../utils'
+import {setCookie, getCookie, deleteCookie} from '../utils/cookie'
 
 const axios = require('axios').default;
 
-export function postData(url, form) {
+export function postData(url: string, form) {
 
     return dispatch => {
         dispatch(reqRequest)
@@ -46,7 +46,7 @@ const reqFailed= () => (
     req_FAILED()
 )
 
-export function logoutUser(form){
+export function logoutUser(){
     const urlLogout = "https://norma.nomoreparties.space/api/auth/logout"
     axios.post(`${url}${logout}`, {"token": `${getCookie('refreshToken')}`})
     .then( (response) => {
@@ -58,8 +58,8 @@ export function logoutUser(form){
     })
 }
 
-function postAuthorizationData(body, url){
-    const accessToken = getCookie(accessToken)
+function postAuthorizationData(url: string, body){
+    const accessToken = getCookie('accessToken')
     const headers = {
         'Content-Type': 'application/json',
         'Authorization': `${accessToken}`

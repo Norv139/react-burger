@@ -11,13 +11,8 @@ import { postData } from '../services/actions/user';
 import { url, login } from '../utils/settings';
 import { setLogin } from '../services/reducers/user';
 import { Link, useHistory, useLocation} from 'react-router-dom';
-import { getCookie } from '../services/utils';
+import { getCookie } from '../services/utils/cookie';
 
-interface IRootStore {
-    user:{
-      previousPath:Array<string|null>
-    }
-  }
 
 export function Login(){
     

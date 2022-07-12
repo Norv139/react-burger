@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 // config
 import { closeInfo, closeOrder } from '../services/reducers/detals';
 import { useHistory, useLocation } from 'react-router-dom';
+import { TRootState } from '../services/store';
 
 declare module 'react' {
   interface FunctionComponent<P = {}> {
@@ -21,12 +22,6 @@ declare module 'react' {
   }
 }
 
-interface IState{
-  detals:{
-    isOpenOrder: boolean;
-    isOpenInfo: boolean;
-  }
-}
 
 export const Shop: React.FC = () => {
 
@@ -34,7 +29,7 @@ export const Shop: React.FC = () => {
   const history = useHistory();
   
   const dispatch = useDispatch();
-  const {isOpenOrder} = useSelector((state:IState) => state.detals)
+  const {isOpenOrder} = useSelector((state:TRootState) => state.detals)
   
 
   const closeAllPopups = ()=>{

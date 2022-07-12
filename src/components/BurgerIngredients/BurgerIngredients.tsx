@@ -13,6 +13,7 @@ import { TdataPropTypes } from '../../utils/type/type';
 
 import style from './style.module.css'
 import { useHistory, useLocation } from 'react-router-dom'
+import { TRootState } from '../../services/store'
 
 
 declare module 'react' {
@@ -22,12 +23,6 @@ declare module 'react' {
   }
 
 
-interface IStore{
-    components: {
-        items:TdataPropTypes[];
-        list: TdataPropTypes[]
-    }
-}
 
 
 const BurgerIngredients: FC = () => {
@@ -38,8 +33,8 @@ const BurgerIngredients: FC = () => {
     const history = useHistory();
     const location = useLocation();
 
-    const dataIngredients = useSelector((state:IStore)=>state.components.items)
-    const listIngredients = useSelector((state:IStore)=>state.components.list)
+    const dataIngredients = useSelector((state:TRootState)=>state.components.items)
+    const listIngredients = useSelector((state:TRootState)=>state.components.list)
 
     function fnCaunt(_id:string){
         return listIngredients.filter( (x: TdataPropTypes ) => {return x._id === _id}).length

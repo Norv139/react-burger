@@ -77,7 +77,6 @@ const detalsSlice = createSlice({
 
 
 export const { 
-    initialState,
     setInfo, 
     openInfo, closeInfo, 
     openOrder, closeOrder,
@@ -86,7 +85,8 @@ export const {
     postOrder_REQUEST,
     postOrder_FAILED
 
-
-
 } = detalsSlice.actions;
+
+export const detalsInit = detalsSlice.getInitialState
+
 export default detalsSlice.reducer;

@@ -8,10 +8,18 @@ const user = createSlice({
         isLogin: false,
         data:{},
         itemsFailed: false,
-        itemsRequest: false
+        itemsRequest: false,
+        //refreshSuccess: false
     },
 
     reducers: {
+        /*
+        setRefreshSuccess: (state, action)=>{
+            return{
+                ...state,
+                refreshSuccess: action.payload
+            }
+        },  */
         setPreviousPath: (state, action)=>{
             return{
                 ...state,
@@ -51,13 +59,14 @@ const user = createSlice({
 })
 
 
+
 export const {
-    initialState,
     req_FAILED,
     req_REQUEST,
     req_SUCCESS,
     setPreviousPath,
-    setLogin
+    setLogin,
+    //setRefreshSuccess
 } = user.actions;
 
 export default user.reducer;

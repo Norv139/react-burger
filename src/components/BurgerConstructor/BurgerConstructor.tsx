@@ -6,6 +6,7 @@ import Reorder, {
     reorderFromTo,
     reorderFromToImmutable
 } from "react-reorder";
+
 import move from "lodash-move";
 import { v4 as uuidv4 } from 'uuid';
 import { useDrop} from 'react-dnd'
@@ -16,8 +17,9 @@ import {
     increase_list_item, 
     change_list 
 } from '../../services/reducers/components';
-import { sendOrder } from '../../services/actions/index.js';
-import { getCookie } from '../../services/utils';
+
+import { sendOrder } from '../../services/actions/index';
+
 
 import { TdataPropTypes } from '../../utils/type/type';
 
@@ -48,12 +50,12 @@ const BurgerConstructor: FC = () => {
 
     const isLogin = useSelector((store:IRootStore)=>store.user.isLogin)
     const listIngredients = useSelector((store:IRootStore)=>store.components.list)
-    
+    const state = history.location.state as { from: {pathname: string} }
 
     
 
     const createOrder = () =>{
-        if(isLogin && listIngredients && history.location.state.from.pathname === '/login') {
+        if(isLogin && listIngredients && state.from.pathname === '/login') {
             return dispatch( sendOrder(listIngredients) as any )
         }else{
             history.push({ pathname: "/login", state: { from: location } });
@@ -73,6 +75,7 @@ const BurgerConstructor: FC = () => {
         if(isLogin && listIngredients.length!==0) {
             dispatch( sendOrder(listIngredients) as any )
         }
+
     }, []
     )
    

@@ -2,9 +2,13 @@ import { compose, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { rootReducer } from './reducers';
 import { createStore } from 'redux';
+import { loggerMiddleware, socketMiddleware } from './middleware/webSoket';
 
-import {initialState as detalsInit} from './reducers/detals'
-import {initialState as userInit} from './reducers/user'
+declare global {
+  interface Window {
+    __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
+  }
+}
 
 function loadFromLocalStorage() {
     try {
@@ -13,8 +17,8 @@ function loadFromLocalStorage() {
 
         var obj = {...JSON.parse(serialisedState)}
 
-        obj.user = userInit;
-        obj.detals = detalsInit;
+        //obj.user = userInit;
+        //obj.detals = detalsInit;
 
         return {...obj};
     } catch (e) {
@@ -32,15 +36,22 @@ function saveToLocalStorage(state) {
     }
 }
 
+
+
 const composeEnhancers =
     typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
         ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
         : compose;
 
-const enhancer = composeEnhancers(applyMiddleware(thunk));
+const enhancer = composeEnhancers( applyMiddleware(thunk, socketMiddleware, ));
+
 
 const store = createStore(rootReducer, enhancer);
 
+
 //store.subscribe(() => saveToLocalStorage(store.getState()));
+
+export type TRootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch
 
 export default store

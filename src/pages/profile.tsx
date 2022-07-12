@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import {Input, Button} from '@ya.praktikum/react-developer-burger-ui-components'
-import { getCookie } from '../services/utils';
+import { getCookie } from '../services/utils/cookie';
 import { logoutUser } from '../services/actions';
 
 

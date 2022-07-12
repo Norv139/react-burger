@@ -1,8 +1,8 @@
 import React from 'react';
 import { Redirect, Route, RouteProps, useHistory } from 'react-router-dom';
-import { refreshToken as refreshTokenFn } from '../../services/auth';
+import { refreshToken as refreshTokenFn } from '../../services/utils/auth';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCookie } from '../../services/utils';
+import { getCookie } from '../../services/utils/cookie';
 import { setLogin } from '../../services/reducers/user';
 
 

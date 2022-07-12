@@ -7,7 +7,7 @@ import {
 import { clearList } from "../reducers/components";
 
 import { url, orders } from "../../utils/settings";
-import { getCookie } from "../utils";
+import { getCookie } from "../utils/cookie"
 
 //
 
