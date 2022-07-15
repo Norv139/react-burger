@@ -28,34 +28,37 @@ export const loggerMiddleware: Middleware = (store) => {
 
 export const socketMiddleware: Middleware = store => {
     let socket: WebSocket
-    let socketIO: Socket
-    let accessToken = getCookie('accessToken')
-    //accessToken = accessToken.substring(7)
-    console.log('init')
+
     return next => action => {
         if(action.type === 'ws/wsStart'){
-            console.log(action.payload)
-            //socketIO = io(action.payload)
+            //console.log(action.payload)
             socket = new WebSocket(action.payload)
             console.log(socket)
         }
-        
-
-        if (socket){
+        if (socket){      
             socket.onopen = (event) => {
-                console.log("onopen", event)
+                store.dispatch(wsFeedConnectionSuccess())
+                console.log("onopen")
               };
 
             socket.onerror = (event) => {
-                console.log('onerror', event)
+                store.dispatch(wsFeedConnectionError())
+                console.log('onerror')
               };
             socket.onmessage = event => {
                 const { data } = event;
                 const parsedData = JSON.parse(data);
-                console.log('onmessage', parsedData)
+
+                const { success, ...restParsedData } = parsedData;
+
+                store.dispatch(wsGetData(restParsedData))
+                console.log('onmessage', restParsedData)
             };
 
-
+            if(action.type === 'ws/wsClose'){
+                store.dispatch(wsFeedConnectionClosed())
+                socket.close()
+            }
         }           
         return next(action)
     }

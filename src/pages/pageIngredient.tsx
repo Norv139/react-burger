@@ -9,7 +9,7 @@ import { path, url } from '../utils/settings';
 
 import { TdataPropTypes, NulldataPropTypes } from '../utils/type/type';
 
-import style from './style.module.css'
+import style from './styles.module.css'
 import styleIngredient from './styleIngredient.module.css'
 
 const axios = require('axios').default;

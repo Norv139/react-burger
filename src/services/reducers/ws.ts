@@ -1,28 +1,43 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { type } from "os";
 
-type TOrder = {
-    _id: string;
+export type TwsOrder = {
     ingredients: Array<string>;
+    _id: string;
     status: string;
+    number: number;
     name: string;
     createdAt: string;
     updatedAt: string;
-    number: number;
   }
 
-interface IWSFeedMessage {
-    orders: Array<TOrder>;
+export interface IWSFeedMessage {
+    orders: Array<TwsOrder>;
     total: number;
     totalToday: number;
   }
+
 
 
 const wsReduser = createSlice({
     name: 'ws',
     initialState: {
         wsConnected: false,
-        feed: [] as Array<IWSFeedMessage>,
+        feed:{
+                orders: [
+                    {
+                        ingredients: [''],
+                        _id: "",
+                        status: "",
+                        number: 0,
+                        name: '',
+                        createdAt: '',
+                        updatedAt: ''
+                    }
+                ],
+                total: 0,
+                totalToday: 0,
+            },
         wsError: false
     },
     reducers: {
@@ -58,7 +73,7 @@ const wsReduser = createSlice({
         wsGetData: (state, action)=>{
             return {
                 ...state,
-                feed: [state.feed, action.payload]
+                feed: action.payload
             }
         }
     }

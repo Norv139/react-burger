@@ -4,7 +4,7 @@ import { FC } from 'react';
 
 import {Input, Button} from '@ya.praktikum/react-developer-burger-ui-components'
 
-import style from './style.module.css'
+import style from './styles.module.css'
 import { useDispatch } from 'react-redux';
 
 import { postData } from '../services/actions/user';

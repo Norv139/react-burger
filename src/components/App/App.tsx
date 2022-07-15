@@ -24,13 +24,10 @@ import {
   Feed 
 } from '../../pages'
 import { wsClose, wsStart } from "../../services/reducers/ws";
+import { TRootState } from "../../services/store";
 
 
-interface IRootStore {
-  detals:{
-    isOpenInfo: boolean
-  }
-}
+
 
 const App: FC = () => {
   const dispatch = useDispatch();
@@ -38,21 +35,14 @@ const App: FC = () => {
   const state = history.location.state as { from: {pathname: string} }
   const location = useLocation();
   
-  const isOpenInfo = useSelector((store:IRootStore)=>store.detals.isOpenInfo)
+  const isOpenInfo = useSelector((store:TRootState)=>store.detals.isOpenInfo)
 
   const closeAllPopups = ()=>{
     
     dispatch(closeOrder());
     dispatch(closeInfo());
-    history.push('/')
+    history.goBack()
   }
-  
-  useEffect(()=>{
-    dispatch(wsStart('wss://norma.nomoreparties.space/orders/all'))
-    return ()=>{
-      dispatch(wsClose('null'))}
-  },[])
-
   //console.log(history, location)
 
   return (
@@ -62,20 +52,46 @@ const App: FC = () => {
         <Switch location={location}>
           
 
+
+          <Route path={"/feed/:id"}>
+            
+            { isOpenInfo ?(
+            <> 
+              <FeedLent />
+              <Modal onClose={closeAllPopups}>
+                <Order />
+              </Modal>
+            </>
+            ):(
+              <div className="mt-25">
+              <Order />
+              </div>
+            )}
+          </Route>  
+
           <Route path={"/feed/"}>
             <FeedLent />
           </Route>
-          <Route path={"/feed/:id"}>
-            <Feed/>
-          </Route>
           
+          <ProtectedRoute path="/profile/orders/:id">
+            { isOpenInfo?(
+              <>
+                <Orders/>
+                <Modal onClose={closeAllPopups}>
+                  <Order />
+                </Modal>
+              </>
+              ):(
+                <div className="mt-25">
+                  <Order />
+                </div>
+              )
+            }
+
+          </ProtectedRoute> 
           <Route path="/profile/orders">
             <Orders/>
           </Route>
-          <ProtectedRoute path="/profile/orders/:id">
-            <Order />
-          </ProtectedRoute> 
-
 
           <ProtectedRoute path="/profile" >
             <Profile/>

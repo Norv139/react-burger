@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 
 
-import style from './style.module.css'
+import style from './styles.module.css'
 
 import { postData } from '../services/actions/user';
 import { url, login } from '../utils/settings';
@@ -39,7 +39,7 @@ export function Login(){
 
         if (getCookie('accessToken') !== undefined){
             dispatch(setLogin(true));
-            history.push(history.location.state)
+            history.push(location)
         }
     }   
 

@@ -14,6 +14,9 @@ import { getCookie } from "../utils/cookie"
 const axios = require('axios').default;
 
 export function sendOrder (listItems) {
+    console.log({
+        'Authorization': `${getCookie('accessToken')}`
+    })
     return dispatch => {
 
     const data = { "ingredients": listItems.map(x=>x._id) };

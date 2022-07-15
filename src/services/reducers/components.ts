@@ -6,7 +6,7 @@ const componentsSlice = createSlice({
     name: 'detals',
 
     initialState: {
-        items: [],
+        items: [] as Array<TdataPropTypes>,
         itemsRequest: false,
         itemsFailed: false,
     

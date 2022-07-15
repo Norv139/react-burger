@@ -5,7 +5,7 @@ import { getCookie } from '../services/utils/cookie';
 import { logoutUser } from '../services/actions';
 
 
-import style from './style.module.css'
+import style from './styles.module.css'
 import { useDispatch } from 'react-redux';
 import { setLogin } from '../services/reducers/user';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -111,7 +111,7 @@ export const Profile: React.FC = () => {
                 <span className='mr-15'>
 
                     <p 
-                        className={style.p_text + " text text_type_main-medium " + select.profile}
+                        className={style.p_text + " text text_type_main-medium "}
                     >
                         Профиль
                     </p>

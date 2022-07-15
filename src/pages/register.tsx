@@ -3,7 +3,7 @@ import React, { useCallback, useState } from 'react';
 import {Input, Button} from '@ya.praktikum/react-developer-burger-ui-components'
 import { useDispatch } from 'react-redux';
 
-import style from './style.module.css'
+import style from './styles.module.css'
 
 import { postData } from '../services/actions/user';
 import { url, register } from '../utils/settings';

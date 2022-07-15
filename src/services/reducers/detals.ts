@@ -78,6 +78,7 @@ const detalsSlice = createSlice({
 
 export const { 
     setInfo, 
+    
     openInfo, closeInfo, 
     openOrder, closeOrder,
 

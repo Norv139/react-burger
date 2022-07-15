@@ -10,5 +10,5 @@ export const token = "/auth/token" // эндпоинт обновления то
 export const reset_step1 = "/password-reset" // эндпоинт восстановления пароля.
 export const reset_step2 = "/password-reset/reset" // эндпоинт изменения забытого пароля
 
-export const wsOrder = "wss://norma.nomoreparties.space/orders"
+export const wsUrl = "wss://norma.nomoreparties.space/orders"
 //export const wsFeet = ""

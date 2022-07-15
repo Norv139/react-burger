@@ -55,7 +55,7 @@ function AppHeader(){
                             onClickBnt={
                                 ()=>{
                                     setObjButton({...initValue, orderFeed: true})
-                                    history.push({ pathname: "/profile/orders", state: { from: location } })
+                                    history.push({ pathname: "/feed", state: { from: location } })
                                 }
                             }
                         />

@@ -10,7 +10,8 @@ import { url, reset_step2 } from '../utils/settings';
 
 import { setPreviousPath } from '../services/reducers/user';
 
-import style from './style.module.css'
+import style from './styles.module.css'
+
 import { useHistory } from 'react-router-dom';
 
 interface IStore{
@@ -25,6 +26,7 @@ export const ResetPassword: React.FC = () => {
 
     const history = useHistory();
     const location = useLocation();
+    const state = history.location.state as { from: {pathname: string} }
 
     const dispatch = useDispatch();
 
@@ -45,13 +47,13 @@ export const ResetPassword: React.FC = () => {
     }
     
 
-    console.log(history.location.state.from)
+    console.log(history.location.state)
 
     return(
         <>
         {
             history.location.state ? (
-                history.location.state.from.pathname == '/forgot-password' ? (
+                state.from.pathname == '/forgot-password' ? (
                         <div className={style.over}>
                         <main className={style.main}>
                             <p className="text text_type_main-medium mb-6">
