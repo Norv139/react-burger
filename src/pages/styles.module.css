@@ -146,3 +146,7 @@
     transform: translate(-30px, 5px);
   }
   
+  .list_ingredient_scroll{
+    overflow-y: scroll;
+    height: 200px;
+  }

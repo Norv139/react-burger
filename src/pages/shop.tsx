@@ -7,14 +7,16 @@ import BurgerIngredients from '../components/BurgerIngredients/BurgerIngredients
 import Modal from '../components/Modal/Modal';
 
 // Overlay
-import IngredientDetails from '../components/IngredientDetails/IngredientDetails';
 import OrderDetails from '../components/OrderDetails/OrderDetails';
-import { useDispatch, useSelector } from 'react-redux';
+
 
 // config
 import { closeInfo, closeOrder } from '../services/reducers/detals';
 import { useHistory, useLocation } from 'react-router-dom';
-import { TRootState } from '../services/store';
+
+import { useAppDispatch, useAppSelector } from '../services/utils/hooks';
+
+import styles from "./styles.module.css"
 
 declare module 'react' {
   interface FunctionComponent<P = {}> {
@@ -28,9 +30,9 @@ export const Shop: React.FC = () => {
   const location = useLocation();
   const history = useHistory();
   
-  const dispatch = useDispatch();
-  const {isOpenOrder} = useSelector((state:TRootState) => state.detals)
-  
+  const dispatch = useAppDispatch();
+  const {isOpenOrder} = useAppSelector((state) => state.detals)
+  const orderRequest = useAppSelector((state) => state.detals.orderRequest)
 
   const closeAllPopups = ()=>{
 
@@ -44,6 +46,19 @@ export const Shop: React.FC = () => {
         <BurgerIngredients />
         <BurgerConstructor />
       </main>
+      { 
+        orderRequest &&
+        <Modal onClose={()=>{}}>
+          <span className=' m-15'>
+              <h1 className={` text text_type_main-large mr-10 mb-8`}>
+                Ожидайте
+              </h1>
+              <p className={` text text_type_main-default`}>
+                Заказ обрабатывается 
+              </p>
+          </span>
+        </Modal>  
+      } 
       { 
         isOpenOrder &&
         <Modal onClose={closeAllPopups}>

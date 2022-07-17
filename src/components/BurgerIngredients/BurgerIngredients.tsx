@@ -2,7 +2,7 @@ import { FC } from 'react'
 import PropTypes from 'prop-types'
 import { useRef, useEffect, useState } from 'react'
 import {Tab, CurrencyIcon, Counter} from '@ya.praktikum/react-developer-burger-ui-components'
-import { useDispatch, useSelector } from 'react-redux'
+
 import { setInfo, openInfo } from '../../services/reducers/detals'
 
 
@@ -13,7 +13,9 @@ import { TdataPropTypes } from '../../utils/type/type';
 
 import style from './style.module.css'
 import { useHistory, useLocation } from 'react-router-dom'
-import { TRootState } from '../../services/store'
+
+import { useAppDispatch, useAppSelector } from '../../services/utils/hooks'
+import { AnyAction } from 'redux'
 
 
 declare module 'react' {
@@ -29,12 +31,12 @@ const BurgerIngredients: FC = () => {
 
     const [current, setCurrent] = useState('bun')
 
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
     const history = useHistory();
     const location = useLocation();
 
-    const dataIngredients = useSelector((state:TRootState)=>state.components.items)
-    const listIngredients = useSelector((state:TRootState)=>state.components.list)
+    const dataIngredients = useAppSelector((state)=>state.components.items)
+    const listIngredients = useAppSelector((state)=>state.components.list)
 
     function fnCaunt(_id:string){
         return listIngredients.filter( (x: TdataPropTypes ) => {return x._id === _id}).length
@@ -71,7 +73,7 @@ const BurgerIngredients: FC = () => {
     useEffect(() => {
       window.addEventListener("scroll", scrollHandler, true);
 
-        dispatch(getAllItems()  as any)
+        dispatch(getAllItems())
 
       return () => {
         window.removeEventListener("scroll", scrollHandler, true);

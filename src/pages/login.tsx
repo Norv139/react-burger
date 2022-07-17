@@ -12,13 +12,14 @@ import { url, login } from '../utils/settings';
 import { setLogin } from '../services/reducers/user';
 import { Link, useHistory, useLocation} from 'react-router-dom';
 import { getCookie } from '../services/utils/cookie';
+import { useAppDispatch } from '../services/utils/hooks';
 
 
 export function Login(){
     
     const initValue = { email: '', password: '' }
 
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
     const history = useHistory();
     const location = useLocation();
 

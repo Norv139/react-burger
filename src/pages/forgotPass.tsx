@@ -11,6 +11,7 @@ import { postData } from '../services/actions/user';
 import { url, reset_step1 } from '../utils/settings';
 
 import { Redirect, useHistory, useLocation } from 'react-router-dom';
+import { useAppDispatch } from '../services/utils/hooks';
 
 
 export const ForgotPassword: FC = ()=> {
@@ -18,7 +19,7 @@ export const ForgotPassword: FC = ()=> {
     const history = useHistory();
     const location = useLocation();
 
-    const pispatch = useDispatch()
+    const dispatch = useAppDispatch()
     const initValue = { email: ''}
     const [form, setValue] = useState(initValue);
 
@@ -33,7 +34,7 @@ export const ForgotPassword: FC = ()=> {
             console.log('Good')
             if (form != initValue){
                 console.log(history)
-                pispatch(postData(`${url}${reset_step1}`, form) as any)
+                dispatch(postData(`${url}${reset_step1}`, form) as any)
                 setValue(initValue)
 
                 history.push({ pathname: "/reset-password", state: { from: location }}) 

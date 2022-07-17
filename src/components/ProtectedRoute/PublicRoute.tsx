@@ -1,10 +1,10 @@
 import React from 'react';
 import { Redirect, Route, RouteProps, useHistory } from 'react-router-dom';
 import { refreshToken as refreshTokenFn } from '../../services/utils/auth';
-import { useDispatch, useSelector } from 'react-redux';
 import { getCookie } from '../../services/utils/cookie';
 import { setLogin } from '../../services/reducers/user';
 import { TRootState } from '../../services/store';
+import { useAppDispatch, useAppSelector } from '../../services/utils/hooks';
 
 interface Ihistory {
   location:{
@@ -15,10 +15,10 @@ interface Ihistory {
 }
 
 export function PublicRoute({ children, path }: RouteProps ) {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   
   const history = useHistory()
-  const isLogin = useSelector((store:TRootState)=>store.user.isLogin)
+  const isLogin = useAppSelector((store)=>store.user.isLogin)
   const refreshToken = getCookie('refreshToken')
   const accessToken = getCookie('accessToken')
 

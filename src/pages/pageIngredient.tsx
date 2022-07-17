@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
-
-import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 
 import { getAllItems } from '../services/actions/index.js';
 
 import { path, url } from '../utils/settings';
-
+import { useAppSelector } from '../services/utils/hooks';
 import { TdataPropTypes, NulldataPropTypes } from '../utils/type/type';
 
 import style from './styles.module.css'
 import styleIngredient from './styleIngredient.module.css'
+
+
 
 const axios = require('axios').default;
 
@@ -32,7 +32,7 @@ export const PageIngredient: React.FC = () =>  {
     const [allItem, setAllItem] = useState<TdataPropTypes>(NulldataPropTypes)
     const location = useLocation();
     const id = location.pathname.split('/').pop();
-    const items = useSelector((state:IStore)=>state.components.items)
+    const items = useAppSelector((state)=>state.components.items)
 
 
     useEffect( ()=>{

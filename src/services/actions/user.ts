@@ -8,10 +8,21 @@ import {
 import { url, login, logout } from "../../utils/settings";
 
 import {setCookie, getCookie, deleteCookie} from '../utils/cookie'
+import { ThunkAction } from "redux-thunk";
+import store, { TRootState } from "../store";
+import { ActionCreator, AnyAction } from "redux";
 
 const axios = require('axios').default;
 
-export function postData(url: string, form) {
+type RootState = ReturnType<typeof store.getState>;
+//type TActionComponent = typeof actionComponent
+
+type AppThunk<TReturn = void> = ActionCreator<
+    ThunkAction<TReturn, AnyAction, RootState, any>
+>;
+
+
+export const postData:AppThunk  = (url: string, form:any) => {
 
     return dispatch => {
         dispatch(reqRequest)

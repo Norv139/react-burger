@@ -6,14 +6,16 @@ import {
 
 import { clearList } from "../reducers/components";
 
-import { url, orders } from "../../utils/settings";
+import { url } from "../../utils/settings";
 import { getCookie } from "../utils/cookie"
+import { TdataPropTypes } from "../../utils/type/type";
 
 //
 
 const axios = require('axios').default;
 
-export function sendOrder (listItems) {
+export const sendOrder = (listItems:Array<TdataPropTypes>) => {
+
     console.log({
         'Authorization': `${getCookie('accessToken')}`
     })
@@ -21,12 +23,16 @@ export function sendOrder (listItems) {
 
     const data = { "ingredients": listItems.map(x=>x._id) };
     const header = {
-        'Authorization': `${getCookie('accessToken')}`
+        'content-Type': 'application/json',
+        'authorization': `${(getCookie('accessToken'))}`
     };
 
     dispatch(postOrderRequest())
+
     
-    axios.post(`${url}${orders}`, data, header)
+    axios.post(`${url}/orders`, data, {
+        headers: header
+      })
     .then( (response) => {
         dispatch(postOrderSuccess(response.data));
         console.log(response);
@@ -36,6 +42,7 @@ export function sendOrder (listItems) {
         dispatch(postOrderFailed());
         console.log(error);
     })
+
 }}
 
 const postOrderSuccess = items => (

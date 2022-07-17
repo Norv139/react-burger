@@ -6,9 +6,9 @@ import { logoutUser } from '../services/actions';
 
 
 import style from './styles.module.css'
-import { useDispatch } from 'react-redux';
 import { setLogin } from '../services/reducers/user';
 import { useHistory, useLocation } from 'react-router-dom';
+import { useAppDispatch } from '../services/utils/hooks';
 
 
 const axios = require('axios').default;
@@ -23,15 +23,10 @@ interface IResponse extends Response {
     }
 }
 
-interface IInitValueType{
-    profile: string;
-    orders: string;
-    logout: "text_color_inactive"
-}
 
 export const Profile: React.FC = () => {  
 
-    const dispatch = useDispatch()    
+    const dispatch = useAppDispatch()    
 
     const history = useHistory()
     const location = useLocation();

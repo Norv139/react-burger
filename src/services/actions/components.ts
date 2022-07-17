@@ -6,43 +6,34 @@ import {
 } from "../reducers/components";
 
 import { url, path } from "../../utils/settings";
-import { Action, ActionCreator, ThunkAction } from "@reduxjs/toolkit";
-import store from "../store";
+import { Action, ActionCreator, AnyAction, ThunkAction } from "@reduxjs/toolkit";
+import store, { TRootState } from "../store";
+import { ThunkDispatch, ThunkMiddleware } from "redux-thunk";
 
 const axios = require('axios').default;
 
 type RootState = ReturnType<typeof store.getState>;
 type TActionComponent = typeof actionComponent
 
-type AppThunk<TReturn = void> = ActionCreator<
-    ThunkAction<TReturn, TActionComponent, RootState, any>
->;
+type AppThunk = ThunkAction<AnyAction, {}, null, any>
 
-export const getAllItems:AppThunk = ()=> {
-    return dispatch => {
-
-        dispatch(getItemsRequest)
+export const getAllItems: any = () => {
+    return (dispatch) => {
+        dispatch(getItems_REQUEST())
 
         axios.get(`${url}${path}`)
         .then( (response) => {
-            dispatch(getItemsSuccess(response.data.data));
+            dispatch(
+                getItems_SUCCESS(
+                    {items: response.data.data}
+                )
+            );
         })
         .catch( (error) => {
-            dispatch(getItemsFailed());
+            dispatch(
+                getItems_FAILED()
+            );
             console.log(error);
         })
-
-
-}}
-
-const getItemsSuccess = response => (
-    getItems_SUCCESS(
-        {items: response}
-    )
-)
-const getItemsRequest= () => (
-    getItems_REQUEST()
-)
-const getItemsFailed= () => (
-    getItems_FAILED()
-)
+}
+}

@@ -10,7 +10,6 @@ import Reorder, {
 import move from "lodash-move";
 import { v4 as uuidv4 } from 'uuid';
 import { useDrop} from 'react-dnd'
-import { useSelector, useDispatch } from 'react-redux';
 
 import { 
     decrease_list_item, 
@@ -25,6 +24,7 @@ import { TdataPropTypes } from '../../utils/type/type';
 
 import style from './style.module.css';
 import { useHistory, useLocation } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../services/utils/hooks';
 
 declare module 'react' {
     interface FunctionComponent<P = {}> {
@@ -46,22 +46,24 @@ const BurgerConstructor: FC = () => {
     const history = useHistory();
     const location = useLocation();
     // { pathname: "/login", state: { from: location } }
-    const dispatch = useDispatch() 
+    const dispatch = useAppDispatch() 
 
-    const isLogin = useSelector((store:IRootStore)=>store.user.isLogin)
-    const listIngredients = useSelector((store:IRootStore)=>store.components.list)
+    const isLogin = useAppSelector((store)=>store.user.isLogin)
+    const listIngredients = useAppSelector((store)=>store.components.list)
     const state = history.location.state as { from: {pathname: string} }
 
     
 
     const createOrder = () =>{
-        if(isLogin && listIngredients && state.from.pathname === '/login') {
-            return dispatch( sendOrder(listIngredients) as any )
-        }else{
-            history.push({ pathname: "/login", state: { from: location } });
+        if(listIngredients.length!==0){
+            if(isLogin) {
+                return dispatch( sendOrder(listIngredients) as any)
+            }else{
+                history.push({ pathname: "/login", state: { from: location } });
+            }
         }
-
     }
+
     const removeItem = (itemId: string) => dispatch(
         decrease_list_item({id: itemId})
     )

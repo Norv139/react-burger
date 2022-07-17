@@ -1,8 +1,6 @@
 import React, { useEffect } from "react"
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components"
 import { FC } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { TRootState } from "../../services/store"
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -13,18 +11,13 @@ import { TwsOrder } from "../../services/reducers/ws"
 import { TdataPropTypes } from "../../utils/type/type"
 
 import styles from "./style.module.css"
-
-declare module 'react' {
-    interface FunctionComponent<P = {}> {
-      (props: PropsWithChildren<P>): ReactElement<any, any> | null;
-    }
-  }
+import { useAppDispatch, useAppSelector } from "../../services/utils/hooks"
 
 export const CardFeed:FC<{order:TwsOrder, type: string, eKey:string, openModal}> = ({order, eKey, type, openModal}) =>{
 
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
-    const allIngridients = useSelector((state: TRootState)=>state.components.items)
+    const allIngridients = useAppSelector((state)=>state.components.items)
 //    const feed = useSelector((state: TRootState)=>state.ws.feed)
 
     

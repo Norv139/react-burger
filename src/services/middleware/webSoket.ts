@@ -1,18 +1,13 @@
-import { Dispatch, Middleware, MiddlewareAPI } from "redux";
+import { Middleware, MiddlewareAPI } from "redux";
 import { AppDispatch, TRootState } from "../store";
-import { TwsAction } from "../reducers/ws";
+
 import { 
     wsFeedConnectionClosed,
     wsFeedConnectionError,
     wsFeedConnectionSuccess,
     wsGetData 
 } from "../reducers/ws";
-import store from "../store";
-import { ThunkMiddleware } from "redux-thunk";
-import { getCookie } from "../utils/cookie";
-import { url } from "inspector";
 
-import { io, Socket } from 'socket.io-client';
 
 
 export const loggerMiddleware: Middleware = (store) => {
@@ -26,10 +21,11 @@ export const loggerMiddleware: Middleware = (store) => {
     }
 }
 
-export const socketMiddleware: Middleware = store => {
+export const socketMiddleware: Middleware = (store: MiddlewareAPI<AppDispatch, TRootState>) => {
     let socket: WebSocket
 
     return next => action => {
+        
         if(action.type === 'ws/wsStart'){
             //console.log(action.payload)
             socket = new WebSocket(action.payload)

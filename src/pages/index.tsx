@@ -14,7 +14,6 @@ import { Order } from "./order";
 
 
 import { FeedLent } from "./feedLent";
-import { Feed } from "./feed";
 
 
 
@@ -30,7 +29,5 @@ export {
 
     Orders, 
     Order, 
-    
-    FeedLent, 
-    Feed 
+    FeedLent
 }

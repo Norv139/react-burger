@@ -1,20 +1,21 @@
 
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import {Input, Button} from '@ya.praktikum/react-developer-burger-ui-components'
-import { useDispatch } from 'react-redux';
+
 
 import style from './styles.module.css'
 
 import { postData } from '../services/actions/user';
 import { url, register } from '../utils/settings';
 import { useHistory, useLocation } from 'react-router-dom';
+import { useAppDispatch } from '../services/utils/hooks';
 
 
 export const Register: React.FC = () => {
     const history = useHistory();
     const location = useLocation();
 
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
     const initValue = { email: '', password: '', name: '' }
 

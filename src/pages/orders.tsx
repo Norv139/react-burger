@@ -6,14 +6,16 @@ import { TRootState } from "../services/store"
 
 import { wsUrl } from "../utils/settings"
 import { getCookie } from "../services/utils/cookie"
-import { FeedLent } from "./feedLent"
 import { CardFeed } from "../components/CardFeed/CardFeed"
 
 import styles from "./styles.module.css"
 import style from './styles.module.css'
 import { useHistory, useLocation } from "react-router-dom"
 import { setLogin } from "../services/reducers/user"
-import { openInfo, setInfo } from "../services/reducers/detals"
+import { closeInfo, closeOrder, openInfo, setInfo } from "../services/reducers/detals"
+import Modal from "../components/Modal/Modal"
+import { Order } from "./order"
+import { useAppDispatch, useAppSelector } from "../services/utils/hooks"
 
 export const Orders: FC = () => {
 
@@ -28,14 +30,17 @@ export const Orders: FC = () => {
 
     const [select, setSelect] = useState(initValueType);
 
-    const dispatch = useDispatch()
-    const dataIngredients = useSelector((state:TRootState)=>state.components.items)
+    const dispatch = useAppDispatch()
+
+    const dataIngredients = useAppSelector((state)=>state.components.items)
+    const isOpenInfo = useAppSelector((state)=>state.detals.isOpenInfo)
+    const feed = useAppSelector((state)=>state.ws.feed)
+
     const accessToken = getCookie('accessToken')?.substring(7)
 
-    const feed = useSelector((state:TRootState)=>state.ws.feed)
+
 
     useEffect(() => {
-      
       dispatch(wsStart(`${wsUrl}?token=${accessToken}`))
         if (dataIngredients.length === 0){
             dispatch(getAllItems()  as any)
@@ -55,9 +60,10 @@ export const Orders: FC = () => {
     if (!feed.orders){
         history.push({pathname: '/', state: { from: location } });
     }
+    
 
-
-    return (
+    return ( <>
+    
     <main className={`${style.box} mt-10`}>
         
         <span className='mr-15 mt-10'>
@@ -114,7 +120,25 @@ export const Orders: FC = () => {
             )
         }
         </div>
- 
+
     </main>
+    {
+        isOpenInfo?(
+            <Modal onClose={
+                ()=>{
+                    dispatch(closeOrder());
+                    dispatch(closeInfo());
+                    history.goBack()
+                    }
+                }>
+                <Order />
+            </Modal>
+        ):(
+            <></>
+        )
+    }
+    </>
+    
+
     )
 }

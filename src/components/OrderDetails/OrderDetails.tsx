@@ -4,25 +4,14 @@ import { } from '@ya.praktikum/react-developer-burger-ui-components'
 import ImgDone from '../../images/done.svg'
 
 import style from './style.module.css'
-
-interface IState{
-    detals: {
-        isOpenOrder: boolean; 
-        order: {
-            order: {
-                number: number
-            }
-        }
-    }
-}
-
+import { useAppSelector } from '../../services/utils/hooks';
 
 function OrderDetails(){
-    const {isOpenOrder, order} = useSelector((state:IState) => state.detals)
+    const isOpenOrder = useAppSelector((state) => state.detals.order)
+    const order = useAppSelector((state) => state.detals.order as {order: {number: number} })
 
     return(  
-            <>
-                { isOpenOrder &&
+
 
                         <span>
                             <div className={style.model_main + ' mr-25 ml-25'}>
@@ -38,8 +27,6 @@ function OrderDetails(){
                             </div>
                         </span>
                     
-                }     
-            </>
         )
 }
 

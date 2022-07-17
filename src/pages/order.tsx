@@ -11,22 +11,26 @@ import styles from "./styles.module.css"
 import { wsClose, wsStart } from "../services/reducers/ws";
 import { wsUrl } from "../utils/settings";
 import { getAllItems } from "../services/actions";
+import { useAppDispatch, useAppSelector } from "../services/utils/hooks";
 
 export const Order: FC = () => {
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
     const location = useLocation()
     const id = location.pathname.split('/').pop();
 
-    const allIngridients = useSelector((state: TRootState)=>state.components.items)
-    const orders = useSelector((state:TRootState)=>state.ws.feed.orders)
+    const allIngridients = useAppSelector((state)=>state.components.items)
+    const feed = useAppSelector((state)=>state.ws.feed)
+    const orders = useAppSelector((state)=>state.ws.feed.orders)
     const order = orders.find(x=>x._id === id)
 
     useEffect(() => {
-        dispatch(getAllItems()  as any)
-        dispatch(wsStart(`${wsUrl}/all`))
-        return ()=>{
-          dispatch(wsClose('null'))}
+        if (feed.total === 0){
+            dispatch(wsStart(`${wsUrl}/all`))
+        }
+        if (allIngridients.length === 0){
+            dispatch(getAllItems() as any)
+        }
       }, []);
 
     const getStatus = (status: string | undefined):string =>{
@@ -59,8 +63,10 @@ export const Order: FC = () => {
                 []
             )
     }
-
     const orderIngridient = getIingredients(order?.ingredients)
+
+    const countItems = (item_id) => order?.ingredients.filter(item => item == item_id ).length
+    
 
     return (        
     <div className={styles.main_frame}>
@@ -72,30 +78,32 @@ export const Order: FC = () => {
             <p className={`${order?.status === 'done' ? styles.order_ready : styles.order__status} text text_type_main-default mb-15`}>{getStatus(order?.status)}</p>
         </div>
         <h1 className={`${styles.j} text text_type_main-medium mb-6`}>Состав:</h1>
-        
-        { orderIngridient.map( storeIngredient =>
-            <div className={`${styles.frame_status} mb-4`} key={uuidv4()}>
-            <div className={styles.frame_status}>
-                <div className={`${styles.list_ingredient_container} mr-4`}>
-                    <div className={styles.list_ingredient_icon}>
+        <div className={styles.list_ingredient_scroll}>
+            { orderIngridient.map( storeIngredient =>
+                <div className={`${styles.frame_status} mb-4`} key={uuidv4()}>
+                <div className={styles.frame_status}>
+                    <div className={`${styles.list_ingredient_container} mr-4`}>
+                        <div className={styles.list_ingredient_icon}>
 
-                    <img 
-                        src={storeIngredient.image_mobile} 
-                        className={styles.img}
-                        alt="ingredient_image" 
-                    />
+                        <img 
+                            src={storeIngredient.image_mobile} 
+                            className={styles.img}
+                            alt="ingredient_image" 
+                        />
+                        </div>
                     </div>
+                    <p className='text text_type_main-default'>{storeIngredient.name}</p>
                 </div>
-                <p className='text text_type_main-default'>{storeIngredient.name}</p>
-            </div>
 
-            <div className={styles.frame_status}>
-                <h2 className="text text_type_digits-default">{} x </h2>
-                <h2 className="text text_type_digits-default">{storeIngredient.price}</h2>
-                <CurrencyIcon type="primary"/>
-            </div>
-            </div>)
-        }
+                <div className={styles.frame_status}>
+                    <h2 className="text text_type_digits-default">{countItems(storeIngredient._id)} x </h2>
+                    <h2 className="text text_type_digits-default">{storeIngredient.price}</h2>
+                    <CurrencyIcon type="primary"/>
+                </div>
+                </div>)
+            }
+        </div>
+
  
         <div className={styles.frame_info}>
             

@@ -1,6 +1,5 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import {Input, Button} from '@ya.praktikum/react-developer-burger-ui-components'
-import { useDispatch, useSelector } from 'react-redux';
 
 import { Redirect, useLocation } from 'react-router-dom';
 
@@ -13,22 +12,15 @@ import { setPreviousPath } from '../services/reducers/user';
 import style from './styles.module.css'
 
 import { useHistory } from 'react-router-dom';
-
-interface IStore{
-    user:{
-        previousPath: Array< null | string >
-    }
-}
+import { useAppDispatch } from '../services/utils/hooks';
 
 export const ResetPassword: React.FC = () => {
-
-    const pathHistory = useSelector((store:IStore)=>store.user.previousPath)
 
     const history = useHistory();
     const location = useLocation();
     const state = history.location.state as { from: {pathname: string} }
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const initValue = { password: '', token: '' }
 
@@ -43,11 +35,8 @@ export const ResetPassword: React.FC = () => {
         e.preventDefault(); 
         setValue(initValue)
         dispatch(setPreviousPath('/forgot-password'))
-        dispatch( postData(`${url}${reset_step2}` ,form) as any)
+        dispatch( postData(`${url}${reset_step2}` ,form) as any )
     }
-    
-
-    console.log(history.location.state)
 
     return(
         <>
