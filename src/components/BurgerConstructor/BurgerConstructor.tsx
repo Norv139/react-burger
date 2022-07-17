@@ -14,10 +14,11 @@ import { useDrop} from 'react-dnd'
 import { 
     decrease_list_item, 
     increase_list_item, 
-    change_list 
+    change_list, 
+    clearList
 } from '../../services/reducers/components';
 
-import { sendOrder } from '../../services/actions/index';
+//import { sendOrder } from '../../services/actions/index';
 
 
 import { TdataPropTypes } from '../../utils/type/type';
@@ -25,6 +26,9 @@ import { TdataPropTypes } from '../../utils/type/type';
 import style from './style.module.css';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../services/utils/hooks';
+import { postOrder_FAILED, postOrder_REQUEST, postOrder_SUCCESS } from '../../services/reducers/detals';
+import { url } from '../../utils/settings';
+import { getCookie } from '../../services/utils/cookie';
 
 declare module 'react' {
     interface FunctionComponent<P = {}> {
@@ -42,7 +46,7 @@ interface IRootStore {
 }
 
 const BurgerConstructor: FC = () => {
-    
+    const axios = require('axios').default;
     const history = useHistory();
     const location = useLocation();
     // { pathname: "/login", state: { from: location } }
@@ -53,11 +57,47 @@ const BurgerConstructor: FC = () => {
     const state = history.location.state as { from: {pathname: string} }
 
     
+    const sendOrder = (listItems:Array<TdataPropTypes>) => {
+
+        console.log({
+            'Authorization': `${getCookie('accessToken')}`
+        })
+        return dispatch => {
+    
+        const data = { "ingredients": listItems.map(x=>x._id) };
+        const header = {
+            'content-Type': 'application/json',
+            'authorization': `${(getCookie('accessToken'))}`
+        };
+    
+        dispatch(postOrder_REQUEST())
+    
+        
+        axios.post(`${url}/orders`, data, {
+            headers: header
+          })
+        .then( (response) => {
+            dispatch(
+                postOrder_SUCCESS(
+                    {items: {...response.data}}
+                    )
+                );
+            console.log(response);
+            dispatch(clearList())
+        })
+        .catch( (error) => {
+            dispatch(postOrder_FAILED());
+            console.log(error);
+        })
+    
+    }}
+
+
 
     const createOrder = () =>{
         if(listIngredients.length!==0){
             if(isLogin) {
-                return dispatch( sendOrder(listIngredients) as any)
+                return sendOrder(listIngredients)
             }else{
                 history.push({ pathname: "/login", state: { from: location } });
             }
@@ -75,7 +115,7 @@ const BurgerConstructor: FC = () => {
     useEffect(()=>{
         
         if(isLogin && listIngredients.length!==0) {
-            dispatch( sendOrder(listIngredients) as any )
+            sendOrder(listIngredients)
         }
 
     }, []
@@ -274,3 +314,7 @@ const BurgerConstructorList = ({list, fnRemove, fnReorder}:IBurgerConstructorLis
 }
 
 export default BurgerConstructor;
+
+function dispatch(arg0: any) {
+    throw new Error('Function not implemented.');
+}

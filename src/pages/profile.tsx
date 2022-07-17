@@ -2,13 +2,14 @@
 import React, { useEffect, useState } from 'react';
 import {Input, Button} from '@ya.praktikum/react-developer-burger-ui-components'
 import { getCookie } from '../services/utils/cookie';
-import { logoutUser } from '../services/actions';
+
 
 
 import style from './styles.module.css'
 import { setLogin } from '../services/reducers/user';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useAppDispatch } from '../services/utils/hooks';
+import { logoutUser } from '../utils/logoutUser';
 
 
 const axios = require('axios').default;

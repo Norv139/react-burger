@@ -1,10 +1,10 @@
 import React, {FC, useEffect, useState} from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { getAllItems, logoutUser } from "../services/actions"
+
 import { TwsOrder, wsClose, wsStart } from "../services/reducers/ws"
 import { TRootState } from "../services/store"
 
-import { wsUrl } from "../utils/settings"
+import { path, url, wsUrl } from "../utils/settings"
 import { getCookie } from "../services/utils/cookie"
 import { CardFeed } from "../components/CardFeed/CardFeed"
 
@@ -16,6 +16,8 @@ import { closeInfo, closeOrder, openInfo, setInfo } from "../services/reducers/d
 import Modal from "../components/Modal/Modal"
 import { Order } from "./order"
 import { useAppDispatch, useAppSelector } from "../services/utils/hooks"
+import { getItems_FAILED, getItems_REQUEST, getItems_SUCCESS } from "../services/reducers/components"
+import { logoutUser } from "../utils/logoutUser"
 
 export const Orders: FC = () => {
 
@@ -38,12 +40,32 @@ export const Orders: FC = () => {
 
     const accessToken = getCookie('accessToken')?.substring(7)
 
+    const axios = require('axios').default;
+
+    const getAllItems = () => {
+        dispatch(getItems_REQUEST())
+
+        axios.get(`${url}${path}`)
+        .then( (response) => {
+            dispatch(
+                getItems_SUCCESS(
+                    {items: response.data.data}
+                )
+            );
+        })
+        .catch( (error) => {
+            dispatch(
+                getItems_FAILED()
+            );
+            console.log(error);
+        })
+    }
 
 
     useEffect(() => {
       dispatch(wsStart(`${wsUrl}?token=${accessToken}`))
         if (dataIngredients.length === 0){
-            dispatch(getAllItems()  as any)
+            getAllItems()
         }
       return ()=>{
         dispatch(wsClose('null'))}

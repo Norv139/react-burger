@@ -4,7 +4,6 @@ import { FC } from "react"
 
 import { v4 as uuidv4 } from 'uuid';
 
-import { getAllItems } from "../../services/actions"
 import { formatDate } from "../../services/utils/formatDate"
 
 import { TwsOrder } from "../../services/reducers/ws"
@@ -12,13 +11,36 @@ import { TdataPropTypes } from "../../utils/type/type"
 
 import styles from "./style.module.css"
 import { useAppDispatch, useAppSelector } from "../../services/utils/hooks"
+import { getItems_FAILED, getItems_REQUEST, getItems_SUCCESS } from "../../services/reducers/components";
+import { path, url } from "../../utils/settings";
 
 export const CardFeed:FC<{order:TwsOrder, type: string, eKey:string, openModal}> = ({order, eKey, type, openModal}) =>{
 
     const dispatch = useAppDispatch()
 
     const allIngridients = useAppSelector((state)=>state.components.items)
-//    const feed = useSelector((state: TRootState)=>state.ws.feed)
+    //const feed = useSelector((state: TRootState)=>state.ws.feed)
+
+    const axios = require('axios').default;
+
+    const getAllItems = () => {
+        dispatch(getItems_REQUEST())
+
+        axios.get(`${url}${path}`)
+        .then( (response) => {
+            dispatch(
+                getItems_SUCCESS(
+                    {items: response.data.data}
+                )
+            );
+        })
+        .catch( (error) => {
+            dispatch(
+                getItems_FAILED()
+            );
+            console.log(error);
+        })
+    }
 
     
 
@@ -41,7 +63,7 @@ export const CardFeed:FC<{order:TwsOrder, type: string, eKey:string, openModal}>
 
     useEffect(()=>{
         if(allIngridients.length===0){
-            dispatch(getAllItems()  as any)
+            getAllItems()
         }
 
     },[getIingredients])

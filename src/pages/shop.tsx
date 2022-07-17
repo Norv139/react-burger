@@ -16,7 +16,6 @@ import { useHistory, useLocation } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../services/utils/hooks';
 
-import styles from "./styles.module.css"
 
 declare module 'react' {
   interface FunctionComponent<P = {}> {

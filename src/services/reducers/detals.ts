@@ -88,6 +88,6 @@ export const {
 
 } = detalsSlice.actions;
 
-export const detalsInit = detalsSlice.getInitialState
+//export const detalsInit = detalsSlice.getInitialState
 
 export default detalsSlice.reducer;

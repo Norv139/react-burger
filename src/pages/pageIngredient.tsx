@@ -1,25 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { getAllItems } from '../services/actions/index.js';
-
 import { path, url } from '../utils/settings';
-import { useAppSelector } from '../services/utils/hooks';
+
 import { TdataPropTypes, NulldataPropTypes } from '../utils/type/type';
 
 import style from './styles.module.css'
 import styleIngredient from './styleIngredient.module.css'
-
+import { useAppSelector } from '../services/utils/hooks';
 
 
 const axios = require('axios').default;
-
-
-interface IStore {
-    components:{
-        items: TdataPropTypes[]
-    }
-}
 
 interface IResponse extends Response{
     data: {

@@ -9,9 +9,9 @@ import { formatDate } from "../services/utils/formatDate";
 
 import styles from "./styles.module.css"
 import { wsClose, wsStart } from "../services/reducers/ws";
-import { wsUrl } from "../utils/settings";
-import { getAllItems } from "../services/actions";
+import { path, url, wsUrl } from "../utils/settings";
 import { useAppDispatch, useAppSelector } from "../services/utils/hooks";
+import { getItems_FAILED, getItems_REQUEST, getItems_SUCCESS } from "../services/reducers/components";
 
 export const Order: FC = () => {
     const dispatch = useAppDispatch()
@@ -24,12 +24,33 @@ export const Order: FC = () => {
     const orders = useAppSelector((state)=>state.ws.feed.orders)
     const order = orders.find(x=>x._id === id)
 
+    const axios = require('axios').default;
+
+    const getAllItems = () => {
+        dispatch(getItems_REQUEST())
+
+        axios.get(`${url}${path}`)
+        .then( (response) => {
+            dispatch(
+                getItems_SUCCESS(
+                    {items: response.data.data}
+                )
+            );
+        })
+        .catch( (error) => {
+            dispatch(
+                getItems_FAILED()
+            );
+            console.log(error);
+        })
+    }
+
     useEffect(() => {
         if (feed.total === 0){
             dispatch(wsStart(`${wsUrl}/all`))
         }
         if (allIngridients.length === 0){
-            dispatch(getAllItems() as any)
+            getAllItems()
         }
       }, []);
 

@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { type } from "os";
 
 export type TwsOrder = {
     ingredients: Array<string>;
