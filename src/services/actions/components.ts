@@ -15,9 +15,9 @@ const axios = require('axios').default;
 type RootState = ReturnType<typeof store.getState>;
 type TActionComponent = typeof actionComponent
 
-type AppThunk = ThunkAction<AnyAction, {}, null, any>
+type AppThunk = ThunkAction<any, TRootState, null, any>
 
-export const getAllItems: any = () => {
+export const getAllItems = () => {
     return (dispatch) => {
         dispatch(getItems_REQUEST())
 

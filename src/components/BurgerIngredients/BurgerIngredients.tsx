@@ -73,7 +73,7 @@ const BurgerIngredients: FC = () => {
     useEffect(() => {
       window.addEventListener("scroll", scrollHandler, true);
 
-        dispatch(getAllItems())
+        dispatch(getAllItems() as any)
 
       return () => {
         window.removeEventListener("scroll", scrollHandler, true);

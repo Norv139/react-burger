@@ -1,7 +1,8 @@
 import { compose, applyMiddleware } from 'redux';
 import thunk, { ThunkAction } from 'redux-thunk';
 import { rootReducer } from './reducers';
-import { createStore } from 'redux';
+import { createStore, } from 'redux';
+import { configureStore } from '@reduxjs/toolkit';
 import { loggerMiddleware, socketMiddleware } from './middleware/webSoket';
 
 declare global {
@@ -46,9 +47,13 @@ const composeEnhancers =
 const enhancer = composeEnhancers( applyMiddleware(thunk ));
 
 
-const store = createStore(rootReducer, enhancer);
 
+const store = configureStore({
+  reducer: rootReducer,
+  middleware: [thunk, socketMiddleware]
+})
 
+// const store = createStore(rootReducer, enhancer);
 //store.subscribe(() => saveToLocalStorage(store.getState()));
 
 export type TRootState = ReturnType<typeof store.getState>
