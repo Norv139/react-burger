@@ -29,12 +29,7 @@ import { useAppDispatch, useAppSelector } from '../../services/utils/hooks';
 import { postOrder_FAILED, postOrder_REQUEST, postOrder_SUCCESS } from '../../services/reducers/detals';
 import { url } from '../../utils/settings';
 import { getCookie } from '../../services/utils/cookie';
-
-declare module 'react' {
-    interface FunctionComponent<P = {}> {
-      (props: PropsWithChildren<P>): ReactElement<any, any> | null;
-    }
-  }
+import { sendOrder } from '../../services/action/sendOrder';
 
 interface IRootStore {
     components: {
@@ -56,48 +51,11 @@ const BurgerConstructor: FC = () => {
     const listIngredients = useAppSelector((store)=>store.components.list)
     const state = history.location.state as { from: {pathname: string} }
 
-    
-    const sendOrder = (listItems:Array<TdataPropTypes>) => {
-
-        console.log({
-            'Authorization': `${getCookie('accessToken')}`
-        })
-        return dispatch => {
-    
-        const data = { "ingredients": listItems.map(x=>x._id) };
-        const header = {
-            'content-Type': 'application/json',
-            'authorization': `${(getCookie('accessToken'))}`
-        };
-    
-        dispatch(postOrder_REQUEST())
-    
-        
-        axios.post(`${url}/orders`, data, {
-            headers: header
-          })
-        .then( (response) => {
-            dispatch(
-                postOrder_SUCCESS(
-                    {items: {...response.data}}
-                    )
-                );
-            console.log(response);
-            dispatch(clearList())
-        })
-        .catch( (error) => {
-            dispatch(postOrder_FAILED());
-            console.log(error);
-        })
-    
-    }}
-
-
 
     const createOrder = () =>{
         if(listIngredients.length!==0){
             if(isLogin) {
-                return sendOrder(listIngredients)
+                dispatch(sendOrder(listIngredients))
             }else{
                 history.push({ pathname: "/login", state: { from: location } });
             }
@@ -115,7 +73,7 @@ const BurgerConstructor: FC = () => {
     useEffect(()=>{
         
         if(isLogin && listIngredients.length!==0) {
-            sendOrder(listIngredients)
+            dispatch(sendOrder(listIngredients))
         }
 
     }, []
@@ -315,6 +273,3 @@ const BurgerConstructorList = ({list, fnRemove, fnReorder}:IBurgerConstructorLis
 
 export default BurgerConstructor;
 
-function dispatch(arg0: any) {
-    throw new Error('Function not implemented.');
-}

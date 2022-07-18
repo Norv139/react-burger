@@ -1,10 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import {Input, Button} from '@ya.praktikum/react-developer-burger-ui-components'
 
-import { useDispatch, useSelector } from 'react-redux';
-
-
-
 import style from './styles.module.css'
 
 import { url, login } from '../utils/settings';

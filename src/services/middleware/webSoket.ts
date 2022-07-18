@@ -5,8 +5,11 @@ import {
     wsFeedConnectionClosed,
     wsFeedConnectionError,
     wsFeedConnectionSuccess,
-    wsGetData 
+    wsGetData, 
+    wsStart
 } from "../reducers/ws";
+import {TwsAction} from "../reducers/ws"
+
 
 
 
@@ -21,15 +24,24 @@ export const loggerMiddleware: Middleware = (store) => {
     }
 }
 
-export const socketMiddleware: Middleware = (store: MiddlewareAPI<AppDispatch, TRootState>) => {
+
+export const socketMiddleware = (wsActions: TwsAction): Middleware => {
+
+    let {
+        wsStart, 
+        wsFeedConnectionClosed, 
+        wsFeedConnectionError, 
+        wsFeedConnectionSuccess,
+        wsGetData,
+        wsClose
+    }=wsActions
     let socket: WebSocket
+    return (store: MiddlewareAPI<AppDispatch, TRootState>) => {
+    
 
     return next => action => {
-        
-        if(action.type === 'ws/wsStart'){
-            //console.log(action.payload)
+        if(wsActions.wsStart.match(action)){
             socket = new WebSocket(action.payload)
-            console.log(socket)
         }
         if (socket){      
             socket.onopen = (event) => {
@@ -51,11 +63,17 @@ export const socketMiddleware: Middleware = (store: MiddlewareAPI<AppDispatch, T
                 console.log('onmessage', restParsedData)
             };
 
-            if(action.type === 'ws/wsClose'){
+            if(wsActions.wsClose.match(action)){
                 store.dispatch(wsFeedConnectionClosed())
                 socket.close()
             }
         }           
         return next(action)
     }
+}}
+
+export const testSocketMiddleware = (wsAction, resAction, reqAction) => {
+    return (storeAPI) => {
+        return next => action => {}
+    } 
 }

@@ -1,10 +1,13 @@
-import { compose } from 'redux';
-//import { applyMiddleware } from 'redux';
+import { compose, Middleware } from 'redux';
+import { applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { rootReducer } from './reducers';
-//import { createStore, } from 'redux';
+import { createStore, } from 'redux';
 import { configureStore } from '@reduxjs/toolkit';
+import { ConfigureStoreOptions } from '@reduxjs/toolkit';
 import { socketMiddleware } from './middleware/webSoket';
+
+import {WsAction} from './reducers/ws'
 
 declare global {
   interface Window {
@@ -45,13 +48,13 @@ declare global {
 //         ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
 //         : compose;
 
-// const enhancer = composeEnhancers( applyMiddleware(thunk ));
+// const enhancer = composeEnhancers( applyMiddleware(thunk, socketMiddleware));
 
 
 
 const store = configureStore({
   reducer: rootReducer,
-  middleware: [thunk, socketMiddleware]
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk, socketMiddleware(WsAction)),
 })
 
 // const store = createStore(rootReducer, enhancer);

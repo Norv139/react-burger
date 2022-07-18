@@ -10,6 +10,8 @@ import { setLogin } from '../services/reducers/user';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useAppDispatch } from '../services/utils/hooks';
 import { logoutUser } from '../utils/logoutUser';
+import { url } from '../utils/settings';
+
 
 
 const axios = require('axios').default;
@@ -53,7 +55,7 @@ export const Profile: React.FC = () => {
     useEffect(()=>{
 
         axios.get(
-            'https://norma.nomoreparties.space/api/auth/user',
+            `${url}/auth/user`,
             {headers: {'authorization': `${getCookie('accessToken')}`}}
         ).then( (response: IResponse) => {
             setValue({...initValueUser, ...response.data.user})
@@ -78,7 +80,7 @@ export const Profile: React.FC = () => {
             }
 
             axios.patch(
-                'https://norma.nomoreparties.space/api/auth/user', 
+                `${url}/auth/user`, 
                 {...form},
                 {headers: {'authorization': `${getCookie('accessToken')}`}}
             ).then( (response:IResponse) => {

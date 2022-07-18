@@ -18,6 +18,7 @@ import { useAppDispatch, useAppSelector } from '../../services/utils/hooks'
 import { AnyAction } from 'redux'
 import { getItems_FAILED, getItems_REQUEST, getItems_SUCCESS } from '../../services/reducers/components'
 import { path, url } from '../../utils/settings'
+import { getAllItems } from '../../services/action/getAllItems'
 
 
 declare module 'react' {
@@ -39,27 +40,6 @@ const BurgerIngredients: FC = () => {
 
     const dataIngredients = useAppSelector((state)=>state.components.items)
     const listIngredients = useAppSelector((state)=>state.components.list)
-
-    const axios = require('axios').default;
-
-    const getAllItems = () => {
-        dispatch(getItems_REQUEST())
-
-        axios.get(`${url}${path}`)
-        .then( (response) => {
-            dispatch(
-                getItems_SUCCESS(
-                    {items: response.data.data}
-                )
-            );
-        })
-        .catch( (error) => {
-            dispatch(
-                getItems_FAILED()
-            );
-            console.log(error);
-        })
-    }
 
     function fnCaunt(_id:string){
         return listIngredients.filter( (x: TdataPropTypes ) => {return x._id === _id}).length
@@ -96,7 +76,7 @@ const BurgerIngredients: FC = () => {
     useEffect(() => {
       window.addEventListener("scroll", scrollHandler, true);
 
-        getAllItems()
+        dispatch(getAllItems())
 
       return () => {
         window.removeEventListener("scroll", scrollHandler, true);

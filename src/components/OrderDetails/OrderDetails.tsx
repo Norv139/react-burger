@@ -1,4 +1,4 @@
-import { useSelector, useDispatch } from 'react-redux';
+
 import { } from '@ya.praktikum/react-developer-burger-ui-components'
 
 import ImgDone from '../../images/done.svg'
@@ -8,7 +8,7 @@ import { useAppSelector } from '../../services/utils/hooks';
 
 function OrderDetails(){
     const isOpenOrder = useAppSelector((state) => state.detals.order)
-    const order = useAppSelector((state) => state.detals.order as {order: {number: number} })
+    const order = useAppSelector((state) => state.detals.order)
 
     return(  
 

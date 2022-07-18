@@ -1,7 +1,6 @@
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import React, {FC, useEffect} from "react"
-import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { TRootState } from "../services/store";
 
 import { v4 as uuidv4 } from 'uuid';
@@ -15,8 +14,9 @@ import { getItems_FAILED, getItems_REQUEST, getItems_SUCCESS } from "../services
 
 export const Order: FC = () => {
     const dispatch = useAppDispatch()
-
+    const history = useHistory();
     const location = useLocation()
+    
     const id = location.pathname.split('/').pop();
 
     const allIngridients = useAppSelector((state)=>state.components.items)

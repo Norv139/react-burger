@@ -88,5 +88,6 @@ export const {
 } = wsReduser.actions
 
 export type TwsAction = typeof wsReduser.actions
+export const WsAction =  wsReduser.actions
 
 export default wsReduser.reducer

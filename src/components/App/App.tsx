@@ -53,20 +53,7 @@ const App: FC = () => {
           
 
           <Route path={"/feed/:id"}>
-          { (history.location.state)?(
-              (state.from.pathname === '/feed' && isOpenInfo)?(
                 <FeedLent />
-                ):(
-                  <div className="mt-10">
-                  <Order/>
-                  </div>
-                )
-              ):(
-                <div className="mt-10">
-                <Order/>
-                </div>
-              )
-          }
           </Route>
 
           <Route path={"/feed/"}>
@@ -74,30 +61,13 @@ const App: FC = () => {
           </Route>
 
 
-          <Route path="/profile/orders/:id">
-
-
-          { (history.location.state)?(
-              (state.from.pathname === '/profile/orders' && isOpenInfo)?(
+          <ProtectedRoute path={"/profile/orders/:id"}>
                 <Orders/>
-                ):(
-                  <div className="mt-10">
-                  <Order/>
-                  </div>
-                )
-              ):(
-                <div className="mt-10">
-                <Order/>
-                </div>
-              )
-          }
+          </ProtectedRoute>
 
-
-          </Route>
-
-          <Route path="/profile/orders">
-            <Orders/>
-          </Route>
+          <ProtectedRoute path="/profile/orders">
+                <Orders/>
+          </ProtectedRoute>
 
           <ProtectedRoute path="/profile" >
             <Profile/>

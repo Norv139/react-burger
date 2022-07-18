@@ -1,8 +1,6 @@
 import React, {FC, useEffect, useState} from "react"
-import { useDispatch, useSelector } from "react-redux"
 
 import { TwsOrder, wsClose, wsStart } from "../services/reducers/ws"
-import { TRootState } from "../services/store"
 
 import { path, url, wsUrl } from "../utils/settings"
 import { getCookie } from "../services/utils/cookie"
@@ -34,6 +32,8 @@ export const Orders: FC = () => {
 
     const dispatch = useAppDispatch()
 
+    const isLogin = useAppSelector(state=>state.user.isLogin)
+
     const dataIngredients = useAppSelector((state)=>state.components.items)
     const isOpenInfo = useAppSelector((state)=>state.detals.isOpenInfo)
     const feed = useAppSelector((state)=>state.ws.feed)
@@ -43,6 +43,9 @@ export const Orders: FC = () => {
     const axios = require('axios').default;
 
     const getAllItems = () => {
+        if(!isLogin){
+            history.push({ pathname: `/login`, state: { from: location } })
+        }
         dispatch(getItems_REQUEST())
 
         axios.get(`${url}${path}`)
@@ -63,6 +66,7 @@ export const Orders: FC = () => {
 
 
     useEffect(() => {
+
       dispatch(wsStart(`${wsUrl}?token=${accessToken}`))
         if (dataIngredients.length === 0){
             getAllItems()
@@ -85,79 +89,84 @@ export const Orders: FC = () => {
     
 
     return ( <>
-    
-    <main className={`${style.box} mt-10`}>
-        
-        <span className='mr-15 mt-10'>
+    { location.pathname == '/profile/orders' || isOpenInfo?
+        (
+            <main className={`${style.box} mt-10`}>
+            
+            <span className='mr-15 mt-10'>
 
-            <p 
-                className={style.p_text + " text text_type_main-medium " + select.profile}
-                onClick={()=>{history.push({pathname: '/profile', state: { from: location } })}}
-            >
-                Профиль
-            </p>
+                <p 
+                    className={style.p_text + " text text_type_main-medium " + select.profile}
+                    onClick={()=>{history.push({pathname: '/profile', state: { from: location } })}}
+                >
+                    Профиль
+                </p>
 
-            <p 
-                className={style.p_text + " text text_type_main-medium "}
-                
-            >
-                История заказов
-            </p>
+                <p 
+                    className={style.p_text + " text text_type_main-medium "}
+                    
+                >
+                    История заказов
+                </p>
 
-            <p 
-                className={style.p_text + " text text_type_main-medium " + select.logout}
-                onClick={()=>{ 
-                    dispatch(setLogin(false)); 
-                    logoutUser(); 
-                    history.push({pathname: '/', state: { from: location } });
-                }}
-            >
-                Выход
-            </p>
+                <p 
+                    className={style.p_text + " text text_type_main-medium " + select.logout}
+                    onClick={()=>{ 
+                        dispatch(setLogin(false)); 
+                        logoutUser(); 
+                        history.push({pathname: '/', state: { from: location } });
+                    }}
+                >
+                    Выход
+                </p>
 
-            <div className='mt-20' />
+                <div className='mt-20' />
 
-            <p className={style.p_text + " text text_type_main-default text_color_inactive"}>
-                В этом разделе вы можете
-                изменить свои персональные данные
-            </p>
+                <p className={style.p_text + " text text_type_main-default text_color_inactive"}>
+                    В этом разделе вы можете
+                    изменить свои персональные данные
+                </p>
 
-        </span>
+            </span>
 
-        <div className={styles.all_content}>
-        {   feed.total !== 0?(
+            <div className={styles.all_content}>
+            {   feed.total !== 0?(
 
-                feed.orders.map( 
-                    (order: TwsOrder, i )=> 
-                    <CardFeed 
-                        type={'feed'} 
-                        openModal={openDetals}
-                        order={order} 
-                        key={i.toString()} 
-                        eKey={i.toString()}
-                    /> 
+                    feed.orders.map( 
+                        (order: TwsOrder, i )=> 
+                        <CardFeed 
+                            type={'feed'} 
+                            openModal={openDetals}
+                            order={order} 
+                            key={i.toString()} 
+                            eKey={i.toString()}
+                        /> 
+                    )
+                ):(
+                    <>L</>
                 )
-            ):(
-                <>L</>
-            )
-        }
-        </div>
+            }
+            </div>
 
-    </main>
+            </main>
+        ):(
+            <div className="mt-10">
+            <Order/>
+            </div>
+        )
+    }
     {
-        isOpenInfo?(
+        isOpenInfo &&
             <Modal onClose={
                 ()=>{
                     dispatch(closeOrder());
                     dispatch(closeInfo());
-                    history.goBack()
+                    history.push({pathname: '/profile/orders', state: { from: location } })
                     }
                 }>
                 <Order />
             </Modal>
-        ):(
-            <></>
-        )
+
     }
     </>
     

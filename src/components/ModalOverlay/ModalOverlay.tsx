@@ -3,7 +3,7 @@ import style from './style.module.css'
 
 interface IModalOverlay{
     children: React.ReactNode;
-    onClose: any
+    onClose: ()=>void
 }
 
 const ModalOverlay = ({children, onClose}:IModalOverlay) => {

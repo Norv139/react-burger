@@ -4,7 +4,11 @@ const detalsSlice = createSlice({
     name: 'detals',
 
     initialState: {
-        order: {},
+        order: {
+            order:{
+                number:1
+            }
+        },
     
         orderRequest: false,
         orderFailed: false,

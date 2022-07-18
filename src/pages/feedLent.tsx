@@ -1,5 +1,5 @@
 import React, {FC, useEffect} from "react"
-import { useDispatch, useSelector } from "react-redux"
+
 import { wsClose, wsStart } from "../services/reducers/ws"
 import { TRootState } from "../services/store"
 import { orders, wsUrl } from "../utils/settings"
@@ -13,6 +13,12 @@ import { Order } from "./order"
 import { useAppDispatch, useAppSelector } from "../services/utils/hooks"
 
 import styles from "./styles.module.css"
+interface Ihi {
+
+    from:{
+            pathname: string}
+
+}
 
 export const FeedLent = () => {
 
@@ -23,6 +29,8 @@ export const FeedLent = () => {
 
     const isOpenInfo = useAppSelector((store)=>store.detals.isOpenInfo)
     const feed = useAppSelector((state)=>state.ws.feed)
+    
+    const id = location.pathname.split('/').pop();
 
     useEffect(() => {
       dispatch(wsStart(`${wsUrl}/all`))
@@ -41,16 +49,18 @@ export const FeedLent = () => {
     if (!feed.orders){
         history.push({pathname: '/', state: { from: location } });
     }
-    
+
+    const state = history.location.state as Ihi
+
     
 
     return ( 
     <>
-        {feed.orders?
+        {   
+            (location.pathname == `/feed` || isOpenInfo)?
             (
             <>
-                { 
-                    feed.orders.length > 1 ?(
+                { feed.orders.length > 1 ?(
                     <main>
                         <div>
                             <h2 className='text text_type_main-large mb-5 mt-8'>Лента заказов</h2>
@@ -127,21 +137,22 @@ export const FeedLent = () => {
                 }
             </>
             ):(
-                <h1 className={`${styles.order_loading} text text_type_main-large text_color_inactive`}>Ошибка?</h1>
+                <div className="mt-10">
+                <Order/>
+                </div>
             )
         }
-        {isOpenInfo?
-            (<Modal onClose={
+
+        {isOpenInfo &&
+            <Modal onClose={
                 ()=>{
                     dispatch(closeOrder());
                     dispatch(closeInfo());
-                    history.goBack()
+                    history.push({pathname: '/feed', state: { from: location } })
                     }
                 }>
                 <Order />
-            </Modal>)
-            :
-            (<></>)
+            </Modal>
         }
     </>
     )
