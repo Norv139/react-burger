@@ -6,12 +6,11 @@ import { getItems_FAILED, getItems_REQUEST, getItems_SUCCESS } from "../reducers
 import { TRootState } from "../store";
 
 
-export const getAllItems = (): AppThunk<Promise<unknown>> => 
-async dispatch => {
+export const getAllItems = (): AppThunk => dispatch => {
     const axios = require('axios').default;
     dispatch(getItems_REQUEST())
 
-    await axios.get(`${url}${path}`)
+    axios.get(`${url}${path}`)
     .then( (response) => {
         dispatch(
             getItems_SUCCESS(
