@@ -12,6 +12,7 @@ import style from './styles.module.css'
 import { useHistory } from 'react-router-dom';
 import { useAppDispatch } from '../services/utils/hooks';
 import { setCookie } from '../services/utils/cookie';
+import { postData } from '../services/action/postData';
 
 export const ResetPassword: React.FC = () => {
 
@@ -28,30 +29,6 @@ export const ResetPassword: React.FC = () => {
 
     const axios = require('axios').default;
 
-    const postData = (url: string, form:any) => {
-
-        dispatch(req_REQUEST())
-
-        axios.post(url, form)
-        .then( (response) => {
-            setCookie(response.data);
-
-            //console.log(response.data)
-            dispatch(
-                req_SUCCESS(response.data)
-                );
-
-            if (url.indexOf('/login') !== -1){
-                    dispatch(setLogin(true))
-            }
-
-        })
-        .catch( (error) => {
-            dispatch(req_FAILED());
-            console.log("error", error);
-        })
-    }
-
     const onChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         setValue({ ...form, [e.target.name]: e.target.value });
       };
@@ -60,7 +37,7 @@ export const ResetPassword: React.FC = () => {
         e.preventDefault(); 
         setValue(initValue)
         dispatch(setPreviousPath('/forgot-password'))
-        postData(`${url}${reset_step2}` ,form)
+        dispatch(postData(`${url}${reset_step2}` ,form))
     }
 
     return(

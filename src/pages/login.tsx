@@ -8,6 +8,7 @@ import { req_FAILED, req_REQUEST, req_SUCCESS, setLogin } from '../services/redu
 import { Link, useHistory, useLocation} from 'react-router-dom';
 import { getCookie, setCookie } from '../services/utils/cookie';
 import { useAppDispatch } from '../services/utils/hooks';
+import { postData } from '../services/action/postData';
 
 
 export function Login(){
@@ -22,31 +23,6 @@ export function Login(){
     const [form, setValue] = useState(initValue);
     const [icon, setIcon] = useState(true);
 
-    const axios = require('axios').default;
-
-    const postData = (url: string, form:any) => {
-
-        dispatch(req_REQUEST())
-
-        axios.post(url, form)
-        .then( (response) => {
-            setCookie(response.data);
-
-            //console.log(response.data)
-            dispatch(
-                req_SUCCESS(response.data)
-                );
-
-            if (url.indexOf('/login') !== -1){
-                    dispatch(setLogin(true))
-            }
-
-        })
-        .catch( (error) => {
-            dispatch(req_FAILED());
-            console.log("error", error);
-        })
-    }
 
     const onChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         setValue({ ...form, [e.target.name]: e.target.value });
@@ -55,7 +31,7 @@ export function Login(){
     const onClick = (e:React.FormEvent<HTMLFormElement>) =>{
         e.preventDefault();
 
-        postData(`${url}${login}`,form);
+        dispatch(postData(`${url}${login}`,form));
 
         setValue(initValue);
 

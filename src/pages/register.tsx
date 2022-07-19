@@ -10,6 +10,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { useAppDispatch } from '../services/utils/hooks';
 import { req_FAILED, req_REQUEST, req_SUCCESS, setLogin } from '../services/reducers/user';
 import { setCookie } from '../services/utils/cookie';
+import { postData } from '../services/action/postData';
 
 
 export const Register: React.FC = () => {
@@ -25,29 +26,7 @@ export const Register: React.FC = () => {
     
     const axios = require('axios').default;
 
-    const postData = (url: string, form:any) => {
-
-        dispatch(req_REQUEST())
-
-        axios.post(url, form)
-        .then( (response) => {
-            setCookie(response.data);
-
-            //console.log(response.data)
-            dispatch(
-                req_SUCCESS(response.data)
-                );
-
-            if (url.indexOf('/login') !== -1){
-                    dispatch(setLogin(true))
-            }
-
-        })
-        .catch( (error) => {
-            dispatch(req_FAILED());
-            console.log("error", error);
-        })
-    }
+    
 
     const onChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         setValue({ ...form, [e.target.name]: e.target.value });
@@ -55,8 +34,7 @@ export const Register: React.FC = () => {
 
     const onClick = (e:React.FormEvent<HTMLFormElement>) =>{
         e.preventDefault(); 
-        console.log(form)
-        postData( `${url}${register}`, form)
+        dispatch(postData( `${url}${register}`, form))
         setValue(initValue);
         history.push({pathname: '/', state: { from: location}});
     }

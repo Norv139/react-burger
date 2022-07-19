@@ -1,17 +1,11 @@
 import { AnyAction, ThunkAction } from "@reduxjs/toolkit";
 import { url } from "../../utils/settings";
-import { TdataPropTypes } from "../../utils/type/type";
+import { AppThunk, TdataPropTypes } from "../../utils/type/type";
 import { clearList } from "../reducers/components";
 import { postOrder_FAILED, postOrder_REQUEST, postOrder_SUCCESS } from "../reducers/detals";
 import { TRootState } from "../store";
 import { getCookie } from "../utils/cookie";
 
-type AppThunk<ThunkReturnType = void> = ThunkAction<
-ThunkReturnType, // возвращаемый тип после выхоза thunk
-TRootState, // root state )))
-unknown, // дополнительный аргумент добавляемый в каждый thunk, в проекте мы его не использовали
-AnyAction // Список всех обычных экшенов
->;
 
 
 export const sendOrder = (listItems:Array<TdataPropTypes>): AppThunk<Promise<unknown>> => 

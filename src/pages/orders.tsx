@@ -15,7 +15,8 @@ import Modal from "../components/Modal/Modal"
 import { Order } from "./order"
 import { useAppDispatch, useAppSelector } from "../services/utils/hooks"
 import { getItems_FAILED, getItems_REQUEST, getItems_SUCCESS } from "../services/reducers/components"
-import { logoutUser } from "../utils/logoutUser"
+import { logoutUser } from "../services/action/logoutUser"
+import { getAllItems } from "../services/action/getAllItems"
 
 export const Orders: FC = () => {
 
@@ -40,36 +41,13 @@ export const Orders: FC = () => {
 
     const accessToken = getCookie('accessToken')?.substring(7)
 
-    const axios = require('axios').default;
-
-    const getAllItems = () => {
-        if(!isLogin){
-            history.push({ pathname: `/login`, state: { from: location } })
-        }
-        dispatch(getItems_REQUEST())
-
-        axios.get(`${url}${path}`)
-        .then( (response) => {
-            dispatch(
-                getItems_SUCCESS(
-                    {items: response.data.data}
-                )
-            );
-        })
-        .catch( (error) => {
-            dispatch(
-                getItems_FAILED()
-            );
-            console.log(error);
-        })
-    }
 
 
     useEffect(() => {
 
       dispatch(wsStart(`${wsUrl}?token=${accessToken}`))
         if (dataIngredients.length === 0){
-            getAllItems()
+            dispatch(getAllItems())
         }
       return ()=>{
         dispatch(wsClose('null'))}

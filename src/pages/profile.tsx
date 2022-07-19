@@ -9,7 +9,7 @@ import style from './styles.module.css'
 import { setLogin } from '../services/reducers/user';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useAppDispatch } from '../services/utils/hooks';
-import { logoutUser } from '../utils/logoutUser';
+import { logoutUser } from '../services/action/logoutUser';
 import { url } from '../utils/settings';
 
 
@@ -125,7 +125,7 @@ export const Profile: React.FC = () => {
                         className={style.p_text + " text text_type_main-medium " + select.logout}
                         onClick={()=>{ 
                             dispatch(setLogin(false)); 
-                            logoutUser(); 
+                            dispatch(logoutUser()); 
                             history.push({pathname: '/', state: { from: location } });
                         }}
                     >

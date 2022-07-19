@@ -1,3 +1,6 @@
+import { AnyAction, ThunkAction } from "@reduxjs/toolkit";
+import { TRootState } from "../../services/store";
+
 export type TdataPropTypes = {
     uuid?: string;
     _id: string;
@@ -28,3 +31,11 @@ export const NulldataPropTypes : TdataPropTypes = {
     "image_large":"",
     "__v":0
   }
+
+
+export type AppThunk<ThunkReturnType = void> = ThunkAction<
+  ThunkReturnType, // возвращаемый тип после выхоза thunk
+  TRootState, // root state )))
+  unknown, // дополнительный аргумент добавляемый в каждый thunk, в проекте мы его не использовали
+  AnyAction // Список всех обычных экшенов
+  >;

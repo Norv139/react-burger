@@ -1,15 +1,18 @@
-import { url, logout } from "./settings";
+import { url, logout } from "../../utils/settings";
+import { AppThunk } from "../../utils/type/type";
+import { setLogin } from "../reducers/user";
 
-import { getCookie, deleteCookie} from '../services/utils/cookie'
+import { getCookie, deleteCookie} from '../utils/cookie'
 
 const axios = require('axios').default;
 
 
 
 
-export function logoutUser(){
-    //const urlLogout = "https://norma.nomoreparties.space/api/auth/logout"
-    axios.post(`${url}${logout}`, {"token": `${getCookie('refreshToken')}`})
+export const logoutUser=(): AppThunk<Promise<unknown>> => 
+async dispatch => {
+    dispatch(setLogin(false))
+    await axios.post(`${url}${logout}`, {"token": `${getCookie('refreshToken')}`})
     .then( (response) => {
         deleteCookie('refreshToken')
         deleteCookie('accessToken')

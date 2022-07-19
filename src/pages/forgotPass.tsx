@@ -12,6 +12,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { useAppDispatch } from '../services/utils/hooks';
 import { req_FAILED, req_REQUEST, req_SUCCESS, setLogin } from '../services/reducers/user';
 import { setCookie } from '../services/utils/cookie';
+import { postData } from '../services/action/postData';
 
 
 export const ForgotPassword: FC = () => {
@@ -23,32 +24,6 @@ export const ForgotPassword: FC = () => {
     const initValue = { email: '' }
     const [form, setValue] = useState(initValue);
 
-    const axios = require('axios').default;
-
-    const postData = (url: string, form: any) => {
-
-        dispatch(req_REQUEST())
-
-        axios.post(url, form)
-            .then((response) => {
-                setCookie(response.data);
-
-                //console.log(response.data)
-                dispatch(
-                    req_SUCCESS(response.data)
-                );
-
-                if (url.indexOf('/login') !== -1) {
-                    dispatch(setLogin(true))
-                }
-
-            })
-            .catch((error) => {
-                dispatch(req_FAILED());
-                console.log("error", error);
-            })
-    }
-
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setValue({ ...form, [e.target.name]: e.target.value });
     };
@@ -59,7 +34,7 @@ export const ForgotPassword: FC = () => {
         console.log('Good')
         if (form != initValue) {
             console.log(history)
-            postData(`${url}${reset_step1}`, form)
+            dispatch(postData(`${url}${reset_step1}`, form))
             setValue(initValue)
 
             history.push({ pathname: "/reset-password", state: { from: location } })
