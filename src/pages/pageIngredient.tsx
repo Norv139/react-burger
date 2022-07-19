@@ -7,7 +7,8 @@ import { TdataPropTypes, NulldataPropTypes } from '../utils/type/type';
 
 import style from './styles.module.css'
 import styleIngredient from './styleIngredient.module.css'
-import { useAppSelector } from '../services/utils/hooks';
+import { useAppDispatch, useAppSelector } from '../services/utils/hooks';
+import { getAllItems } from '../services/action/getAllItems';
 
 
 const axios = require('axios').default;
@@ -20,6 +21,7 @@ interface IResponse extends Response{
 
 export const PageIngredient: React.FC = () =>  {  
 
+    const dispatch = useAppDispatch()
     const [allItem, setAllItem] = useState<TdataPropTypes>(NulldataPropTypes)
     const location = useLocation();
     const id = location.pathname.split('/').pop();
@@ -28,16 +30,10 @@ export const PageIngredient: React.FC = () =>  {
 
     useEffect( ()=>{
         if (items.length == 0){
-            axios.get(`${url}${path}`)
-            .then( (response: IResponse) => {
-                setAllItem(response.data.data.filter(x=>x._id == id)[0])
-            })
-            .catch( (error: Response) => {
-                console.log(error);
-            })
+            dispatch(getAllItems())
+            setAllItem(items.filter(x=>x._id == id)[0])
         }
         else{
-            
             setAllItem(items.filter(x=>x._id == id)[0])
         }
         },[setAllItem, axios, id]

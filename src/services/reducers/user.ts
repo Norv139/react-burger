@@ -34,6 +34,15 @@ const user = createSlice({
             }
         },
 
+        setUserData:(state, action)=>{
+            return { 
+                ...state, 
+                itemsFailed: false, 
+                data: action.payload, 
+                itemsRequest: false 
+            };
+        },
+
         req_SUCCESS: (state, action)=>{
             return { 
                 ...state, 
@@ -67,6 +76,7 @@ export const {
     setPreviousPath,
     setLogin,
     //setRefreshSuccess
+    setUserData
 } = user.actions;
 
 export default user.reducer;

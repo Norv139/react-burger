@@ -8,9 +8,11 @@ import { getCookie } from '../services/utils/cookie';
 import style from './styles.module.css'
 import { setLogin } from '../services/reducers/user';
 import { useHistory, useLocation } from 'react-router-dom';
-import { useAppDispatch } from '../services/utils/hooks';
+import { useAppDispatch, useAppSelector } from '../services/utils/hooks';
 import { logoutUser } from '../services/action/logoutUser';
 import { url } from '../utils/settings';
+import { getUser } from '../services/action/getUser';
+import { patchData } from '../services/action/patchData';
 
 
 
@@ -18,12 +20,11 @@ const axios = require('axios').default;
 
 
 interface IResponse extends Response {
-    data:{
+
         user:{
             email: string;
             name: string;
         }
-    }
 }
 
 
@@ -51,20 +52,16 @@ export const Profile: React.FC = () => {
     const [select, setSelect] = useState(initValueType);
 
     const [wasAChange, setWasAChange] = useState(false);
+    const user = useAppSelector(state=>state.user.data)
 
     useEffect(()=>{
-
-        axios.get(
-            `${url}/auth/user`,
-            {headers: {'authorization': `${getCookie('accessToken')}`}}
-        ).then( (response: IResponse) => {
-            setValue({...initValueUser, ...response.data.user})
-            setActuslForm({...initValueUser, ...response.data.user})
-        }).catch( (error: Response) => {
-            console.log("error", error);
-        })
+        dispatch(getUser())
+        setActuslForm({...initValueUser, ...user})
+        setValue({...initValueUser, ...user})
 
     }, [])
+
+
 
 
 
@@ -78,19 +75,8 @@ export const Profile: React.FC = () => {
             if (e){
                 e.preventDefault()
             }
+            dispatch(patchData(form))
 
-            axios.patch(
-                `${url}/auth/user`, 
-                {...form},
-                {headers: {'authorization': `${getCookie('accessToken')}`}}
-            ).then( (response:IResponse) => {
-                setValue({...initValueUser, ...response.data.user})
-                setActuslForm({...initValueUser, ...response.data.user})
-                setWasAChange(false)
-            }).catch( (error:Response) => {
-                console.log("error", error);
-            })
-            
         }
         const onCancel =  (e?:React.ChangeEvent<HTMLButtonElement>) => {
             if (e){
