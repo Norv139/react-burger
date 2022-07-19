@@ -1,37 +1,36 @@
 
 import React, { useEffect, useState } from 'react';
 import {Input, Button} from '@ya.praktikum/react-developer-burger-ui-components'
-import { getCookie } from '../services/utils';
-import { logoutUser } from '../services/actions';
+import { getCookie } from '../services/utils/cookie';
 
 
-import style from './style.module.css'
-import { useDispatch } from 'react-redux';
+
+import style from './styles.module.css'
 import { setLogin } from '../services/reducers/user';
 import { useHistory, useLocation } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../services/utils/hooks';
+import { logoutUser } from '../services/action/logoutUser';
+import { url } from '../utils/settings';
+import { getUser } from '../services/action/getUser';
+import { patchData } from '../services/action/patchData';
+
 
 
 const axios = require('axios').default;
 
 
 interface IResponse extends Response {
-    data:{
+
         user:{
             email: string;
             name: string;
         }
-    }
 }
 
-interface IInitValueType{
-    profile: string;
-    orders: string;
-    logout: "text_color_inactive"
-}
 
 export const Profile: React.FC = () => {  
 
-    const dispatch = useDispatch()    
+    const dispatch = useAppDispatch()    
 
     const history = useHistory()
     const location = useLocation();
@@ -53,20 +52,16 @@ export const Profile: React.FC = () => {
     const [select, setSelect] = useState(initValueType);
 
     const [wasAChange, setWasAChange] = useState(false);
+    const user = useAppSelector(state=>state.user.data)
 
     useEffect(()=>{
-
-        axios.get(
-            'https://norma.nomoreparties.space/api/auth/user',
-            {headers: {'authorization': `${getCookie('accessToken')}`}}
-        ).then( (response: IResponse) => {
-            setValue({...initValueUser, ...response.data.user})
-            setActuslForm({...initValueUser, ...response.data.user})
-        }).catch( (error: Response) => {
-            console.log("error", error);
-        })
+        dispatch(getUser())
+        setActuslForm({...initValueUser, ...user})
+        setValue({...initValueUser, ...user})
 
     }, [])
+
+
 
 
 
@@ -80,19 +75,8 @@ export const Profile: React.FC = () => {
             if (e){
                 e.preventDefault()
             }
+            dispatch(patchData(form))
 
-            axios.patch(
-                'https://norma.nomoreparties.space/api/auth/user', 
-                {...form},
-                {headers: {'authorization': `${getCookie('accessToken')}`}}
-            ).then( (response:IResponse) => {
-                setValue({...initValueUser, ...response.data.user})
-                setActuslForm({...initValueUser, ...response.data.user})
-                setWasAChange(false)
-            }).catch( (error:Response) => {
-                console.log("error", error);
-            })
-            
         }
         const onCancel =  (e?:React.ChangeEvent<HTMLButtonElement>) => {
             if (e){
@@ -111,7 +95,7 @@ export const Profile: React.FC = () => {
                 <span className='mr-15'>
 
                     <p 
-                        className={style.p_text + " text text_type_main-medium " + select.profile}
+                        className={style.p_text + " text text_type_main-medium "}
                     >
                         Профиль
                     </p>
@@ -127,7 +111,7 @@ export const Profile: React.FC = () => {
                         className={style.p_text + " text text_type_main-medium " + select.logout}
                         onClick={()=>{ 
                             dispatch(setLogin(false)); 
-                            logoutUser(); 
+                            dispatch(logoutUser()); 
                             history.push({pathname: '/', state: { from: location } });
                         }}
                     >

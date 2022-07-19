@@ -4,7 +4,11 @@ const detalsSlice = createSlice({
     name: 'detals',
 
     initialState: {
-        order: {},
+        order: {
+            order:{
+                number:1
+            }
+        },
     
         orderRequest: false,
         orderFailed: false,
@@ -77,8 +81,8 @@ const detalsSlice = createSlice({
 
 
 export const { 
-    initialState,
     setInfo, 
+    
     openInfo, closeInfo, 
     openOrder, closeOrder,
 
@@ -86,7 +90,8 @@ export const {
     postOrder_REQUEST,
     postOrder_FAILED
 
-
-
 } = detalsSlice.actions;
+
+//export const detalsInit = detalsSlice.getInitialState
+
 export default detalsSlice.reducer;

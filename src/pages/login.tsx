@@ -1,35 +1,28 @@
 import React, { useCallback, useState } from 'react';
 import {Input, Button} from '@ya.praktikum/react-developer-burger-ui-components'
 
-import { useDispatch, useSelector } from 'react-redux';
+import style from './styles.module.css'
 
-
-
-import style from './style.module.css'
-
-import { postData } from '../services/actions/user';
 import { url, login } from '../utils/settings';
-import { setLogin } from '../services/reducers/user';
+import { req_FAILED, req_REQUEST, req_SUCCESS, setLogin } from '../services/reducers/user';
 import { Link, useHistory, useLocation} from 'react-router-dom';
-import { getCookie } from '../services/utils';
+import { getCookie, setCookie } from '../services/utils/cookie';
+import { useAppDispatch } from '../services/utils/hooks';
+import { postData } from '../services/action/postData';
 
-interface IRootStore {
-    user:{
-      previousPath:Array<string|null>
-    }
-  }
 
 export function Login(){
     
     const initValue = { email: '', password: '' }
 
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
     const history = useHistory();
     const location = useLocation();
 
 
     const [form, setValue] = useState(initValue);
     const [icon, setIcon] = useState(true);
+
 
     const onChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         setValue({ ...form, [e.target.name]: e.target.value });
@@ -38,13 +31,13 @@ export function Login(){
     const onClick = (e:React.FormEvent<HTMLFormElement>) =>{
         e.preventDefault();
 
-        dispatch(postData(`${url}${login}`,form) as any);
+        dispatch(postData(`${url}${login}`,form));
 
         setValue(initValue);
 
         if (getCookie('accessToken') !== undefined){
             dispatch(setLogin(true));
-            history.push(history.location.state)
+            history.push(location)
         }
     }   
 

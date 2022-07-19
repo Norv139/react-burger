@@ -1,5 +1,4 @@
 import ReactDOM from 'react-dom';
-import { FC, ReactChild, ReactChildren, useRef, ReactFragment } from 'react';
 import { useEffect, useCallback, ReactElement} from 'react';
 
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components'

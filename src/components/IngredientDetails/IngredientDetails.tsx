@@ -1,21 +1,12 @@
-
-import { useSelector } from 'react-redux';
-
 import style from './style.module.css'
 import { TdataPropTypes } from '../../utils/type/type';
+import { useAppSelector } from '../../services/utils/hooks';
 
-
-interface IStore{
-    detals: {
-        info: TdataPropTypes;
-        isOpenInfo: boolean;
-    }
-}
 
 function IngredientDetails(){
     
-    const data = useSelector((state:IStore)=>state.detals.info)
-    const isOpenInfo = useSelector((state:IStore)=>state.detals.isOpenInfo)
+    const data = useAppSelector((state)=>state.detals.info as TdataPropTypes)
+    const isOpenInfo = useAppSelector((state)=>state.detals.isOpenInfo)
 
 
     

@@ -1,6 +1,3 @@
-import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { setPreviousPath } from './reducers/user';
 import Cookies from 'js-cookie'
 
 export function setCookie (response: { accessToken: string; refreshToken: string; }) {

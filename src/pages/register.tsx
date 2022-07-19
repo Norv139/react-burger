@@ -1,26 +1,32 @@
 
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import {Input, Button} from '@ya.praktikum/react-developer-burger-ui-components'
-import { useDispatch } from 'react-redux';
 
-import style from './style.module.css'
 
-import { postData } from '../services/actions/user';
+import style from './styles.module.css'
+
 import { url, register } from '../utils/settings';
 import { useHistory, useLocation } from 'react-router-dom';
+import { useAppDispatch } from '../services/utils/hooks';
+import { req_FAILED, req_REQUEST, req_SUCCESS, setLogin } from '../services/reducers/user';
+import { setCookie } from '../services/utils/cookie';
+import { postData } from '../services/action/postData';
 
 
 export const Register: React.FC = () => {
     const history = useHistory();
     const location = useLocation();
 
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
     const initValue = { email: '', password: '', name: '' }
 
     const [form, setValue] = useState(initValue);
     const [icon, setIcon] = useState(true);
+    
+    const axios = require('axios').default;
 
+    
 
     const onChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         setValue({ ...form, [e.target.name]: e.target.value });
@@ -28,8 +34,7 @@ export const Register: React.FC = () => {
 
     const onClick = (e:React.FormEvent<HTMLFormElement>) =>{
         e.preventDefault(); 
-        console.log(form)
-        dispatch(postData( `${url}${register}`, form) as any)
+        dispatch(postData( `${url}${register}`, form))
         setValue(initValue);
         history.push({pathname: '/', state: { from: location}});
     }

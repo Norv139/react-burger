@@ -6,29 +6,30 @@ import Reorder, {
     reorderFromTo,
     reorderFromToImmutable
 } from "react-reorder";
+
 import move from "lodash-move";
 import { v4 as uuidv4 } from 'uuid';
 import { useDrop} from 'react-dnd'
-import { useSelector, useDispatch } from 'react-redux';
 
 import { 
     decrease_list_item, 
     increase_list_item, 
-    change_list 
+    change_list, 
+    clearList
 } from '../../services/reducers/components';
-import { sendOrder } from '../../services/actions/index.js';
-import { getCookie } from '../../services/utils';
+
+//import { sendOrder } from '../../services/actions/index';
+
 
 import { TdataPropTypes } from '../../utils/type/type';
 
 import style from './style.module.css';
 import { useHistory, useLocation } from 'react-router-dom';
-
-declare module 'react' {
-    interface FunctionComponent<P = {}> {
-      (props: PropsWithChildren<P>): ReactElement<any, any> | null;
-    }
-  }
+import { useAppDispatch, useAppSelector } from '../../services/utils/hooks';
+import { postOrder_FAILED, postOrder_REQUEST, postOrder_SUCCESS } from '../../services/reducers/detals';
+import { url } from '../../utils/settings';
+import { getCookie } from '../../services/utils/cookie';
+import { sendOrder } from '../../services/action/sendOrder';
 
 interface IRootStore {
     components: {
@@ -40,26 +41,27 @@ interface IRootStore {
 }
 
 const BurgerConstructor: FC = () => {
-    
+    const axios = require('axios').default;
     const history = useHistory();
     const location = useLocation();
     // { pathname: "/login", state: { from: location } }
-    const dispatch = useDispatch() 
+    const dispatch = useAppDispatch() 
 
-    const isLogin = useSelector((store:IRootStore)=>store.user.isLogin)
-    const listIngredients = useSelector((store:IRootStore)=>store.components.list)
-    
+    const isLogin = useAppSelector((store)=>store.user.isLogin)
+    const listIngredients = useAppSelector((store)=>store.components.list)
+    const state = history.location.state as { from: {pathname: string} }
 
-    
 
     const createOrder = () =>{
-        if(isLogin && listIngredients && history.location.state.from.pathname === '/login') {
-            return dispatch( sendOrder(listIngredients) as any )
-        }else{
-            history.push({ pathname: "/login", state: { from: location } });
+        if(listIngredients.length!==0){
+            if(isLogin) {
+                dispatch(sendOrder(listIngredients))
+            }else{
+                history.push({ pathname: "/login", state: { from: location } });
+            }
         }
-
     }
+
     const removeItem = (itemId: string) => dispatch(
         decrease_list_item({id: itemId})
     )
@@ -71,8 +73,9 @@ const BurgerConstructor: FC = () => {
     useEffect(()=>{
         
         if(isLogin && listIngredients.length!==0) {
-            dispatch( sendOrder(listIngredients) as any )
+            dispatch(sendOrder(listIngredients))
         }
+
     }, []
     )
    
@@ -269,3 +272,4 @@ const BurgerConstructorList = ({list, fnRemove, fnReorder}:IBurgerConstructorLis
 }
 
 export default BurgerConstructor;
+

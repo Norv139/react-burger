@@ -1,37 +1,33 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import {Input, Button} from '@ya.praktikum/react-developer-burger-ui-components'
-import { useDispatch, useSelector } from 'react-redux';
 
 import { Redirect, useLocation } from 'react-router-dom';
 
-
-import { postData } from '../services/actions/user';
 import { url, reset_step2 } from '../utils/settings';
 
-import { setPreviousPath } from '../services/reducers/user';
+import { req_FAILED, req_REQUEST, req_SUCCESS, setLogin, setPreviousPath } from '../services/reducers/user';
 
-import style from './style.module.css'
+import style from './styles.module.css'
+
 import { useHistory } from 'react-router-dom';
-
-interface IStore{
-    user:{
-        previousPath: Array< null | string >
-    }
-}
+import { useAppDispatch } from '../services/utils/hooks';
+import { setCookie } from '../services/utils/cookie';
+import { postData } from '../services/action/postData';
 
 export const ResetPassword: React.FC = () => {
 
-    const pathHistory = useSelector((store:IStore)=>store.user.previousPath)
-
     const history = useHistory();
     const location = useLocation();
+    const state = history.location.state as { from: {pathname: string} }
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const initValue = { password: '', token: '' }
 
     const [form, setValue] = useState(initValue);
     const [icon, setIcon] = useState(true);
+
+    const axios = require('axios').default;
 
     const onChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         setValue({ ...form, [e.target.name]: e.target.value });
@@ -41,17 +37,14 @@ export const ResetPassword: React.FC = () => {
         e.preventDefault(); 
         setValue(initValue)
         dispatch(setPreviousPath('/forgot-password'))
-        dispatch( postData(`${url}${reset_step2}` ,form) as any)
+        dispatch(postData(`${url}${reset_step2}` ,form))
     }
-    
-
-    console.log(history.location.state.from)
 
     return(
         <>
         {
             history.location.state ? (
-                history.location.state.from.pathname == '/forgot-password' ? (
+                state.from.pathname === '/forgot-password' ? (
                         <div className={style.over}>
                         <main className={style.main}>
                             <p className="text text_type_main-medium mb-6">

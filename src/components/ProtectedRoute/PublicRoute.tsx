@@ -1,29 +1,33 @@
 import React from 'react';
 import { Redirect, Route, RouteProps, useHistory } from 'react-router-dom';
-import { refreshToken as refreshTokenFn } from '../../services/auth';
-import { useDispatch, useSelector } from 'react-redux';
-import { getCookie } from '../../services/utils';
+import { refreshToken as refreshTokenFn } from '../../services/utils/auth';
+import { getCookie } from '../../services/utils/cookie';
 import { setLogin } from '../../services/reducers/user';
+import { TRootState } from '../../services/store';
+import { useAppDispatch, useAppSelector } from '../../services/utils/hooks';
 
-
-interface IRootStore {
-  user:{
-    isLogin: boolean
+interface Ihistory {
+  location:{
+    state:{
+      from: any
+    }
   }
 }
 
 export function PublicRoute({ children, path }: RouteProps ) {
-  const dispatch = useDispatch()
-
+  const dispatch = useAppDispatch()
+  
   const history = useHistory()
-  const isLogin = useSelector((store:IRootStore)=>store.user.isLogin)
+  const isLogin = useAppSelector((store)=>store.user.isLogin)
   const refreshToken = getCookie('refreshToken')
   const accessToken = getCookie('accessToken')
 
+  const state = history.location.state as { from: string }
+
   if (!isLogin && refreshToken  ){
-    refreshTokenFn()
-    console.log("REFRESH")
-    if ( accessToken !== undefined){
+    
+    console.log("REFRESH", refreshTokenFn())
+    if ( accessToken !== undefined ){
       dispatch(setLogin(true))
       history.push({ pathname: "/login", state: { from: path } })
     }
@@ -35,7 +39,7 @@ export function PublicRoute({ children, path }: RouteProps ) {
         children
       ):( 
           history.location.state ?(
-            <Redirect to={`${history.location.state.from}`}/>
+            <Redirect to={`${state.from}`}/>
           ):(
             <Redirect to='/'/>
           )

@@ -1,0 +1,68 @@
+роуты: 
+
+/feed — страница ленты заказов. 
+	Доступен всем пользователям.
+/feed/:id — страница заказа в ленте. 
+	Доступен всем пользователям.
+———
+/profile/orders — страница истории заказов пользователя. 
+	Доступен только авторизованным пользователям.
+/profile/orders/:id — страница заказа в истории заказов. 
+	Доступен только авторизованным пользователям.
+
+
+Бекенд: 
+wss://norma.nomoreparties.space/orders/all
+wss://norma.nomoreparties.space/orders/all  Все заказы
+ответ:
+{
+  "success": true,
+  "orders": [
+    {
+      "ingredients": [
+        "60d3463f7034a000269f45e7",
+        "60d3463f7034a000269f45e9",
+        "60d3463f7034a000269f45e8",
+        "60d3463f7034a000269f45ea"
+      ],
+      "_id": "",
+      "status": "done",
+      "number": 0,
+      "createdAt": "2021-06-23T14:43:22.587Z",
+      "updatedAt": "2021-06-23T14:43:22.603Z"
+    }
+  ],
+  "total": 1,
+  "totalToday": 1
+}
+
+wss://norma.nomoreparties.space/orders  конкретного заказа 
+ответ:
+{
+  "success": true,
+  "orders": [
+    {
+      "ingredients": [
+        "60d3463f7034a000269f45e9",
+        "60d3463f7034a000269f45e7"
+      ],
+      "_id": "",
+      "status": "done",
+      "number": 1,
+      "createdAt": "2021-06-23T20:11:01.403Z",
+      "updatedAt": "2021-06-23T20:11:01.406Z"
+    },
+    {
+      "ingredients": [
+        "60d3463f7034a000269f45e9"
+      ],
+      "_id": "",
+      "status": "done",
+      "number": 3,
+      "createdAt": "2021-06-23T20:13:23.654Z",
+      "updatedAt": "2021-06-23T20:13:23.657Z"
+    }
+  ],
+  "total": 2,
+  "totalToday": 2
+}

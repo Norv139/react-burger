@@ -1,5 +1,4 @@
-import React, {FC} from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, {FC, useEffect} from "react";
 import { Switch, Route, useLocation, useHistory} from "react-router-dom";
 
 import { ProtectedRoute } from "../ProtectedRoute/protectedRoute";
@@ -9,30 +8,41 @@ import Modal from "../Modal/Modal";
 import IngredientDetails from "../IngredientDetails/IngredientDetails";
 import { closeInfo, closeOrder } from "../../services/reducers/detals";
 import AppHeader from '../Header/AppHeader'
-import { Shop, Login, Register, ForgotPassword, ResetPassword, Profile, PageIngredient  } from '../../pages'
+import { 
+  Shop, 
+  Login, 
+  Register, 
+  ForgotPassword, 
+  ResetPassword, 
+  Profile, 
+  PageIngredient, 
+  
+  Orders, 
+  Order, 
+  FeedLent
+} from '../../pages'
+import { wsClose, wsStart } from "../../services/reducers/ws";
+import { TRootState } from "../../services/store";
+import { useAppDispatch, useAppSelector } from "../../services/utils/hooks";
 
 
-interface IRootStore {
-  detals:{
-    isOpenInfo: boolean
-  }
-}
+
 
 const App: FC = () => {
-  const dispatch = useDispatch();
-  const history = useHistory();
+  const dispatch = useAppDispatch();
 
+  const history = useHistory();
+  const state = history.location.state as { from: {pathname: string} }
   const location = useLocation();
   
-  const isOpenInfo = useSelector((store:IRootStore)=>store.detals.isOpenInfo)
+  const isOpenInfo = useAppSelector(store=>store.detals.isOpenInfo)
 
   const closeAllPopups = ()=>{
     
     dispatch(closeOrder());
     dispatch(closeInfo());
-    history.push('/')
+    history.goBack()
   }
-
   //console.log(history, location)
 
   return (
@@ -41,12 +51,22 @@ const App: FC = () => {
       
         <Switch location={location}>
           
-          <ProtectedRoute path="/profile/orders/:id">
-            <>orders id</>
-          </ProtectedRoute> 
-          
+
+          <Route path={"/feed/:id"}>
+                <FeedLent />
+          </Route>
+
+          <Route path={"/feed/"}>
+            <FeedLent />
+          </Route>
+
+
+          <ProtectedRoute path={"/profile/orders/:id"}>
+                <Orders/>
+          </ProtectedRoute>
+
           <ProtectedRoute path="/profile/orders">
-            <>orders</>
+                <Orders/>
           </ProtectedRoute>
 
           <ProtectedRoute path="/profile" >
@@ -73,7 +93,7 @@ const App: FC = () => {
 
           <Route path={"/ingredients/:id"} >
             {(history.location.state)?(
-                (history.location.state.from.pathname === '/' && isOpenInfo)?(
+                (state.from.pathname === '/' && isOpenInfo)?(
                   <>
                     <Shop/>
                     <Modal onClose={closeAllPopups}>

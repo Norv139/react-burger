@@ -8,10 +8,18 @@ const user = createSlice({
         isLogin: false,
         data:{},
         itemsFailed: false,
-        itemsRequest: false
+        itemsRequest: false,
+        //refreshSuccess: false
     },
 
     reducers: {
+        /*
+        setRefreshSuccess: (state, action)=>{
+            return{
+                ...state,
+                refreshSuccess: action.payload
+            }
+        },  */
         setPreviousPath: (state, action)=>{
             return{
                 ...state,
@@ -24,6 +32,15 @@ const user = createSlice({
                 ...state,
                 isLogin: action.payload
             }
+        },
+
+        setUserData:(state, action)=>{
+            return { 
+                ...state, 
+                itemsFailed: false, 
+                data: action.payload, 
+                itemsRequest: false 
+            };
         },
 
         req_SUCCESS: (state, action)=>{
@@ -51,13 +68,15 @@ const user = createSlice({
 })
 
 
+
 export const {
-    initialState,
     req_FAILED,
     req_REQUEST,
     req_SUCCESS,
     setPreviousPath,
-    setLogin
+    setLogin,
+    //setRefreshSuccess
+    setUserData
 } = user.actions;
 
 export default user.reducer;

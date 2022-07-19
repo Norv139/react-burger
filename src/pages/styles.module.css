@@ -1,0 +1,152 @@
+.order_loading {
+    text-align: center;
+    margin-top: 15vh;
+  }
+
+.all_content{
+    
+    height: calc(85vh );
+
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+    display: flex;
+    flex-direction: column;
+}
+.all_content::-webkit-scrollbar{
+    width: 8px;
+}
+.all_content::-webkit-scrollbar-track{
+    background: #2F2F37;
+}
+.all_content::-webkit-scrollbar-thumb{
+    background: #8585AD;
+}
+
+.link{
+    color: #4C4CFF;
+    cursor: pointer;
+}
+
+.stats_list{
+    overflow-y: scroll;
+    height: 150px;
+}
+
+.stats_list_ready{
+    color: #00CCCC;
+}
+
+.stats_count {
+    text-shadow: 0 0 16px rgba(51, 51, 255, 0.25), 0 0 8px rgba(51, 51, 255, 0.25), 0 4px 32px rgba(51, 51, 255, 0.5);
+  }
+
+.main_conteiner{
+    display: flex;
+    flex-direction: row;
+}
+
+
+.over{
+    margin-top: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.center{
+    display: flex;
+    justify-content: center;
+}
+
+.main{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.box {
+    display: flex;
+}
+
+.p_text{
+    display: flex;
+    align-items: center;
+
+    height: 64px;
+    width: 320px;
+    text-align: start;
+    vertical-align: middle;
+}
+
+.main_frame{
+    width: 584px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    border-radius: 40px;
+  
+    background: #1C1C21;
+  }
+  
+  .frame_status{
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
+    align-items: center;
+  }
+  
+  .frame_info{
+    height: 64px;
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
+    align-items: center;
+  }
+  
+  .list_ingredient{
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .order_ready{
+    color: #00CCCC;
+  }
+
+  .order_status{
+    color: #cc5800;
+  }
+  
+  .list_ingredient_container{
+    position: relative;
+    display: flex;
+    /* align-items: center;
+    */
+    border-radius: 100%;
+    min-width: 85px;
+    height: 75px;
+    background: #131316;
+  }
+  
+  .list_ingredient_icon{
+    min-width: 80px;
+    height: 70px;
+    position: relative;
+    /*background: linear-gradient(#801AB2, #4C4CFF);*/
+    content: '';
+    z-index: 1;
+    border-radius: 100%;
+    display: flex;
+    
+
+  }
+  .img{
+    position: absolute;
+    transform: translate(-30px, 5px);
+  }
+  
+  .list_ingredient_scroll{
+    overflow-y: scroll;
+    height: 200px;
+  }

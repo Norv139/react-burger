@@ -1,14 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+import { TdataPropTypes } from "../../utils/type/type";
+
 const componentsSlice = createSlice({
     name: 'detals',
 
     initialState: {
-        items: [],
+        items: [] as Array<TdataPropTypes>,
         itemsRequest: false,
         itemsFailed: false,
     
-        list: []
+        list: [] as Array<TdataPropTypes>
     },
 
     reducers: {
@@ -33,11 +35,13 @@ const componentsSlice = createSlice({
                 itemsRequest: false 
             };
         },
+        
         clearList:(state)=>{
             return { ...state, list: [] };
         },
 
         decrease_list_item: (state,action)=>{
+
             return {
                 ...state, 
                 list: [
@@ -70,5 +74,6 @@ export const {
     increase_list_item,
     change_list
 } = componentsSlice.actions;
+export const actionComponent = typeof componentsSlice.actions
 
 export default componentsSlice.reducer;
