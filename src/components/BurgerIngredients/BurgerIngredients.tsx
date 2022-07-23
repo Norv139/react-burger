@@ -155,6 +155,7 @@ function SortCards({data, filterName, openDetals, fnCount}:ISortCards){
                     { return(
                          
                     <Сard 
+                        dataAt={`ingredient`}
                         key={renderData._id} 
                         data={renderData} 
                         openDetals={openDetals} 
@@ -171,9 +172,10 @@ interface ICart{
     data: any;
     openDetals: (data:TdataPropTypes)=>void;
     count: number;
+    dataAt: string;
 }
 
-function Сard ({data, openDetals, count}:ICart) {
+function Сard ({data, openDetals, count, dataAt}:ICart) {
 
     const [,drag] = useDrag(() => ({
         type: 'item',
@@ -185,7 +187,7 @@ function Сard ({data, openDetals, count}:ICart) {
       )
 
     return(
-        <div className={style.card_frame + ' mt-6 mb-10 ml-4 mr-2'} onClick={()=>{openDetals(data)}} >
+        <div data-at={dataAt} className={style.card_frame + ' mt-6 mb-10 ml-4 mr-2'} onClick={()=>{openDetals(data)}} ref={drag} >
             <div className={ style.card_frame + ' ml-4 mr-4'}>
                 { count !== 0 ?(
                     <div className={style.counter_box}>
@@ -198,7 +200,7 @@ function Сard ({data, openDetals, count}:ICart) {
                     null
                 )}
 
-                <img src={data.image} alt={data.name} ref={drag} />
+                <img src={data.image} alt={data.name}  />
 
 
             </div>

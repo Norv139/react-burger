@@ -1,13 +1,6 @@
 import { Middleware, MiddlewareAPI } from "redux";
 import { AppDispatch, TRootState } from "../store";
 
-import { 
-    wsFeedConnectionClosed,
-    wsFeedConnectionError,
-    wsFeedConnectionSuccess,
-    wsGetData, 
-    wsStart
-} from "../reducers/ws";
 import {TwsAction} from "../reducers/ws"
 
 
@@ -28,12 +21,12 @@ export const loggerMiddleware: Middleware = (store) => {
 export const socketMiddleware = (wsActions: TwsAction): Middleware => {
 
     let {
-        wsStart, 
+        
         wsFeedConnectionClosed, 
         wsFeedConnectionError, 
         wsFeedConnectionSuccess,
         wsGetData,
-        wsClose
+        
     }=wsActions
     let socket: WebSocket
     return (store: MiddlewareAPI<AppDispatch, TRootState>) => {
@@ -66,6 +59,7 @@ export const socketMiddleware = (wsActions: TwsAction): Middleware => {
             if(wsActions.wsClose.match(action)){
                 store.dispatch(wsFeedConnectionClosed())
                 socket.close()
+                console.log('close')
             }
         }           
         return next(action)

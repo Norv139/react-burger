@@ -1,12 +1,12 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import {Input, Button} from '@ya.praktikum/react-developer-burger-ui-components'
 
 import style from './styles.module.css'
 
 import { url, login } from '../utils/settings';
-import { req_FAILED, req_REQUEST, req_SUCCESS, setLogin } from '../services/reducers/user';
+import { setLogin } from '../services/reducers/user';
 import { Link, useHistory, useLocation} from 'react-router-dom';
-import { getCookie, setCookie } from '../services/utils/cookie';
+import { getCookie } from '../services/utils/cookie';
 import { useAppDispatch } from '../services/utils/hooks';
 import { postData } from '../services/action/postData';
 

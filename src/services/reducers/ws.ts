@@ -18,7 +18,7 @@ export interface IWSFeedMessage {
 
 
 
-const wsReduser = createSlice({
+const wsSlice = createSlice({
     name: 'ws',
     initialState: {
         wsConnected: false,
@@ -78,6 +78,8 @@ const wsReduser = createSlice({
     }
 })
 
+export const wsInit = wsSlice.getInitialState()
+
 export const {
     wsStart,
     wsClose,
@@ -85,9 +87,9 @@ export const {
     wsFeedConnectionError,
     wsFeedConnectionSuccess,
     wsGetData
-} = wsReduser.actions
+} = wsSlice.actions
 
-export type TwsAction = typeof wsReduser.actions
-export const WsAction =  wsReduser.actions
+export type TwsAction = typeof wsSlice.actions
+export const WsAction =  wsSlice.actions
 
-export default wsReduser.reducer
+export default wsSlice.reducer

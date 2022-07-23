@@ -1,31 +1,18 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {Input, Button} from '@ya.praktikum/react-developer-burger-ui-components'
-import { getCookie } from '../services/utils/cookie';
-
 
 
 import style from './styles.module.css'
+
 import { setLogin } from '../services/reducers/user';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../services/utils/hooks';
 import { logoutUser } from '../services/action/logoutUser';
-import { url } from '../utils/settings';
+
 import { getUser } from '../services/action/getUser';
 import { patchData } from '../services/action/patchData';
 
-
-
-const axios = require('axios').default;
-
-
-interface IResponse extends Response {
-
-        user:{
-            email: string;
-            name: string;
-        }
-}
 
 
 export const Profile: React.FC = () => {  
@@ -35,12 +22,6 @@ export const Profile: React.FC = () => {
     const history = useHistory()
     const location = useLocation();
 
-    const initValueType = {
-        profile: "text_color_inactive",
-        orders: "text_color_inactive",
-        logout: "text_color_inactive"
-    };
-
     const initValueUser = { 
         email: '', 
         password: '', 
@@ -49,20 +30,22 @@ export const Profile: React.FC = () => {
     const [actuslForm, setActuslForm] = useState(initValueUser);
 
     const [form, setValue] = useState(initValueUser);
-    const [select, setSelect] = useState(initValueType);
 
     const [wasAChange, setWasAChange] = useState(false);
     const user = useAppSelector(state=>state.user.data)
 
     useEffect(()=>{
         dispatch(getUser())
-        setActuslForm({...initValueUser, ...user})
-        setValue({...initValueUser, ...user})
-
+        //console.log(dataUser)
     }, [])
 
-
-
+    const userData = useMemo(
+        ()=>{          
+            setActuslForm({...initValueUser, ...user})
+            setValue({...initValueUser, ...user})
+            return {...initValueUser, ...user}
+        }, [user]
+    )
 
 
     const onChange =  (e:React.ChangeEvent<HTMLInputElement>) => {
@@ -71,23 +54,20 @@ export const Profile: React.FC = () => {
             setWasAChange(true)
         }
     
-        const onSave =  (e?:React.ChangeEvent<HTMLButtonElement>) => {
-            if (e){
-                e.preventDefault()
-            }
-            dispatch(patchData(form))
+    const onSave =  (e?:React.ChangeEvent<HTMLButtonElement>) => {
+        if (e){
+            e.preventDefault()
+        }
+        dispatch(patchData(form))
 
+    }
+    const onCancel =  (e?:React.ChangeEvent<HTMLButtonElement>) => {
+        if (e){
+            e.preventDefault()
         }
-        const onCancel =  (e?:React.ChangeEvent<HTMLButtonElement>) => {
-            if (e){
-                e.preventDefault()
-            }
-            setValue(actuslForm)
-            setWasAChange(false)
-        }
-    
-    
-    
+        setValue(actuslForm)
+        setWasAChange(false)
+    }
 
     return(
         <div className={style.over}>
@@ -101,14 +81,14 @@ export const Profile: React.FC = () => {
                     </p>
 
                     <p 
-                        className={style.p_text + " text text_type_main-medium " + select.orders}
+                        className={style.p_text + " text text_type_main-medium " + "text_color_inactive"}
                         onClick={()=>{history.push({pathname: '/profile/orders', state: { from: location } })}}
                     >
                         История заказов
                     </p>
 
                     <p 
-                        className={style.p_text + " text text_type_main-medium " + select.logout}
+                        className={style.p_text + " text text_type_main-medium " + "text_color_inactive"}
                         onClick={()=>{ 
                             dispatch(setLogin(false)); 
                             dispatch(logoutUser()); 
@@ -166,7 +146,7 @@ export const Profile: React.FC = () => {
                         </Button>
                     </>
                     }
-                </form>
+                </form> 
             </main>
         </div>
     )

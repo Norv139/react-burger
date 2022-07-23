@@ -1,9 +1,9 @@
-import { AnyAction, ThunkAction } from "@reduxjs/toolkit";
+
 import { url } from "../../utils/settings";
 import { AppThunk, TdataPropTypes } from "../../utils/type/type";
 import { clearList } from "../reducers/components";
 import { postOrder_FAILED, postOrder_REQUEST, postOrder_SUCCESS } from "../reducers/detals";
-import { TRootState } from "../store";
+
 import { getCookie } from "../utils/cookie";
 
 
