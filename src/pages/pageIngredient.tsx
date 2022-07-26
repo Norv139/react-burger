@@ -1,18 +1,16 @@
-import React, {FC, useEffect, useState} from "react"
+import React, {useEffect} from "react"
 import { useLocation } from 'react-router-dom';
 
-import { path, url } from '../utils/settings';
 
-import { TdataPropTypes, NulldataPropTypes } from '../utils/type/type';
+import { TdataPropTypes} from '../utils/type/type';
 
 import style from './styles.module.css'
 import styleIngredient from './styleIngredient.module.css'
 import { useAppDispatch, useAppSelector } from '../services/utils/hooks';
 import { getAllItems } from '../services/action/getAllItems';
-import testListData from '../utils/data';
 
 
-const axios = require('axios').default;
+
 
 interface IResponse extends Response{
     data: {

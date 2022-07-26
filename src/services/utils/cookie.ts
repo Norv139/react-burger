@@ -1,6 +1,7 @@
 import Cookies from 'js-cookie'
 
 export function setCookie (response: { accessToken: string; refreshToken: string; }) {
+
     if(response.accessToken){
        var {accessToken, refreshToken} = response
 
@@ -13,6 +14,10 @@ export function setCookie (response: { accessToken: string; refreshToken: string
         Cookies.set('refreshToken', refreshToken);
         
     }
+}
+
+export function createCookie(name:string, value:string){
+    Cookies.set(name, value)
 }
 
 export function getCookie(name:string){

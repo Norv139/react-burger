@@ -1,8 +1,8 @@
-import React, {FC, useEffect, useState} from "react"
+import {FC, useEffect, useState} from "react"
 
 import { TwsOrder, wsClose, wsStart } from "../services/reducers/ws"
 
-import { path, url, wsUrl } from "../utils/settings"
+import { wsUrl } from "../utils/settings"
 import { getCookie } from "../services/utils/cookie"
 import { CardFeed } from "../components/CardFeed/CardFeed"
 
@@ -14,7 +14,7 @@ import { closeInfo, closeOrder, openInfo, setInfo } from "../services/reducers/d
 import Modal from "../components/Modal/Modal"
 import { Order } from "./order"
 import { useAppDispatch, useAppSelector } from "../services/utils/hooks"
-import { getItems_FAILED, getItems_REQUEST, getItems_SUCCESS } from "../services/reducers/components"
+
 import { logoutUser } from "../services/action/logoutUser"
 import { getAllItems } from "../services/action/getAllItems"
 

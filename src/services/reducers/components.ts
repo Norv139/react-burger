@@ -2,6 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import { TdataPropTypes } from "../../utils/type/type";
 
+
+
 const componentsSlice = createSlice({
     name: 'detals',
 
@@ -50,8 +52,9 @@ const componentsSlice = createSlice({
                 ]
               };
         },
+        
         increase_list_item: (state, action)=>{
-            return action.payload.items.type === "bun" ? 
+            return action.payload.items.type == "bun" ? 
             {...state, list: [...state.list.filter(x=>x.type!=='bun'), action.payload.items]} :
             {...state, list: [...state.list, action.payload.items]}
         },
@@ -61,8 +64,8 @@ const componentsSlice = createSlice({
         },
     }
 })
-
-
+export const initComponent = componentsSlice.getInitialState()
+export const actionComponent = typeof componentsSlice.actions
 export const { 
     getItems_SUCCESS, 
     getItems_REQUEST, 
@@ -74,6 +77,5 @@ export const {
     increase_list_item,
     change_list
 } = componentsSlice.actions;
-export const actionComponent = typeof componentsSlice.actions
 
 export default componentsSlice.reducer;

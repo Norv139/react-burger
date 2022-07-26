@@ -1,6 +1,6 @@
 import { url } from "../../utils/settings";
 import { AppThunk } from "../../utils/type/type";
-import { req_SUCCESS, setUserData } from "../reducers/user";
+import { setUserData } from "../reducers/user";
 import { getCookie } from "../utils/cookie";
 
 
@@ -12,6 +12,9 @@ export const getUser =(): AppThunk<Promise<unknown>> => async dispatch=>{
     ).then( (response) => {
         //dispatch(req_SUCCESS(response.data.user))
         dispatch(setUserData(response.data.user))
+
+        //console.log(response.data.user)
+
     }).catch( (error) => {
         console.log("error", error);
     })

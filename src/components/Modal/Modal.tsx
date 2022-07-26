@@ -37,9 +37,12 @@ const Modal = ({children, onClose }:IModal) => {
     
         <ModalOverlay onClose={onClose}>
             <div onClick={e=>e.stopPropagation()} className={style.model_content}> 
-                <div className={style.model_close_btn + ' mt-10 mr-10 ml-10'}>
+                <div className={style.model_close_btn + ' mt-10 mr-10 ml-10'} >
                     <div className={style.btn}>
-                        <CloseIcon type='secondary' onClick={()=>{onClose()}}/>
+                        <div onClick={()=>{onClose()}} data-at='btnClose'>
+                            <CloseIcon type='secondary' />
+                        </div>
+                        
                     </div>
                 </div>
                 {children}

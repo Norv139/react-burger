@@ -6,10 +6,10 @@ const detalsSlice = createSlice({
     initialState: {
         order: {
             order:{
-                number:1
+                number: 0
             }
         },
-    
+ 
         orderRequest: false,
         orderFailed: false,
     
@@ -54,9 +54,9 @@ const detalsSlice = createSlice({
               ...state,
               orderRequest: true
             };
-          },
+        },
           
-          postOrder_FAILED: (state)=>{
+        postOrder_FAILED: (state)=>{
             return { 
                 ...state,
                 orderRequest: false,
@@ -91,7 +91,5 @@ export const {
     postOrder_FAILED
 
 } = detalsSlice.actions;
-
-//export const detalsInit = detalsSlice.getInitialState
-
+export const initComponent = detalsSlice.getInitialState()
 export default detalsSlice.reducer;

@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from "react";
+import  {FC} from "react";
 import { Switch, Route, useLocation, useHistory} from "react-router-dom";
 
 import { ProtectedRoute } from "../ProtectedRoute/protectedRoute";
@@ -18,11 +18,9 @@ import {
   PageIngredient, 
   
   Orders, 
-  Order, 
   FeedLent
 } from '../../pages'
-import { wsClose, wsStart } from "../../services/reducers/ws";
-import { TRootState } from "../../services/store";
+
 import { useAppDispatch, useAppSelector } from "../../services/utils/hooks";
 
 
@@ -62,11 +60,11 @@ const App: FC = () => {
 
 
           <ProtectedRoute path={"/profile/orders/:id"}>
-                <Orders/>
+            <Orders/>
           </ProtectedRoute>
 
           <ProtectedRoute path="/profile/orders">
-                <Orders/>
+              <Orders/>
           </ProtectedRoute>
 
           <ProtectedRoute path="/profile" >

@@ -5,13 +5,13 @@ import { Redirect, useLocation } from 'react-router-dom';
 
 import { url, reset_step2 } from '../utils/settings';
 
-import { req_FAILED, req_REQUEST, req_SUCCESS, setLogin, setPreviousPath } from '../services/reducers/user';
+import {  setPreviousPath } from '../services/reducers/user';
 
 import style from './styles.module.css'
 
 import { useHistory } from 'react-router-dom';
 import { useAppDispatch } from '../services/utils/hooks';
-import { setCookie } from '../services/utils/cookie';
+
 import { postData } from '../services/action/postData';
 
 export const ResetPassword: React.FC = () => {
@@ -27,7 +27,6 @@ export const ResetPassword: React.FC = () => {
     const [form, setValue] = useState(initValue);
     const [icon, setIcon] = useState(true);
 
-    const axios = require('axios').default;
 
     const onChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         setValue({ ...form, [e.target.name]: e.target.value });

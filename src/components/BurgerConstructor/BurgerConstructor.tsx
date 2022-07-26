@@ -93,9 +93,9 @@ const BurgerConstructor: FC = () => {
       }), [])
 
     return(
-        <div className={"mt-20"} ref={drop}>
+        <div className={"mt-20"} ref={drop} >
 
-            <div>
+            <div data-at='drop'>
                 {   listIngredients &&
                     <BurgerConstructorList list={listIngredients} fnReorder={chngeList} fnRemove={removeItem} />
                 }
@@ -110,12 +110,13 @@ const BurgerConstructor: FC = () => {
 
                 
                 <div className="ml-10">
-                    <div className='pl-10'>
+                    <div className='pl-10' data-at="btn-order">
                         <Button
                             onClick={createOrder}
                             
                             type="primary" 
                             size="large"
+                            
                         >
                             Оформить заказ
                         </Button>

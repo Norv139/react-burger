@@ -1,12 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const user = createSlice({
+const userSlice = createSlice({
     name: 'user',
 
     initialState: {
         previousPath: [null, null],
         isLogin: false,
-        data:{},
+        data:{
+            email: "",
+            name: ""
+        },
         itemsFailed: false,
         itemsRequest: false,
         //refreshSuccess: false
@@ -67,7 +70,7 @@ const user = createSlice({
     }
 })
 
-
+export const initUser = userSlice.getInitialState()
 
 export const {
     req_FAILED,
@@ -77,6 +80,6 @@ export const {
     setLogin,
     //setRefreshSuccess
     setUserData
-} = user.actions;
+} = userSlice.actions;
 
-export default user.reducer;
+export default userSlice.reducer;
