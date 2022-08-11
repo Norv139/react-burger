@@ -3,7 +3,7 @@
 </h1>
 
 #  react-burger
-## [Учебный проект](http://portfolio.nikitpkn.beget.tech/) на курсе React разработчик от [Яндекс Практикум](https://practicum.yandex.ru/react/)
+## Учебный проект на курсе React разработчик от [Яндекс Практикум](https://practicum.yandex.ru/react/)
 ## Ссылка на проект в gh-pages: **[react-sneakers](https://norv139.github.io/react-burger/)**
 
 ## Описание:
